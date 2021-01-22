@@ -1,4 +1,4 @@
-const prefix = "!"
+const prefix = "-"
 
 /* 
 name -> Name of command
@@ -6,6 +6,8 @@ alias -> List of Aliases
 description -> Short description of command
 run -> Calls command function
 */
+
+var adminList = ['183617597365813248'];
 
 
 function checkIfAlias(cmdName, cmds){ // Check if command input is an alias of a "real command", if so return the real command
@@ -22,29 +24,42 @@ function checkIfAlias(cmdName, cmds){ // Check if command input is an alias of a
 	return null; // Return nothing if not found
 }
 
+function checkIfValidUser(user, userList){
+	for (allowed of userList){
+		if(user.id === allowed.id){
+			return true;
+		}
+	}
+	return false;
+}
+
 module.exports = {
 	handleCommand: (msg, client, Discord) => {
-		const commands = client.commands
-		if(msg.content.startsWith(prefix)){ // If command begins with designated prefix
+		var commands = client.commands
+		if(adminList.includes(msg.author.id)){
+			commands = client.commands.concat(client.adminCommands); // Combine commands and adminCommands
+		}
+
+		if(msg.content.startsWith(prefix)){
 
 			var tempMessage = msg.content.slice(1); // Remove prefix from string
-			var args = tempMessage.split(" ") // Split the string up into every seperated word by whitespaces(spaces)
+			var args = tempMessage.split(" ");
 
-			CommandName = args[0].toLowerCase(); // Designate first part of array to be CommandName after it has been turned into all lowercase
-			args.splice(args.indexOf(0), 1); // Remove first argument(CommandName) from array
+			CommandName = args[0].toLowerCase();
+			args.shift(); // Remove first argument(CommandName) from array
 
-			const alias = checkIfAlias(CommandName, commands.array()); // Call checkIfAlias function 
+			const alias = checkIfAlias(CommandName, commands.array());
 			if(alias != null){ // Check if alias was found
-				CommandName = alias; // If found give the CommandName the parent command of the alias
+				CommandName = alias.toLowerCase();
 			}
 
 			try{
-				commands.get(CommandName).run(msg, client, commands.array(), Discord, args); // Try executing CommandName; may yield errors
+				commands.get(CommandName).run(msg, args, client, Discord, commands.array()); // Try executing CommandName.run; may yield errors
 			}catch(e){
 				if(e instanceof TypeError){ // Check if the error yielded was a type error(Commonly means that it was unable to find CommandName in command collection)
-					console.log("Command was not found");
+					console.log("\nCommmand was not found:\n");
 				}
-				console.log(e); // Print the error message in the console
+				console.log(e);
 			}
 		}
 	}

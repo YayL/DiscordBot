@@ -2,7 +2,7 @@ module.exports = {
 	name : "CreateGuild",
 	alias : ["gc"],
 	description : "Displays all available commands",
-	run : function(msg, client, cmds, disc, args){
+	run : function(msg, args, client, disc){
 		//console.log("1");
 		client.guilds.create("New Guild")
 			.then(value => {
