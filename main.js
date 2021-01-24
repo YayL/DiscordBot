@@ -1,28 +1,29 @@
-const commandHandler = require('./commandHandler.js');
+// --- Setup stuff ---
 
-const Discord = require('discord.js');
+const Discord = require('discord.js'); // Getting discord module
 const client = new Discord.Client();
+const fs = require('fs'); // Getting file share module
 
-const fs = require('fs');
+	// --- Collection Lists ---
 
 client.commands = new Discord.Collection();
+client.adminCommands = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
+client.votes = new Discord.Collection();
+client.rules = new Discord.Collection();
 
-for(const file of commandFiles){
-	const command = require(`./commands/${file}`);
+client.adminList = ['183617597365813248'];
+client.cmdChannel = '801914747599061022';
 
-	client.commands.set(command.name, command); 
-}
 
-client.on('ready', () => {
-	console.log("Yes, Hello!");
-});
+// --- Load in commands and events --
 
-client.on('message', msg => {
-	commandHandler.handleCommand(msg, client.commands);
-});
+['commandLoader', 'eventLoader'].forEach(h => {
+	require(`./loaders/${h}`)(client, Discord);
+})
 
-fs.readFile('token.txt', 'utf8', function(err, contents){
-	client.login(contents)
+// --- Login bot---
+
+fs.readFile('token.txt', 'utf8', function(err, contents){ // Read token file 
+	client.login(contents) // Activate/Login the bot
 });
