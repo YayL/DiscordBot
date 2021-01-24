@@ -9,6 +9,7 @@ module.exports = {
 	run : function(msg, client, cmds, disc, args){
 		msg.guild.roles.fetch('802154205145464882')
 		.then(role => {
+			console.log(role.position);
 			func.giveRole(msg.member, role);
 		})
 	}

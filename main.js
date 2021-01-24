@@ -8,16 +8,22 @@ const fs = require('fs'); // Getting file share module
 
 client.commands = new Discord.Collection();
 client.adminCommands = new Discord.Collection();
+
+client.votes = new Discord.Collection();
 client.rules = new Discord.Collection();
+
+client.adminList = ['183617597365813248'];
+client.cmdChannel = '801914747599061022';
+
 
 // --- Load in commands and events --
 
 ['commandLoader', 'eventLoader'].forEach(h => {
-	require(`./handlers/${h}`)(client, Discord);
+	require(`./loaders/${h}`)(client, Discord);
 })
 
 // --- Login bot---
-	
+
 fs.readFile('token.txt', 'utf8', function(err, contents){ // Read token file 
 	client.login(contents) // Activate/Login the bot
 });

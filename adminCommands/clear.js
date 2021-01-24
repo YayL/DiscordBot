@@ -7,7 +7,6 @@ module.exports = {
 	options: [false],
 	users: ["183617597365813248"],
 	run: function(msg, args, client, disc){
-		const channel = func.getChannel(msg, args[1])
 		var amount = 0
 		try{
 			amount = Number(args[0]);
@@ -17,6 +16,6 @@ module.exports = {
 		}catch(e){
 			console.log(e)
 		}
-		func.clearChat(msg, amount, channel);
+		func.clearChat(msg, amount);
 	}
 }
