@@ -5,26 +5,26 @@ TODO:
 */
 
 
-Command Ideas:
+Command Ideas:	
 	
--- User Stuff --
+-- User Stuff --	
 
-AddPermToRank - Vote to add a permission to a role possible perm list: (Kick, Mute, Deafen, Move, AddRole Command, RemRole Command, Chat-Mute Command)
-RemoveRole - Remove specific role from user
-AddRole - Add specific role to user
-Chat-Mute - Give user mute role so they can't send messages
-Prisoner - Set user to prisoner
+AddPermToRank - Vote to add a permission to a role possible perm list: (Kick, Mute, Deafen, Move, AddRole Command, RemRole Command, Chat-Mute Command)	
+RemoveRole - Remove specific role from user	
+AddRole - Add specific role to user	
+Chat-Mute - Give user mute role so they can't send messages	
+Prisoner - Set user to prisoner	
 
--- Economy --
+-- Economy --	
   
-Lootboxes - Custom stuff that can be unlocked
-Stockmarket - Invest for money
-Lotery - Money
-Blackjack - Money
-bal - Money balance
+Lootboxes - Custom stuff that can be unlocked	
+Stockmarket - Invest for money	
+Lotery - Money	
+Blackjack - Money	
+bal - Money balance	
 ah - Auction lootbox items 
+  	
+-- General --	
   
--- General --
-  
-VoteSettings - Vote to change core-laws/client.settings stuff
+VoteSettings - Vote to change core-laws/client.settings stuff	
 
