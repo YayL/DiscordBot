@@ -1,4 +1,4 @@
-TODO:
+***Todo next:***
 
 1) Fíx up vote reaction using client.votes where it adds em message and specific func as value. Check votekick end of file
 
@@ -9,9 +9,9 @@ TODO:
 
 ----------------------
 
-Command Ideas:	
+***Command Ideas:***
 
--- User Stuff --	
+***User***
 
 AddPermToRank - Vote to add a permission to a role possible perm list: (Kick, Mute, Deafen, Move, AddRole Command, RemRole Command, Chat-Mute Command)
 
@@ -25,7 +25,7 @@ Prisoner - Set user to prisoner
 
 ----------------------
 
--- Economy --	
+***Economy***
   
 Lootboxes - Custom stuff that can be unlocked
 
@@ -41,7 +41,7 @@ ah - Auction lootbox items
 
 ----------------------
 
--- General --	
+***General***
   
 VoteSettings - Vote to change core-laws/client.settings stuff	
 
