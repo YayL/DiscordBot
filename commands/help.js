@@ -1,6 +1,7 @@
 module.exports = {
 	name : "Help",
 	alias : ["h", "info", "i", "c", "cmds", "commands"],
+	use: "-help",
 	description : "Displays all available commands",
 	options: [true], 
 	users: [],
@@ -19,14 +20,17 @@ module.exports = {
 			value: "\u200b"},
 			{
 			name: cmds[i].name,
-			value: cmds[i].description,
+			value: cmds[i].description + "\n",
 			inline: false},
 			{
-			name: "Alias",
-			value: "[" + cmds[i].alias.join(", ") + "]",
+			name: "Use:",
+			value: cmds[i].use + "\n",
+			inline: false},
+			{
+			name: "Alias:",
+			value: "[" + cmds[i].alias.join(", ") + "]\n" ,
 			inline: true}) // Add a field for command with it's name and description
 		}
 
-		msg.channel.send(embed); // Send embeded message in the same channel as the command was sent in
-	}
+		msg.author.send(embed); // Send embeded message in the same channel as the command was sent in
 }

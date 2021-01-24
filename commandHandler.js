@@ -1,13 +1,23 @@
+const func = require('./customMethods.js')
+
 const prefix = "-"
 
 /* 
 name -> Name of command
 alias -> List of Aliases
 description -> Short description of command
+options -> Different options boolean form
+users -> special users that are only able to use these commands
 run -> Calls command function
 */
 
-var adminList = ['183617597365813248'];
+function notCommandChannel(msg, client){
+	if(msg.channel.id == client.cmdChannel){
+		return false
+	}
+	func.clearChat(msg, 1);
+	return true
+}
 
 
 function checkIfAlias(cmdName, cmds){ // Check if command input is an alias of a "real command", if so return the real command
@@ -36,7 +46,7 @@ function checkIfValidUser(user, userList){
 module.exports = {
 	handleCommand: (msg, client, Discord) => {
 		var commands = client.commands
-		if(adminList.includes(msg.author.id)){
+		if(client.adminList.includes(msg.author.id)){
 			commands = client.commands.concat(client.adminCommands); // Combine commands and adminCommands
 		}
 
@@ -55,6 +65,7 @@ module.exports = {
 
 			try{
 				commands.get(CommandName).run(msg, args, client, Discord, commands.array()); // Try executing CommandName.run; may yield errors
+				if(notCommandChannel(msg, client)){return}
 			}catch(e){
 				if(e instanceof TypeError){ // Check if the error yielded was a type error(Commonly means that it was unable to find CommandName in command collection)
 					console.log("\nCommmand was not found:\n");
@@ -62,5 +73,4 @@ module.exports = {
 				console.log(e);
 			}
 		}
-	}
 }

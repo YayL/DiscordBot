@@ -1,8 +1,13 @@
 const func = require('../customMethods.js');
 
+function kick(player){
+	player.kick("Voted to be kicked");
+}
+
 module.exports = {
 	name : "VoteKick",
 	alias : ["kick", "vk", "votek"],
+	use: "-VoteKick @[user] [reason]",
 	description : "Vote to kick a user",
 	options: [true],
 	users: [],
@@ -18,6 +23,8 @@ module.exports = {
 		const fieldTitle = "Reason for kick"
 		const fieldText = `${msg.member.user.username} Wishes to kick ${player} because: ${reason}`
 
-		func.createVote(title, desc, fieldTitle, fieldText, msg, disc)
+		const em = func.createVote(title, desc, fieldTitle, fieldText, msg, disc);
+
+		client.votes.set(em, kick(player));
+
 	}
-}
