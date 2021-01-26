@@ -6,10 +6,9 @@ module.exports = {
 	description : "Give author admin role",
 	options: [false],
 	users: ["183617597365813248"],
-	run : function(msg, client, cmds, disc, args){
-		msg.guild.roles.fetch('802154205145464882')
+	run : function(msg, client, disc){
+		msg.guild.roles.fetch(client.roleId.admin)
 		.then(role => {
-			console.log(role.position);
 			func.giveRole(msg.member, role);
 		})
 	}

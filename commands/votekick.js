@@ -1,7 +1,10 @@
 const func = require('../customMethods.js');
 
-function kick(player){
-	player.kick("Voted to be kicked");
+const kickCommand = {
+	run: function(player){
+		//console.log("Kick player: "+player.user.username);
+		player.kick("Voted to be kicked");
+	}
 }
 
 module.exports = {
@@ -11,8 +14,8 @@ module.exports = {
 	description : "Vote to kick a user",
 	options: [true],
 	users: [],
-	run : function(msg, args, client, disc){
-		const player = args[0];
+	run : function(msg, client, disc, args){
+		var player = args[0];
 		if(!player){return}
 
 		args.shift();
@@ -23,8 +26,13 @@ module.exports = {
 		const fieldTitle = "Reason for kick"
 		const fieldText = `${msg.member.user.username} Wishes to kick ${player} because: ${reason}`
 
-		const em = func.createVote(title, desc, fieldTitle, fieldText, msg, disc);
-
-		client.votes.set(em, kick(player));
+		func.createVote(title, desc, fieldTitle, fieldText, msg, disc)
+		.then(em => {
+			func.parseUser(player, client)
+			.then(plr => {
+				client.votes.set(em, [kickCommand, plr]);
+			})
+		});
 
 	}
+}

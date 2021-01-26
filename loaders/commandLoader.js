@@ -9,12 +9,13 @@ module.exports = (client, disc) => {
 	}
 
 	// --- Admin Commands ---
+	if(client.settings.adminCommands){
+		const adminCommandFiles = fs.readdirSync('./adminCommands').filter(file => file.endsWith('.js')); // Get list of all files ending with .js in "commands" folder
+		for(const file of adminCommandFiles){ 
 
-	const adminCommandFiles = fs.readdirSync('./adminCommands').filter(file => file.endsWith('.js')); // Get list of all files ending with .js in "commands" folder
-	for(const file of adminCommandFiles){ 
-
-		const command = require(`../adminCommands/${file}`); // Get exported part of file
-		client.adminCommands.set(command.name.toLowerCase(), command); // Add file to command collection
+			const command = require(`../adminCommands/${file}`); // Get exported part of file
+			client.adminCommands.set(command.name.toLowerCase(), command); // Add file to command collection
+		}
 	}
 
 }
