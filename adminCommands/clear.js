@@ -6,7 +6,7 @@ module.exports = {
 	description: "Remove a set amount of messages (ALL=All messages younger than 2 weeks)",
 	options: [false],
 	users: ["183617597365813248"],
-	run: function(msg, args, client, disc){
+	run: function(msg, client, disc, args){
 		var amount = 0
 		try{
 			amount = Number(args[0]);

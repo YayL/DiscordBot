@@ -12,7 +12,7 @@ run -> Calls command function
 */
 
 function notCommandChannel(msg, client){
-	if(msg.channel.id == client.cmdChannel){
+	if(msg.channel.id == client.channelId.commands){
 		return false
 	}
 	func.clearChat(msg, 1);
@@ -61,16 +61,19 @@ module.exports = {
 			const alias = checkIfAlias(CommandName, commands.array());
 			if(alias != null){ // Check if alias was found
 				CommandName = alias.toLowerCase();
-			}
+			}	
 
 			try{
-				commands.get(CommandName).run(msg, args, client, Discord, commands.array()); // Try executing CommandName.run; may yield errors
+				commands.get(CommandName).run(msg, client, Discord, args, commands.array()); // Try executing CommandName.run; may yield errors
 				if(notCommandChannel(msg, client)){return}
 			}catch(e){
 				if(e instanceof TypeError){ // Check if the error yielded was a type error(Commonly means that it was unable to find CommandName in command collection)
-					console.log("\nCommmand was not found:\n");
+					console.log(e);
+					console.log("\nCommmand was not found: " + CommandName + "\n");
+				}else{
+					console.log(e);
 				}
-				console.log(e);
 			}
 		}
+	}
 }

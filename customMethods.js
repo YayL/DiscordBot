@@ -12,26 +12,45 @@ function getChannel(msg, channel) {
 module.exports = {
 	createVote: (title, description, fieldTitle, fieldText, msg, discord) => {
 		var embed = new discord.MessageEmbed()
-				.setTitle(title)
-				.setDescription(description)
-				.setColor('#74ed4c')
-				.setFooter("Vote below if you agree or disagree!")
-				.addFields({
-					name: fieldTitle,
-					value: fieldText
-				})
-			const channel = msg.guild.channels.cache.get('801914827760205885');
-			try{
-			channel.send(embed)
-			.then(em => {
-				em.react("✅");
-				em.react("❌");
-				return em;
+			.setTitle(title)
+			.setDescription(description)
+			.setColor('#74ed4c')
+			.setFooter("Vote below if you agree or disagree!")
+			.addFields({
+				name: fieldTitle,
+				value: fieldText
 			})
-			}catch(e){
-				clearChat(msg, 1);
-			}
+		const channel = msg.guild.channels.cache.get('801914827760205885');
+		try{
+		return channel.send(embed)
+		.then(em => {
+			em.react("✅");
+			em.react("❌");
+			return em;
+		})
+		}catch(e){
+			clearChat(msg, 1);
+		}
+	},
 
+	parseUser: async (player, client) => {
+		if(player.startsWith('<@') && player.endsWith('>')) {
+			player = player.slice(2, -1);
+
+			if (player.startsWith('!')) {
+				player = player.slice(1);
+
+			}
+			const user = client.users.cache.get(player);
+			return client.guilds.fetch(client.guildId)
+			.then(guild => {
+				return guild.members.fetch(user.id)
+				.then(member => {
+					return member;
+				});
+			})
+			.catch(console.error);
+			}
 	},
 
 	clearChat: (msg, amount, channel) => {
@@ -41,29 +60,11 @@ module.exports = {
 				channel.bulkDelete(amount).catch(e => console.log(e)); // Remove set amount of messages younger than 2 weeks old
 			}else if(amount === "all"){
 				channel.messages.fetch({limit: 100})
-					.then(fetched => {
+					.then(async fetched => {
 						channel.bulkDelete(fetched)})
 					.catch(console.error);
 			}
 
 		}catch(e){console.log(e)}
-
-		
-	},
-
-	giveRole: (user, role) => {
-		user.roles.add(role)
-		.catch(console.error);
-	},
-
-	removeRole: (user, role) => {
-		user.roles.add(role)
-		.catch(console.error);
-	},
-
-	sleep: (ms) => {
-		return new Promise((resolve) => {
-			setTimeout(resolve, ms);
-		})
 	}
 }

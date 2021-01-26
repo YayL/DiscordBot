@@ -11,7 +11,7 @@ module.exports = {
 	description: "Turns off the bot correctly",
 	options: [false],
 	users: ["183617597365813248"],
-	run : function(msg, args, client, disc){
+	run : function(msg, client, disc){
 		try{
 			beforeExit(msg);
 		}catch(e){console.log(e)}

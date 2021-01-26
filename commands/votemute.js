@@ -1,13 +1,22 @@
 const func = require('../customMethods.js');
 
+const muteCommand = {
+	run: function(player){
+		player.guild.roles.fetch(player.client.roleId.muted)
+		.then(role => {
+			player.roles.add(role);
+		})
+	}
+}
+
 module.exports = {
 	name : "VoteMute",
 	alias : ["mute", "vm", "votem"],
 	use: "-VoteMute @[user] [reason]",
-	description : "Vote to mute a user in Voice Channels",
+	description : "Vote to mute a user in Text Channels",
 	options: [true],
 	users: [],
-	run : function(msg, args, client, disc){
+	run : function(msg, client, disc, args){
 		const player = args[0];
 		if(!player){return}
 
@@ -21,12 +30,13 @@ module.exports = {
 
 		const vote = func.createVote(title, desc, fieldTitle, fieldText, msg, disc);
 		
-		if(vote == "Voted Yes") {
-			console.log("Hmm adios");
-		}else if(vote == "Voted No"){
-			console.log("Nah nope");
-		}else if(vote == "Time Limit"){
-			console.log("Time expired"); 
-		}
+		func.createVote(title, desc, fieldTitle, fieldText, msg, disc)
+		.then(em => {
+			func.parseUser(player, client)
+			.then(plr => {
+				client.votes.set(em, [muteCommand, plr]);
+			})
+		});
 
 	}
+}
