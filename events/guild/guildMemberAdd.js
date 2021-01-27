@@ -1,5 +1,3 @@
-const func = require('./../../customMethods.js');
-
 module.exports = (client, disc, member) => {
 	console.log(1);
 	member.guild.roles.fetch(client.roleId.member)

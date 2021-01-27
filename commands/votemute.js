@@ -1,4 +1,4 @@
-const func = require('../customMethods.js');
+const m = require('../methodsLoader.js');
 
 const muteCommand = {
 	run: function(player){
@@ -28,12 +28,14 @@ module.exports = {
 		const fieldTitle = "Reason for chat-mute: "
 		const fieldText = `${msg.member.user.username} Wishes to chat-mute ${player} because: ${reason}`
 
-		const vote = func.createVote(title, desc, fieldTitle, fieldText, msg, disc);
-		
-		func.createVote(title, desc, fieldTitle, fieldText, msg, disc)
+		m.msg.createVote(title, desc, fieldTitle, fieldText, msg, disc)
 		.then(em => {
-			func.parseUser(player, client)
+			m.utils.parseUser(player, client)
 			.then(plr => {
+				if(plr === undefined){
+					m.utils.clearChat(msg, 1, client.channelId.voting);
+					return;
+				}
 				client.votes.set(em, [muteCommand, plr]);
 			})
 		});

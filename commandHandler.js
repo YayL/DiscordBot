@@ -1,4 +1,4 @@
-const func = require('./customMethods.js')
+const m = require('./methodsLoader.js')
 
 const prefix = "-"
 
@@ -15,7 +15,7 @@ function notCommandChannel(msg, client){
 	if(msg.channel.id == client.channelId.commands){
 		return false
 	}
-	func.clearChat(msg, 1);
+	m.utils.clearChat(msg, 1);
 	return true
 }
 
@@ -68,8 +68,7 @@ module.exports = {
 				if(notCommandChannel(msg, client)){return}
 			}catch(e){
 				if(e instanceof TypeError){ // Check if the error yielded was a type error(Commonly means that it was unable to find CommandName in command collection)
-					console.log(e);
-					console.log("\nCommmand was not found: " + CommandName + "\n");
+					m.msg.errorReply(msg,"*Commmand was not found:* **" + CommandName + " " + args.join(" ") + "**", client, Discord, "***Make sure to check your command again!***");
 				}else{
 					console.log(e);
 				}

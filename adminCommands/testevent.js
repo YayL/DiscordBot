@@ -1,5 +1,3 @@
-const func = require("../customMethods.js");
-
 module.exports = {
 	name: "TestEvent",
 	alias: ["te", "tevent"],

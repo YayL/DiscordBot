@@ -1,6 +1,6 @@
 module.exports = {
 	name : "Help",
-	alias : ["h", "info", "i", "c", "cmds", "commands"],
+	alias : ["h", "info", "i", "cmds", "commands"],
 	use: "-help",
 	description : "Displays all available commands",
 	options: [true], 

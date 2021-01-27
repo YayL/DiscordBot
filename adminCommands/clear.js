@@ -1,9 +1,9 @@
-const func = require("../customMethods.js");
+const m = require("../methodsLoader.js");
 
 module.exports = {
 	name: "clear",
 	alias: ["prune", "p", "c", "del"],
-	description: "Remove a set amount of messages (ALL=All messages younger than 2 weeks)",
+	description: "Remove a set amount of messages",
 	options: [false],
 	users: ["183617597365813248"],
 	run: function(msg, client, disc, args){
@@ -16,6 +16,12 @@ module.exports = {
 		}catch(e){
 			console.log(e)
 		}
-		func.clearChat(msg, amount);
+		try{
+			while(amount > 100){
+				m.utils.clearChat(msg, 100);
+				amount -= 100;
+			}
+			m.utils.clearChat(msg, amount);
+		}catch(e){return}
 	}
 }

@@ -1,5 +1,3 @@
-const func = require('./../../customMethods.js');
-
 module.exports = (client, disc) => {
 	console.log("Yeah, hello?");
 

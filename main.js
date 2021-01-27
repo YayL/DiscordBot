@@ -1,8 +1,13 @@
 /* Changes:
-	
+	1) Added MySQL database support
+	2) Added a balance command
+	3) Added some error message replies for users executing the command
+	4) Removed a uncessesary folder which I forgot to remove before
+	5) Changed how the previous "customMethod" file was handled and now it is all seperated into
+	   category groups within the methods folder to make it clearer.
+	6) Got rid of -clear all as it did not work as it should. You can now input a value over 100
+	   and it'll work fine.
 */
-
-// TODO: Add command replies if something goes wrong like incorrect argumentes or something
 
 // --- Setup stuff ---
 
@@ -10,7 +15,11 @@ const Discord = require('discord.js'); // Getting discord module
 const client = new Discord.Client();
 const fs = require('fs'); // Getting file share module
 
+client.mysql = require('mysql');
+
 	// --- Collection Lists ---
+
+client.pVars = require('./passwords.js');
 
 client.commands = new Discord.Collection(); // All commands in commands folder
 client.adminCommands = new Discord.Collection(); // All commands in adminCommands folder
@@ -49,8 +58,20 @@ client.settings = {
 	require(`./loaders/${h}`)(client, Discord);
 })
 
-// --- Login bot---
+// --- MySQL ---
 
-fs.readFile('token.txt', 'utf8', function(err, contents){ // Read token file 
-	client.login(contents) // Activate/Login the bot-commands
+client.con = client.mysql.createConnection({
+			host: "localhost",
+			user: "root",
+			password: client.pVars.dbPass,
+			database: client.pVars.database
+		});
+
+client.con.connect(err => {
+	if(err) throw err;
+	console.log("Connected to DB!");
 });
+
+// --- Login bot & connect SQl DB---
+
+client.login(client.pVars.token) // Activate/Login the bot-commands
