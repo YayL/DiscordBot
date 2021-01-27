@@ -1,8 +1,7 @@
-const func = require("../customMethods.js")
+const m = require("../methodsLoader.js")
 
 function beforeExit(msg){
-	const channel = msg.guild.channels.cache.get('801914827760205885');
-	func.clearChat(msg, "all", channel)
+	m.utils.clearChat(msg, "all", m.utils.getChannel(msg, client.channelId.voting))
 }
 
 module.exports = {

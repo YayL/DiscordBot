@@ -1,5 +1,3 @@
-let func = require("../customMethods.js");
-
 module.exports = {
 	name : "Admin",
 	alias : ["a"],
@@ -7,10 +5,10 @@ module.exports = {
 	options: [false],
 	users: ["183617597365813248"],
 	run : function(msg, client, disc){
-		msg.guild.roles.fetch(client.roleId.admin)
-		.then(role => {
-			func.giveRole(msg.member, role);
-		})
+		msg.guild.roles.fetch(client.roleId.admin) // Get admin rank using its role id
+			.then(role => {
+				msg.member.roles.add(role);
+			})
 	}
 
 }
