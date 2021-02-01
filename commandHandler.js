@@ -2,15 +2,6 @@ const func = require('./customMethods.js')
 
 const prefix = "-"
 
-/* 
-name -> Name of command
-alias -> List of Aliases
-description -> Short description of command
-options -> Different options boolean form
-users -> special users that are only able to use these commands
-run -> Calls command function
-*/
-
 function notCommandChannel(msg, client){
 	if(msg.channel.id == client.cmdChannel){
 		return false
