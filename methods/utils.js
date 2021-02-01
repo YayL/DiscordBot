@@ -1,14 +1,26 @@
+const util = require('util'); 
+
+function getChannel(msg, channel){
+	var regex = /\d+/g
+	if(channel == undefined){
+		return msg.channel
+	}
+	return msg.guild.channels.cache.get(channel.match(regex)[0]);
+}
+
 module.exports = {
-	clearChat(msg, amount, channel){
-		channel = this.getChannel(msg, channel);
+	clearChat: async (msg, amount, channel) => {
+		channel = await getChannel(msg, channel);
 		try{
 			if(typeof(amount) === 'number'){
-				channel.bulkDelete(amount).catch(e => console.log(e)); // Remove set amount of messages younger than 2 weeks old
+				channel.bulkDelete(amount).catch(console.error); // Remove set amount of messages younger than 2 weeks old
 			}
-		}catch(e){console.log(e)}
+		}catch(e){
+			console.log(e);
+		}
 	},
 
-	parseUser: async (player, client) => {
+	getMember: async (player, client, reference) => {
 		if(player == undefined){return}
 		if(player.startsWith('<@') && player.endsWith('>')) {
 			player = player.slice(2, -1);
@@ -18,25 +30,18 @@ module.exports = {
 			}
 
 			const user = client.users.cache.get(player);
-			return client.guilds.fetch(client.guildId)
-			.then(guild => {
-				return guild.members.fetch(user.id)
-				.then(member => {
-					return member;
-				});
-			})
-			.catch(console.error);
-			}
+			return reference.guild.members.fetch(user.id)
+			.then(member => {
+				return member;
+			});
+		}
 	},
 
-	getChannel: (msg, channel) => {
-		var regex = /\d+/g
-		if(channel == undefined){
-			return msg.channel
-		}
-		console.log(channel);
-		try{
-			return msg.guild.channels.cache.get(channel.match(regex)[0]);
-		}catch(e){console.log(e)}
+	getChannel(msg, channel){
+		return getChannel(msg, channel);
+	},
+
+	numberWithCommas(n){
+		return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
 }

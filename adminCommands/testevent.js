@@ -1,10 +1,10 @@
 module.exports = {
 	name: "TestEvent",
 	alias: ["te", "tevent"],
+	use: "-TestEvent",
 	description: "Test event",
-	options: [false],
-	users: ["183617597365813248"],
+	options: {ShowInHelp: false},
 	run: function(msg, client, disc){
-		client.emit("messageReactionAdd", msg);
+		client.sleep(3500);
 	}
 }

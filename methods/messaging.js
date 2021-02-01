@@ -9,7 +9,7 @@ module.exports = {
 				name: fieldTitle,
 				value: fieldText
 			})
-		const channel = msg.guild.channels.cache.get(client.channelId.voting);
+		const channel = msg.guild.channels.cache.get(msg.client.channelId.voting);
 		try{
 		return channel.send(embed)
 		.then(em => {
@@ -22,16 +22,19 @@ module.exports = {
 		}
 	},
 
-	errorReply: (msg, text, client, discord, customFooter) =>{
-		if(customFooter == undefined){
-			customFooter = "Make sure to input correct arguments!";
+	errorReply: (msg, text, client, discord, footer) =>{
+		if(footer == undefined){
+			footer = "Make sure to input correct arguments!";
 		}
 
 		var embed = new discord.MessageEmbed()
-			.setTitle("**Problem**")
-			.setDescription(`${text}`)
+			.setTitle("**A problem occured**")
+			.addFields({
+				name: "Error:",
+				value: text
+			})
 			.setColor('#b80909')
-			.setFooter("Make sure to input correct arguments!")
+			.setFooter(footer)
 
 		msg.channel.send(embed).catch(console.error);
 	},

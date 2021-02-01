@@ -1,6 +1,6 @@
 const m = require('../methodsLoader.js');
 
-const muteCommand = {
+const vote = {
 	run: function(player){
 		player.guild.roles.fetch(player.client.roleId.muted)
 		.then(role => {
@@ -12,12 +12,11 @@ const muteCommand = {
 module.exports = {
 	name : "VoteMute",
 	alias : ["mute", "vm", "votem"],
-	use: "-VoteMute @[user] [reason]",
+	use: "-VoteMute (@Member) (reason)",
 	description : "Vote to mute a user in Text Channels",
-	options: [true],
-	users: [],
+	options: {ShowInHelp: true, Category: "Voting"},
 	run : function(msg, client, disc, args){
-		const player = args[0];
+		const player = m.utils.getMember(args[0]);
 		if(!player){return}
 
 		args.shift();
@@ -30,13 +29,13 @@ module.exports = {
 
 		m.msg.createVote(title, desc, fieldTitle, fieldText, msg, disc)
 		.then(em => {
-			m.utils.parseUser(player, client)
+			m.utils.getMember(player, client, msg)
 			.then(plr => {
 				if(plr === undefined){
 					m.utils.clearChat(msg, 1, client.channelId.voting);
 					return;
 				}
-				client.votes.set(em, [muteCommand, plr]);
+				client.votes.set(em, [vote, plr]);
 			})
 		});
 

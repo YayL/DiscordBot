@@ -5,12 +5,11 @@ module.exports = {
 	alias: ["bal"],
 	use: "-Balance",
 	description: "See your own balance",
-	options: [true],
-	users: [],
-	run: async function(msg, client, disc){
-		await m.data.getUserBalance(client, msg.author)
+	options: {ShowInHelp: true, Category: "Economy"},
+	run: function(msg, client, disc){
+		m.data.getBalance(client, msg.author, "bal")
 		.then(bal => {
-			m.msg.reply(msg, "Balance",`*Your balance is:* **${bal}$**`, client, disc);
+			m.msg.reply(msg, "Balance",`*Your balance is:* **$${m.utils.numberWithCommas(bal)}**`, client, disc);
 		})
 	}
 }

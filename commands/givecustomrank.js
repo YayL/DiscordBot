@@ -1,10 +1,9 @@
 module.exports = {
 	name : "GiveCustomRank",
 	alias : ["gcr", "givecr", "gcustomrank", "gcustomr", "gcrank"],
-	use: "-GiveCustomRank [name] [color](Hex)",
-	description : "Creates a new rank for you",
-	options: [true],
-	users: [],
+	use: "-GiveCustomRank (name) (hex-color)",
+	description : "Creates a new rank with custom color for you",
+	options: {ShowInHelp: true, Category: "User"},
 	run : function(msg, client, disc, args){
 
 		if(msg.member.roles.cache.array().length-1 <= client.settings.maxRanks || client.adminList.includes(msg.member.id)){

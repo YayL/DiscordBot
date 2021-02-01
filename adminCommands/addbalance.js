@@ -1,10 +1,10 @@
 const m = require('./../methodsLoader.js');
 
 module.exports = {
-	name: "SetBalance",
-	alias: ["sbal", "setbal"],
-	use: "-SetBalance @[user] [amount]",
-	description: "Set users bal",
+	name: "AddBalance",
+	alias: ["abal", "addbal"],
+	use: "-AddBalance @[user] [amount]",
+	description: "Add to users bal",
 	options: {ShowInHelp: false},
 	run: function(msg, client, disc, args){
 		m.utils.getMember(args[0], client, msg)
@@ -12,7 +12,7 @@ module.exports = {
 			if(args[0] == "me"){
 				plr = msg.author;
 			}
-			m.data.updateUserBalance(client, plr, args[1], "set");
+			m.data.updateUserBalance(client, plr, args[1], "add");
 		})
 	}
 }
