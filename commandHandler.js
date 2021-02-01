@@ -11,11 +11,13 @@ users -> special users that are only able to use these commands
 run -> Calls command function
 */
 
-function notCommandChannel(msg, client){
-	if(msg.channel.id == client.channelId.commands){
+function notCommandChannel(msg, client, notError){
+	if(client.channelId.commandChannels.includes(msg.channel.id)){
 		return false
 	}
-	m.utils.clearChat(msg, 1);
+	if(!notError){
+		m.utils.clearChat(msg, 1);
+	}
 	return true
 }
 
@@ -67,10 +69,15 @@ module.exports = {
 				commands.get(CommandName).run(msg, client, Discord, args, commands.array()); // Try executing CommandName.run; may yield errors
 				if(notCommandChannel(msg, client)){return}
 			}catch(e){
+				if(notCommandChannel(msg, client, false)){return}
 				if(e instanceof TypeError){ // Check if the error yielded was a type error(Commonly means that it was unable to find CommandName in command collection)
-					m.msg.errorReply(msg,"*Commmand was not found:* **" + CommandName + " " + args.join(" ") + "**", client, Discord, "***Make sure to check your command again!***");
+					console.log(e);
+					m.msg.errorReply(msg,"*There was an issue with command:* **" + CommandName + " " + args.join(" ") + "**",
+					 client, Discord, "Make sure to check your command again! Otherwise, report this to @!YayL");
 				}else{
 					console.log(e);
+					m.msg.errorReply(msg,"*There was an issue with command:* **" + CommandName + " " + args.join(" ") + "**",
+					 client, Discord, "Report this to @!YayL as soon as possible!");
 				}
 			}
 		}

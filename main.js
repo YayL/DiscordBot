@@ -1,21 +1,17 @@
-/* Changes:
-	1) Added MySQL database support
-	2) Added a balance command
-	3) Added some error message replies for users executing the command
-	4) Removed a uncessesary folder which I forgot to remove before
-	5) Changed how the previous "customMethod" file was handled and now it is all seperated into
-	   category groups within the methods folder to make it clearer.
-	6) Got rid of -clear all as it did not work as it should. You can now input a value over 100
-	   and it'll work fine.
+/* Changes for next Commit:
+	
 */
 
 // --- Setup stuff ---
 
 const Discord = require('discord.js'); // Getting discord module
 const client = new Discord.Client();
-const fs = require('fs'); // Getting file share module
+const fs = require('fs'); // Getting file system module
 
 client.mysql = require('mysql');
+
+const { promisify } = require('util')
+client.sleep = promisify(setTimeout)
 
 	// --- Collection Lists ---
 
@@ -29,10 +25,15 @@ client.rules = new Discord.Collection(); // All voted rules and then there are c
 
 	// --- Global variables ---
 
-client.guildId = '801908963275702314';
-
 client.adminList = ['183617597365813248']; // List of admin IDs
 client.botCount = 2
+
+client.categoryList = [
+	"Voting",
+	"User",
+	"Economy"
+
+]
 
 client.roleId = {
 	admin: '802154205145464882',
@@ -41,8 +42,9 @@ client.roleId = {
 };
 
 client.channelId = {
-	commands: '801914747599061022',
-	voting: '801914827760205885'
+	commandChannels: ['801914747599061022', '804277866790518804'], // [1] Bot-Commands [2] Admin-Commands
+	voting: '801914827760205885',
+	rules: '801916814501347329	'
 };
 
 client.settings = {
@@ -72,6 +74,6 @@ client.con.connect(err => {
 	console.log("Connected to DB!");
 });
 
-// --- Login bot & connect SQl DB---
+// --- Login bot ---
 
 client.login(client.pVars.token) // Activate/Login the bot-commands

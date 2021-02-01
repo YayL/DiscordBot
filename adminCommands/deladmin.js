@@ -1,9 +1,9 @@
 module.exports = {
-	name : "delAdmin",
+	name : "DelAdmin",
 	alias : ["da"],
+	use: "-DelAdmin",
 	description : "Delete role admin from author",
-	options: [false],
-	users: ["183617597365813248"],
+	options: {ShowInHelp: false},
 	run : function(msg, client, disc, args){
 		msg.guild.roles.fetch(client.roleId.admin)
 		.then(role => {

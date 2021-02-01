@@ -3,8 +3,7 @@ module.exports = {
 	alias : ["m"],
 	use: "-Member",
 	description : "Give yourself the member rank if you for some reason don't have it",
-	options: [true],
-	users: [],
+	options: {ShowInHelp: true, Category: "User"},
 	run : function(msg, client, disc){
 
 		msg.guild.roles.fetch(client.roleId.member) // Get member rank using its role id
