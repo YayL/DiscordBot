@@ -1,12 +1,23 @@
-const func = require('./customMethods.js')
+const m = require('./methodsLoader.js')
 
 const prefix = "-"
 
-function notCommandChannel(msg, client){
-	if(msg.channel.id == client.cmdChannel){
+/* 
+name -> Name of command
+alias -> List of Aliases
+description -> Short description of command
+options -> Different options boolean form
+users -> special users that are only able to use these commands
+run -> Calls command function
+*/
+
+function notCommandChannel(msg, client, notError){
+	if(client.channelId.commandChannels.includes(msg.channel.id)){
 		return false
 	}
-	func.clearChat(msg, 1);
+	if(!notError){
+		m.utils.clearChat(msg, 1);
+	}
 	return true
 }
 
@@ -23,15 +34,6 @@ function checkIfAlias(cmdName, cmds){ // Check if command input is an alias of a
 		}catch{console.error}
 	}
 	return null; // Return nothing if not found
-}
-
-function checkIfValidUser(user, userList){
-	for (allowed of userList){
-		if(user.id === allowed.id){
-			return true;
-		}
-	}
-	return false;
 }
 
 module.exports = {
@@ -52,16 +54,14 @@ module.exports = {
 			const alias = checkIfAlias(CommandName, commands.array());
 			if(alias != null){ // Check if alias was found
 				CommandName = alias.toLowerCase();
-			}
+			}	
 
 			try{
-				commands.get(CommandName).run(msg, args, client, Discord, commands.array()); // Try executing CommandName.run; may yield errors
+				commands.get(CommandName).run(msg, client, Discord, args, commands.array()); // Try executing CommandName.run; may yield errors
 				if(notCommandChannel(msg, client)){return}
 			}catch(e){
-				if(e instanceof TypeError){ // Check if the error yielded was a type error(Commonly means that it was unable to find CommandName in command collection)
-					console.log("\nCommmand was not found:\n");
-				}
-				console.log(e);
+				if(notCommandChannel(msg, client, false)){return}
+				client.eventEm.emit('CommandError', msg, CommandName, args, e)
 			}
 		}
 	}

@@ -6,9 +6,13 @@ module.exports = (client, disc) => {
 
 		for(const file of eventFile){
 			const event = require(`../events/${dir}/${file}`);
-			client.on(file.split('.')[0], event.bind(null, client, disc));
+			if(dir == 'custom'){
+				client.eventEm.on(file.split('.')[0], event.bind(null, client, disc));
+			}else{
+				client.on(file.split('.')[0], event.bind(null, client, disc));
+			}
 		}
 	}
 
-	['client', 'guild'].forEach(e => loadEvent(e));
+	['client', 'guild', 'custom'].forEach(e => loadEvent(e));
 }
