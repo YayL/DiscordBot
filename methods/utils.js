@@ -1,5 +1,3 @@
-const util = require('util'); 
-
 function getChannel(msg, channel){
 	var regex = /\d+/g
 	if(channel == undefined){
@@ -20,7 +18,7 @@ module.exports = {
 		}
 	},
 
-	getMember: async (player, client, reference) => {
+	getMember: async (player, reference) => {
 		if(player == undefined){return}
 		if(player.startsWith('<@') && player.endsWith('>')) {
 			player = player.slice(2, -1);
@@ -30,6 +28,7 @@ module.exports = {
 		}
 		return reference.guild.members.fetch(player)
 		.then(member => {
+			if(member.bot) return null;
 			return member;
 		});
 	},

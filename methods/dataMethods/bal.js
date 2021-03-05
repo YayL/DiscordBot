@@ -1,8 +1,8 @@
 function setBalance(plr, amount, client){
 	client.con.query(`SELECT * FROM user WHERE id = '${plr.id}'`, (e, rows) => {
 		if(e) throw e;
-		if(amount>2147483647){amount=2147483647}
-		if(amount<0){amount=0}
+		if(amount>9223372036854775000) amount = 9223372036854775000
+		if(amount<0) amount=0
 
 		let sql;
 
@@ -65,5 +65,19 @@ module.exports = {
 		}catch(e){
 			console.log(e);
 		}
-	}
+	},
+
+	updateTotalMoney(client){
+        client.con.query(`SELECT * FROM user`, (e, rows) => {
+            if(e) return console.error(e)
+            if(!rows.length) return client.totalMoney = 0
+
+            let money = 0
+
+            for(row of rows){
+                money += row.bal
+            }
+            client.totalMoney = money
+        })
+    }
 }

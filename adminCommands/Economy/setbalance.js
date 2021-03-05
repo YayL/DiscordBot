@@ -8,7 +8,7 @@ module.exports = {
 		if(args[0] == "me"){
 			return client.m.data.bal.updateUserBalance(client, msg.author, args[1], "set");
 		}
-		client.m.utils.getMember(args[0], client, msg)
+		client.m.utils.getMember(args[0], msg)
 		.then(member => {
 			return client.m.data.bal.updateUserBalance(client, member, args[1], "set");
 		})

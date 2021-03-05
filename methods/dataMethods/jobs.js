@@ -1,11 +1,19 @@
 module.exports = {
-    createJob(client, msg, name, base_pay, job_level_requirement, upgrade_job_options) {
+
+    createJob(client, name, base_pay, job_level_requirement, upgrade_job_options) {
         sql = `INSERT INTO jobs (name, base_pay, job_level_requirement, upgrade_job_options) VALUES ('${name}', ${base_pay}, ${job_level_requirement}, '${upgrade_job_options.join(',')}')`
         client.con.query(sql);
+    },
 
-        client.con.query(`SELECT * FROM jobs`, (e, rows) => {
-            if(e) throw e;
-            console.log(rows);
-        });
+    levelToXP(lvl){
+        return Math.pow(lvl, 4)*35 + 100*lvl*lvl - 135
+    },
+    xpToLevel(xp){
+        if (xp == 0) return 1; 
+        testLvl = 0
+        for (tempXp=0; tempXp <= xp; testLvl++){
+            tempXp = this.levelToXP(testLvl+1)
+        }
+        return testLvl-1
     }
 }

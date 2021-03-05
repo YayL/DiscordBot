@@ -5,5 +5,14 @@ module.exports = {
         }catch(e){
             console.error(e);
         }
-    }, client.timer.time.leaderboard)
+    }, client.timer.time.leaderboard),
+
+    totalMoney: (client) => setInterval(() => {
+        try{
+            client.m.data.bal.updateTotalMoney(client)
+        }catch(e){
+            console.error(e);
+        }
+
+    }, client.timer.time.totalMoney)
 }

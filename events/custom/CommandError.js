@@ -4,7 +4,7 @@ module.exports = (client, disc, msg, CommandName, args, e) => {
         client.eventEm.emit('InvalidCommand', msg, CommandName, args)
     }else{
         console.log(e.stack);
-        m.msg.errorReply(msg,"*There was an issue with command:* **" + CommandName + " " + args.join(" ") + "**",
-         client, disc, "Report this to @!YayL as soon as possible!");
+        client.m.msg.errorReply(msg,"*There was an issue with command:* **" + CommandName + " " + args.join(" ") + "**",
+         disc, "Report this to @!YayL as soon as possible!");
     }
 }

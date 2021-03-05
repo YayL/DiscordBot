@@ -7,10 +7,10 @@ async function printLeaderboard(msg, client, disc){
     let name;
     let index = 1;
 	for(val of client.cachedLB){
-        name = await client.m.utils.getMember(val.id, client, msg).then(plr => {return plr.displayName})
+        name = await client.m.utils.getMember(val.id, msg).then(plr => {return plr.displayName})
         embed.addFields({
-            name:  "**" + index + ". " + name + "**",
-            value: "**_$" + client.m.utils.numberWithCommas(val.bal) + "_**"
+            name:  "**" + index + ". " + name + " - " + Math.floor((val.bal/client.totalMoney)*1000000)/10000 +"%**",
+            value: `**$${client.m.utils.numberWithCommas(val.bal)}**`
         }
         )
         index += 1;
@@ -36,7 +36,8 @@ module.exports = {
 	description: "See the server leaderboard",
 	options: {ShowInHelp: true, Category: "Economy"},
 	run: async function(msg, client, disc){
-        if(client.cachedLB.length == undefined) await client.m.data.bal.updateLB(client)
+        if(client.cachedLB.length == undefined) await client.m.data.bal.updateLB(client);
+        if(client.totalMoney == 0) await client.m.data.bal.updateTotalMoney(client);
         printLeaderboard(msg, client, disc)
 	}
 }

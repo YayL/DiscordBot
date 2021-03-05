@@ -39,7 +39,7 @@ function checkIfAlias(cmdName, cmds){ // Check if command input is an alias of a
 module.exports = {
 	handleCommand: (msg, client, Discord) => {
 		var commands = client.commands
-		if(client.adminList.includes(msg.author.id)){
+		if(client.adminList.includes(msg.author.id) && client.settings.adminCommands){
 			commands = client.commands.concat(client.adminCommands); // Combine commands and adminCommands
 		}
 

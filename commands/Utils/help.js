@@ -30,7 +30,7 @@ module.exports = {
 	alias : ["h", "info", "i", "cmds", "commands"],
 	use: "-help",
 	description : "Displays all available commands",
-	options: {ShowInHelp: true, Category: "Managment"},
+	options: {ShowInHelp: true, Category: "Utils"},
 	run : function(msg, client, disc, args){
 		const cmds = client.commands.array();
 		for(c of client.categoryList){

@@ -13,5 +13,5 @@ function loadFiles(client, directory){ // commands or adminCommands
 }
 
 module.exports = (client, disc) => {
-	['commands', 'adminCommands'].forEach(e => loadFiles(client, e));
+	['adminCommands', 'commands'].forEach(e => loadFiles(client, e));
 }

@@ -1,5 +1,5 @@
 module.exports = {
-	createVote: (title, description, fieldTitle, fieldText, msg, discord) => {
+	createVote(title, description, fieldTitle, fieldText, msg, discord){
 		var embed = new discord.MessageEmbed()
 			.setTitle(title)
 			.setDescription(description)
@@ -22,7 +22,7 @@ module.exports = {
 		}
 	},
 
-	errorReply: (msg, text, client, discord, footer) =>{
+	errorReply(msg, text, discord, footer){
 		if(footer == undefined){
 			footer = "Make sure to input correct arguments!";
 		}
@@ -39,7 +39,7 @@ module.exports = {
 		msg.channel.send(embed).catch(console.error);
 	},
 
-	reply: (msg, title, text, discord) => {
+	reply(msg, title, text, discord){
 		var embed = new discord.MessageEmbed()
 			.setTitle(`**${title}**`)
 			.setDescription(text)
@@ -48,5 +48,14 @@ module.exports = {
 		
 
 		msg.channel.send(embed).catch(console.error);
+	},
+
+	log(msg, toLog, discord){
+		const embed = new discord.MessageEmbed()
+			.setTitle("**Log:**")
+			.setDescription(toLog)
+			.setColor("#FFFFFF")
+			.setFooter("Hope you're having a great day! :)");
+		msg.channel.send(embed).catch(console.error)
 	}
 }
