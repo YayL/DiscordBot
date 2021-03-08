@@ -1,13 +1,12 @@
 /* Changes for next Commit:
-	1) Added a job-xp curve
-	2) Added profile command
-	3) Increased limit of user capital
-	4) Added total market capital to profile and leaderboard
-	5) Fully implemented the -work command to give you XP and money when employed!
-	6) Fixed guildMemberAdd problems
-	7) Added 32 jobs
+	1) Added so the job command can not be used if you are not above the level requirement for the next jobs
+	2) Small changes to the messages for the work related replies
+	3) Added a level up message
+	4) Added the highlow gambling game
+	5) Changed the xp curve to something a little easier
+	6) Added 10 jobs
+	7) Added the card game blackjack
 */
-
 /*
 	TODO Before release:
 	1) Finish the website
@@ -47,15 +46,17 @@ client.votes = new Discord.Collection(); // All current votes in #voting
 client.rules = new Discord.Collection(); // All voted rules and then there are core laws set by me for some order
 
 client.cachedLB = {}
-client.lbMinimum = 1000
+client.lbMinimum = 100
 client.lbSize = 10
 
 client.jobList = new Discord.Collection();
 
 	// --- Global variables ---
 
+client.emoji = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷', '🇸'];
+
 client.adminList = ['183617597365813248']; // List of admin IDs
-client.botCount = 2
+client.botCount = 3
 client.totalMoney = 0
 
 client.categoryList = []

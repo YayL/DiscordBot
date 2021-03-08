@@ -7,13 +7,12 @@ module.exports = {
 	description: "Remove a set amount of messages in current channel",
 	options: {ShowInHelp: false},
 	run: async function(msg, client, disc, args){
-		m.utils.clearChat(msg, 1);
-		var amount = 0
-		amount = Number(args[0]);
+		let _ = await m.utils.clearChat(msg, 1);
+		var amount = Number(args[0]);
 		if(isNaN(amount)){return}
 		while(amount > 100){
 			try{
-				await m.utils.clearChat(msg, 100);
+				_ = await m.utils.clearChat(msg, 100);
 				amount -= 100;
 			}catch(e){break}
 		}

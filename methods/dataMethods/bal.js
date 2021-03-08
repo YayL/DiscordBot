@@ -9,7 +9,7 @@ function setBalance(plr, amount, client){
 		if(rows.length < 1){
 			sql = `INSERT INTO user (id, bal) VALUES ('${plr.id}', ${amount})`
 		}else{
-			sql = `UPDATE user SET bal = ${amount} WHERE id = ${plr.id}`
+			sql = `UPDATE user SET bal = ${amount} WHERE id = '${plr.id}'`
 		}
 
 		client.con.query(sql);
@@ -79,5 +79,11 @@ module.exports = {
             }
             client.totalMoney = money
         })
-    }
+    },
+
+	async enoughMoney(client, plr, amount){
+    	const balance = await client.m.data.bal.getBalance(client, plr)
+        if(balance<amount) return client.eventEm.emit('NotEnoughMoney', msg, plr, (amount-balance));
+        return true;
+	}
 }

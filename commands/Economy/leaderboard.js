@@ -1,5 +1,3 @@
-
-
 async function printLeaderboard(msg, client, disc){
 	const embed = new disc.MessageEmbed() // Create embeded message
 		.setTitle("***__LEADERBOARD:__***") // Set the title

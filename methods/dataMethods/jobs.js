@@ -6,7 +6,7 @@ module.exports = {
     },
 
     levelToXP(lvl){
-        return Math.pow(lvl, 4)*35 + 100*lvl*lvl - 135
+        return Math.pow(lvl, 4)*25 + 100*lvl*lvl - 125
     },
     xpToLevel(xp){
         if (xp == 0) return 1; 
