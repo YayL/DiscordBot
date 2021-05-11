@@ -6,7 +6,7 @@ module.exports = {
 	options: {ShowInHelp: false},
 	run: async function(msg, client, disc, args){
 		const payee = await client.m.utils.getMember(args[0], msg);
-		let amount = client.m.utils.suffixCheck(args[0])
+		let amount = client.m.utils.suffixCheck(args[1])
         if(amount == false) return client.eventEm.emit('InvalidCommand', "Highlow", args);
         if(amount == "all") amount = await client.m.data.bal.getBalance(client, msg.member);
 

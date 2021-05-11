@@ -4,7 +4,7 @@ module.exports = {
 	use: "-UpdateLB",
 	description: "Update Money Leaderboard",
 	options: {ShowInHelp: false},
-	run: function(msg, client, disc){
+	run: function(msg, client){
 		client.m.data.bal.updateLB(client);
 	}
 }

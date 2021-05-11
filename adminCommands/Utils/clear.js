@@ -2,17 +2,16 @@ const m = require("../../methodsLoader.js");
 
 module.exports = {
 	name: "Clear",
-	alias: ["prune", "p", "c", "del"],
+	alias: ["prune", "c"],
 	use: "-Clear (amount)",
 	description: "Remove a set amount of messages in current channel",
 	options: {ShowInHelp: false},
 	run: async function(msg, client, disc, args){
-		let _ = await m.utils.clearChat(msg, 1);
-		var amount = Number(args[0]);
-		if(isNaN(amount)){return}
+		var amount = Number(args[0]) +1;
+		if(isNaN(amount) || amount<1){return}
 		while(amount > 100){
 			try{
-				_ = await m.utils.clearChat(msg, 100);
+				await m.utils.clearChat(msg, 100);
 				amount -= 100;
 			}catch(e){break}
 		}

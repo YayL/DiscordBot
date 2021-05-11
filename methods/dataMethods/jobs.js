@@ -5,15 +5,16 @@ module.exports = {
         client.con.query(sql);
     },
 
-    levelToXP(lvl){
-        return Math.pow(lvl, 4)*25 + 100*lvl*lvl - 125
+    nextLvlXp(lvl){
+        return 100*lvl*lvl*lvl;
     },
+
+    totalLvlXp(lvl){
+        return Math.pow(10*(lvl*(lvl+1)/2), 2)
+    },
+
     xpToLevel(xp){
-        if (xp == 0) return 1; 
-        testLvl = 0
-        for (tempXp=0; tempXp <= xp; testLvl++){
-            tempXp = this.levelToXP(testLvl+1)
-        }
-        return testLvl-1
+        if (xp <= 100) return 1; 
+        return Math.floor(Math.sqrt(2*Math.sqrt(xp)/10 + 0.25) - 0.5)+1
     }
 }

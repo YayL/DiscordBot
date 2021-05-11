@@ -21,7 +21,7 @@ module.exports = {
 
 			xp_grant = Math.floor(Math.random() * (xpTop - xpBottom + 1) + xpBottom)
 			base_pay = client.jobList.get(user[0].job_name).base_pay
-			money_grant = Math.floor(base_pay * ((0.6*Math.random())/2 + 1))
+			money_grant = Math.floor(base_pay * ((0.6*Math.random())/2 + 1))*(user[0].rebirths+1)
 
 			client.m.data.user.addXP(client, msg, msg.member, xp_grant, true)
 			client.m.data.bal.updateUserBalance(client, msg.author, money_grant, "add")

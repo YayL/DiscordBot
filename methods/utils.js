@@ -8,7 +8,7 @@ function getChannel(msg, channel){
 
 module.exports = {
 	clearChat: async (msg, amount, channel) => {
-		channel = msg.channel
+		channel = channel != undefined ? getChannel(msg, channel) : msg.channel;
 		try{
 			if(typeof(amount) === 'number'){
 				channel.bulkDelete(amount).catch(console.error); // Remove set amount of messages younger than 2 weeks old
@@ -60,13 +60,13 @@ module.exports = {
 
 	suffixList: ['k', 'm', 'b', 't'],
 
-	suffixCheck(number){
+	suffixCheck(number, override=false){
 		if(!number) return false;
-		if(number.toLowerCase()=="all") return "all"
+		if(!override && number.toLowerCase()=="all") return "all"
 		for(s of this.suffixList){
 			if(number.endsWith(s)) return Number(number.slice(0,number.length - s.length))*(Math.pow(10, (this.suffixList.indexOf(s)+1)*3))
 		}
-		if(isNaN(Number(number)) || Number(number)<1) return false;
+		if(isNaN(Number(number)) || (!override && Number(number)<1)) return false;
 		return Number(number);
 	}
 }

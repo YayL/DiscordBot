@@ -13,44 +13,44 @@ module.exports = {
 
         client.m.data.bal.updateUserBalance(client, msg.member, -1*bet, "add");
 
-	    await highlow(client, msg, disc, bet)
+	    highlow(client, msg, disc, bet)
 	}
 }
 
 async function highlow(client, msg, disc, bet){
     const number = await Math.floor(Math.random()*(100))+1
-        const hint = await Math.floor(Math.random()*(100))+1
-		const embed = new disc.MessageEmbed()
-            .setTitle(`${msg.member.displayName}'s high-low game`)
-            .setDescription(`A number has been chosen at random. The hint is ${hint}\n`
-             + `:regional_indicator_h: Higher\n`
-             + `:regional_indicator_l: Lower\n`
-             + `:regional_indicator_j: Jackpot`)
-            .setFooter('Choose if you think it is higher, lower or that number')
+    const hint = await Math.floor(Math.random()*(100))+1
+    const embed = new disc.MessageEmbed()
+        .setTitle(`${msg.member.displayName}'s high-low game`)
+        .setDescription(`A number has been chosen at random. The hint is ${hint}\n`
+            + `:regional_indicator_h: Higher\n`
+            + `:regional_indicator_l: Lower\n`
+            + `:regional_indicator_j: Jackpot`)
+        .setFooter('Choose if you think it is higher, lower or that number')
 
-        const filter = (reaction, user) => {
-	        if(user.id != msg.member.id) return false;
-	        let correct = false;
-	        if(reaction.emoji.name == client.emoji[7]){
-	            checkIfRight(client, msg, disc, bet, number, hint, "h")
-                correct = true
-            }else if(reaction.emoji.name == client.emoji[11] ){
-	            checkIfRight(client, msg, disc, bet, number, hint, "l")
-                correct = true
-            }else if(reaction.emoji.name == client.emoji[9] ){
-	            checkIfRight(client, msg, disc, bet, number, hint, "j")
-                correct = true
-            }
-	        if(correct) reaction.message.delete();
+    const filter = (reaction, user) => {
+        if(user.id != msg.member.id) return false;
+        let correct = false;
+        if(reaction.emoji.name == client.emoji[7]){
+            checkIfRight(client, msg, disc, bet, number, hint, "h")
+            correct = true
+        }else if(reaction.emoji.name == client.emoji[11] ){
+            checkIfRight(client, msg, disc, bet, number, hint, "l")
+            correct = true
+        }else if(reaction.emoji.name == client.emoji[9] ){
+            checkIfRight(client, msg, disc, bet, number, hint, "j")
+            correct = true
         }
+        if(correct) reaction.message.delete();
+    }
 
-        msg.channel.send(embed)
-            .then(message => {
-                message.awaitReactions(filter)
-                message.react(client.emoji[7]); //H
-                message.react(client.emoji[11]); //L
-                message.react(client.emoji[9]); //J
-            })
+    msg.channel.send(embed)
+        .then(message => {
+            message.awaitReactions(filter)
+            message.react(client.emoji[7]); //H
+            message.react(client.emoji[11]); //L
+            message.react(client.emoji[9]); //J
+        })
 }
 
 function checkIfRight(client, msg, disc, bet, number, hint, choice){

@@ -11,12 +11,12 @@ module.exports = {
 			})
 		const channel = msg.guild.channels.cache.get(msg.client.channelId.voting);
 		try{
-		return channel.send(embed)
-		.then(em => {
-			em.react("✅");
-			em.react("❌");
-			return em;
-		})
+			return channel.send(embed)
+			.then(em => {
+				em.react("✅");
+				em.react("❌");
+				return em;
+			})
 		}catch(e){
 			clearChat(msg, 1);
 		}
@@ -45,7 +45,6 @@ module.exports = {
 			.setDescription(text)
 			.setColor('#0ac2c2')
 			.setFooter("Have a good day!")
-		
 
 		msg.channel.send(embed).catch(console.error);
 	},

@@ -2,12 +2,13 @@ function printCommandCategories(msg, disc, client, cmds, category){
 	const embed = new disc.MessageEmbed() // Create embeded message
 			.setTitle("***" + category + " Commands:***") // Set the title
 			.setColor('#9aedea') // Give it a color in hexidecimal format
-			.setFooter("Anarchy!");
+			.setFooter("Anarchy!"+"\u3000".repeat(100)+"|");
 		for(var i = 0; i < cmds.length; i++){ // Loop through command collection
 			if(cmds[i].options.ShowInHelp && cmds[i].options.Category == category){
 				embed.addFields({
 					name: "---------------------",
-					value: "\u200b"},
+					value: "\u200b",
+					inline: false},
 				{
 					name: "**" + cmds[i].name + "**",
 					value: cmds[i].description + "\n",

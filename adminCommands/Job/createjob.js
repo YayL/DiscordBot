@@ -1,7 +1,7 @@
 module.exports = {
 	name: "CreateJob",
 	alias: ["cjob"],
-	use: "-CreateJob [Job Title] [Base_Pay] [Job_Level] (List Of Jobs to upgrade to)",
+	use: "-CreateJob [Job Title] [Base_Pay]\n[Job_Level] (List Of Jobs to upgrade to)",
 	description: "Add a Job",
 	options: {ShowInHelp: false},
 	run: function(msg, client, disc, args){

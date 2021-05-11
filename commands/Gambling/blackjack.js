@@ -6,7 +6,7 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Gambling"},
 	run: async function(msg, client, disc, args){
         let bet = client.m.utils.suffixCheck(args[0])
-        if(!bet) return client.eventEm.emit('InvalidCommand', msg, "Highlow", args);
+        if(!bet) return client.eventEm.emit('InvalidCommand', msg, "Blackjack", args);
         if(bet == "all") bet = await client.m.data.bal.getBalance(client, msg.member);
 
         if(!await client.m.data.bal.enoughMoney(client, msg.member, bet)) return
@@ -56,7 +56,7 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
     else if((finished && (plrPoints>dlrPoints) && !plrBust)|| dealerBust) {
         const winnings = Math.floor(bet*(Math.random()*(1.5-0.3)+0.3))
         embed.addField(`You won!`, `You earned $${client.m.utils.numberWithCommas(winnings)}`)
-        client.m.data.bal.updateUserBalance(client, player, winnings, "add")
+        client.m.data.bal.updateUserBalance(client, player, winnings+bet, "add")
     }
     else if(plrBust) embed.addField(`BUST`, `You went above 21!`)
     else if(dealerBust) embed.addField(`You won!`, )
@@ -71,7 +71,7 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
         let val = ""
         if(reaction.emoji.name == client.emoji[7]) val = "h"// Hit
         else if(reaction.emoji.name == client.emoji[18]) val = "s"// Stand
-        else if(reaction.emoji.name == client.emoji[9]) val = "d" // Double
+        //else if(reaction.emoji.name == client.emoji[9]) val = "d" // Double
         else return;
         reaction.message.delete();
         blackjack(ref, client, discord, bet, player, cards, dealerHand, playerHand, val)
@@ -85,7 +85,7 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
             }catch(e){console.log(1)}
             msg.react(client.emoji[7]);
             msg.react(client.emoji[18]);
-            msg.react(client.emoji[3]);
+            //msg.react(client.emoji[3]); Double
         })
 }
 

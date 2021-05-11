@@ -52,21 +52,6 @@ module.exports = {
 		}
 	},
 
-	updateLB: (client) => {
-		try{
-			return new Promise(resolve => {
-				client.con.query(`SELECT * FROM user WHERE bal > ${client.lbMinimum-1} ORDER BY bal DESC LIMIT ${client.lbSize}`, (e, rows) => {
-					if(e) throw e;
-					client.cachedLB = rows
-					client.timer.currentTime.leaderboard = Date.now()
-					resolve();
-				});
-			});
-		}catch(e){
-			console.log(e);
-		}
-	},
-
 	updateTotalMoney(client){
         client.con.query(`SELECT * FROM user`, (e, rows) => {
             if(e) return console.error(e)
@@ -80,6 +65,22 @@ module.exports = {
             client.totalMoney = money
         })
     },
+
+	updateLB(client){
+    	this.updateTotalMoney(client);
+		try{
+			return new Promise(resolve => {
+				client.con.query(`SELECT * FROM user WHERE bal > ${client.lbMinimum-1} ORDER BY bal DESC LIMIT ${client.lbSize}`, (e, rows) => {
+					if(e) throw e;
+					client.cachedLB = rows
+					client.timer.currentTime.leaderboard = Date.now()
+					resolve();
+				});
+			});
+		}catch(e){
+			console.log(e);
+		}
+	},
 
 	async enoughMoney(client, plr, amount){
     	const balance = await client.m.data.bal.getBalance(client, plr)
