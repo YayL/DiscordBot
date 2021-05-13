@@ -5,66 +5,78 @@ function addUserToDatabase(client, plr){
 }
 
 function checkLevelUP(client, msg, plr, xp, info){
-    if(xp >= client.m.data.jobs.totalLvlXp(client.m.data.jobs.xpToLevel(info.job_xp))){
-        client.eventEm.emit('userLevelUP', msg, plr, xp);
-    }
+    try{
+        if(xp >= client.m.data.jobs.totalLvlXp(client.m.data.jobs.xpToLevel(info.job_xp))){
+            client.eventEm.emit('userLevelUP', msg, plr, xp);
+        }
+    }catch(e){
+        client.m.msg.log(client.guild, e)
+    } 
 }
 
 module.exports = {
-    resetUser: async (client, plr, isRebirth=false) => {
-        let rebirth = null;
-        if(isRebirth){
-            rebirth = await client.m.data.user.get(client, user, 'rebirths')+1;
-            const achivements = await client.m.data.user.get(client, user, 'achivements');
+    resetUser: async (client, user) => {
+        try{
+            client.con.query(`DELETE FROM user WHERE id = '${user.id}'`)
+            return new Promise((resolve) => {resolve(addUserToDatabase(client, user))})
+        }catch(e){
+            client.m.msg.log(client.guild, e)
         }
-        
-        client.con.query(`DELETE FROM user WHERE id = '${plr.id}'`)
-        await addUserToDatabase(client, plr)
-
-        if(isRebirth){
-            client.con.query(`UPDATE user SET rebirths = ${rebirth} WHERE id = '${user.id}'`)
-            client.con.query(`UPDATE user SET achivements = '${achivements}' WHERE id = '${user.id}'`)
-        }
-
-        return new Promise(resolve => {resolve(rebirth)})
+            
     },
 
     addXP(client, msg, plr, xp, set_work_timer) {
-        client.con.query(`SELECT * FROM user WHERE id = '${plr.id}'`, (e, rows) => {
-            if(e) return console.log(e);
-            if(rows.length < 1) addUserToDatabase(client, plr)
-            xp += Number(rows[0].job_xp)
-            sql = `UPDATE user SET job_xp = ${xp} WHERE id = '${plr.id}'`
+        try{
+            client.con.query(`SELECT * FROM user WHERE id = '${plr.id}'`, (e, rows) => {
+                if(e) return console.log(e);
+                if(rows.length < 1) addUserToDatabase(client, plr)
+                xp += Number(rows[0].job_xp)
 
-            if(set_work_timer) client.con.query(`UPDATE user SET last_work = '${Date.now()}' WHERE id = '${plr.id}'`)
+                if(xp>client.maxXP) xp = client.maxXP
+                if(xp<0) xp=0
 
-            client.con.query(sql)
+                sql = `UPDATE user SET job_xp = ${xp} WHERE id = '${plr.id}'`
 
-            checkLevelUP(client, msg.channel, plr, xp, rows[0])
-        });
+                if(set_work_timer) client.con.query(`UPDATE user SET last_work = '${Date.now()}' WHERE id = '${plr.id}'`)
+
+                client.con.query(sql)
+
+                checkLevelUP(client, msg.channel, plr, xp, rows[0])
+            });
+        }catch(e){
+            client.m.msg.log(client.guild, e)
+        }
+        
     },
+
+
 
     get: async(client, plr, info) => {
         return new Promise(resolve => {
-            try{
                 client.con.query(`SELECT ${info} FROM user WHERE id = '${plr.id}'`, async (e, rows) => {
-                    if(!rows.length) {
-                        await addUserToDatabase(client, plr)
-                        resolve("notFound");
+                    try{
+                        if(info==="*" && rows.length==0) {
+                            await addUserToDatabase(client, plr)
+                            return resolve("notFound");
+                        }
+                        if(e){
+                            client.m.msg.log(client.guild, e)
+                            return resolve(null);
+                        }
+                        if(info === "*") resolve(rows[0]);
+                        else{
+                            if(rows[0] == undefined){
+                                return resolve("")
+                            }
+                            return resolve(rows[0][info]);
+                        } 
+                    }catch(e){
+                        client.m.msg.log(client.guild, e)
                     }
-                    if(e){
-                        console.log(e);
-                        resolve(null);
-                    }
-                    if(info === "*") resolve(rows[0]);
-                    else resolve(rows[0][info]);
+                        
                 })
-            }catch(e){
-                console.log(e);
-                resolve(null);
-            }
         }).catch(e => {
-            console.log(e)
+            client.m.msg.log(client.guild, e)
         })
     }
 }

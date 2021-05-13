@@ -5,6 +5,11 @@ module.exports = {
 	description: "Update Money Leaderboard",
 	options: {ShowInHelp: false},
 	run: function(msg, client){
-		client.m.data.bal.updateLB(client);
+		try{
+			client.m.data.bal.updateLB(client);
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
+		
 	}
 }

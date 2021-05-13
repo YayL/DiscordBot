@@ -7,6 +7,11 @@ module.exports = {
 	description: "Update rules",
 	options: {ShowInHelp: false},
 	run: function(msg, client, disc, args){
-		ur.update(client, disc, msg);
+		try{
+			ur.update(client, disc, msg);
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
+		
 	}
 }

@@ -1,60 +1,80 @@
+function getErrorObject(){
+    try { throw Error('') } catch(err) { return err; }
+}
+
 module.exports = {
 	createVote(title, description, fieldTitle, fieldText, msg, discord){
-		var embed = new discord.MessageEmbed()
-			.setTitle(title)
-			.setDescription(description)
-			.setColor('#74ed4c')
-			.setFooter("Vote below if you agree or disagree!")
-			.addFields({
-				name: fieldTitle,
-				value: fieldText
-			})
-		const channel = msg.guild.channels.cache.get(msg.client.channelId.voting);
 		try{
+			var embed = new discord.MessageEmbed()
+				.setTitle(title)
+				.setDescription(description)
+				.setColor('#74ed4c')
+				.setFooter(`Vote below if you agree or disagree!\n - ${msg.member.displayName}`)
+				.addFields({
+					name: fieldTitle,
+					value: fieldText
+				})
+			const channel = msg.guild.channels.cache.get(msg.client.channelId.voting);
 			return channel.send(embed)
 			.then(em => {
 				em.react("✅");
 				em.react("❌");
 				return em;
 			})
-		}catch(e){
-			clearChat(msg, 1);
-		}
+    	}catch(e){
+    		this.log(msg.guild, e)
+    	}
 	},
 
 	errorReply(msg, text, discord, footer){
-		if(footer == undefined){
-			footer = "Make sure to input correct arguments!";
-		}
+		try{
+			if(footer == undefined){
+				footer = "Make sure to input correct arguments!";
+			}
 
-		var embed = new discord.MessageEmbed()
-			.setTitle("**A problem occured**")
-			.addFields({
-				name: "Error:",
-				value: text
-			})
-			.setColor('#b80909')
-			.setFooter(footer)
+			var embed = new discord.MessageEmbed()
+				.setTitle("**A problem occured**")
+				.addFields({
+					name: "Error:",
+					value: text
+				})
+				.setColor('#b80909')
+				.setFooter(footer)
 
-		msg.channel.send(embed).catch(console.error);
+			msg.channel.send(embed).catch(console.error);
+    	}catch(e){
+    		this.log(msg.guild, e)
+    	}
 	},
 
 	reply(msg, title, text, discord){
-		var embed = new discord.MessageEmbed()
-			.setTitle(`**${title}**`)
-			.setDescription(text)
-			.setColor('#0ac2c2')
-			.setFooter("Have a good day!")
+		try{
+			var embed = new discord.MessageEmbed()
+				.setTitle(`**${title}**`)
+				.setDescription(text)
+				.setColor('#0ac2c2')
+				.setFooter("Have a good day!")
 
-		msg.channel.send(embed).catch(console.error);
+			msg.channel.send(embed).catch(console.error);
+    	}catch(e){
+    		this.log(msg.guild, e)
+    	}
 	},
 
-	log(msg, toLog, discord){
-		const embed = new discord.MessageEmbed()
-			.setTitle("**Log:**")
-			.setDescription(toLog)
-			.setColor("#FFFFFF")
-			.setFooter("Hope you're having a great day! :)");
-		msg.channel.send(embed).catch(console.error)
+	log(guild, toLog, slicing=3){
+		try{
+			var stack = toLog.stack.split("\n").slice(1);
+			guild.channels.cache.get('842354024573566986').send({
+			    embed: {
+			      author: {name: `${toLog}`},
+			      color: "FFFFFF",
+			      description: `${stack}`,
+			      footer: { text: `Time to fix some bugs! Good luck!`},
+			    }
+		  	}).catch(console.error);
+    	}catch(e){
+    		console.log(e)
+    	}
+		
 	}
 }

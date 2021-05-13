@@ -5,15 +5,20 @@ module.exports = {
 	description: "Bet that you will win the blackjack",
 	options: {ShowInHelp: true, Category: "Gambling"},
 	run: async function(msg, client, disc, args){
-        let bet = client.m.utils.suffixCheck(args[0])
-        if(!bet) return client.eventEm.emit('InvalidCommand', msg, "Blackjack", args);
-        if(bet == "all") bet = await client.m.data.bal.getBalance(client, msg.member);
+        try{
+            let bet = client.m.utils.suffixCheck(args[0])
+            if(!bet) return client.eventEm.emit('InvalidCommand', msg, "Blackjack", args);
+            if(bet == "all") bet = await client.m.data.bal.getBalance(client, msg.member);
 
-        if(!await client.m.data.bal.enoughMoney(client, msg.member, bet)) return
+            if(!await client.m.data.bal.enoughMoney(client, msg.member, bet)) return
 
-        client.m.data.bal.updateUserBalance(client, msg.member, -1*bet, "add");
+            client.m.data.bal.updateUserBalance(client, msg.member, -1*bet, "add");
 
-        blackjack(msg, client, disc, bet, msg.member)
+            blackjack(msg, client, disc, bet, msg.member)
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
+        
     }
 }
 
@@ -69,9 +74,9 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
     const filter = (reaction, user) => {
         if(user.id != player.id) return;
         let val = ""
-        if(reaction.emoji.name == client.emoji[7]) val = "h"// Hit
-        else if(reaction.emoji.name == client.emoji[18]) val = "s"// Stand
-        //else if(reaction.emoji.name == client.emoji[9]) val = "d" // Double
+        if(reaction.emoji.name == client.s.emoji[7]) val = "h"// Hit
+        else if(reaction.emoji.name == client.s.emoji[18]) val = "s"// Stand
+        //else if(reaction.emoji.name == client.s.emoji[9]) val = "d" // Double
         else return;
         reaction.message.delete();
         blackjack(ref, client, discord, bet, player, cards, dealerHand, playerHand, val)
@@ -83,8 +88,8 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
             try {
                 msg.awaitReactions(filter)
             }catch(e){console.log(1)}
-            msg.react(client.emoji[7]);
-            msg.react(client.emoji[18]);
+            msg.react(client.s.emoji[7]);
+            msg.react(client.s.emoji[18]);
             //msg.react(client.emoji[3]); Double
         })
 }

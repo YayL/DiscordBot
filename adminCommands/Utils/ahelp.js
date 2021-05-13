@@ -36,7 +36,12 @@ module.exports = {
 	description : "Displays all Admin Commands",
 	options: {ShowInHelp: false},
 	run : function(msg, client, disc){
-		const cmds = client.adminCommands.array();
-		printCommandCategories(msg, disc, cmds);
+		try{
+			const cmds = client.adminCommands.array();
+			printCommandCategories(msg, disc, cmds);
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
+		
 	}
 }

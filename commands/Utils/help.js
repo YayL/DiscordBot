@@ -33,9 +33,13 @@ module.exports = {
 	description : "Displays all available commands",
 	options: {ShowInHelp: true, Category: "Utils"},
 	run : function(msg, client, disc, args){
-		const cmds = client.commands.array();
-		for(c of client.categoryList){
-			printCommandCategories(msg, disc, client, cmds, c);
-		}
+		try{
+			const cmds = client.commands.array();
+			for(c of client.categoryList){
+				printCommandCategories(msg, disc, client, cmds, c);
+			}
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
 	}
 }

@@ -3,16 +3,16 @@ module.exports = {
         try{
             client.m.data.bal.updateLB(client)
         }catch(e){
-            console.error(e);
+            client.m.msg.log(client.guild, e);
         }
-    }, client.timer.time.leaderboard),
+    }, client.s.total_LB_Time),
 
     totalMoney: (client) => setInterval(() => {
         try{
             client.m.data.bal.updateTotalMoney(client)
         }catch(e){
-            console.error(e);
+            client.m.msg.log(client.guild, e)
         }
 
-    }, client.timer.time.totalMoney)
+    }, client.s.total_TM_Time)
 }

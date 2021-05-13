@@ -17,7 +17,12 @@ module.exports = {
 	description: "Turns off the bot correctly",
 	options: {ShowInHelp: false},
 	run : function(msg, client, disc){
-		m.utils.clearChat(msg, 1);
-		beforeExit(msg, client);
+		try{
+			m.utils.clearChat(msg, 1);
+			beforeExit(msg, client);
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
+		
 	}
 }

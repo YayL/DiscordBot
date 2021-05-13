@@ -5,10 +5,16 @@ module.exports = {
 	description: "Add a Job",
 	options: {ShowInHelp: false},
 	run: function(msg, client, disc, args){
-		const name = args[0]
-		const base_pay = Number(args[1])
-		const job_level = Number(args[2])
-		const upgrade_job_name_options = args.slice(3)
-		client.m.data.jobs.createJob(client, name, base_pay, job_level, upgrade_job_name_options);
+		try{
+			var name = '';
+			[name, args] = client.m.utils.argsWithSpace(args)
+			const base_pay = Number(args[0])
+			const job_level = Number(args[1])
+			const upgrade_job_name_options = args.slice(2)
+			client.m.data.jobs.createJob(client, name, base_pay, job_level, upgrade_job_name_options);
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
+		
 	}
 }

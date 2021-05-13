@@ -10,29 +10,24 @@ module.exports = {
 	use: "-VoteKick (@Member) (reason)",
 	description : "Vote to kick a user",
 	options: {ShowInHelp: true, Category: "Voting"},
-	run : function(msg, client, disc, args){
-		var player = client.m.utils.getMember(args[0]);
-		if(!player){return}
+	run : async function(msg, client, disc, args){
+		try{
+			const player = await client.m.utils.getMember(args[0], msg)
+			if(!player) return client.m.utils.clearChat(msg, 1, client.channelId.voting);
 
-		args.shift();
-		const reason = args.join(" ");
+			args.shift();
+			const reason = args.join(" ");
 
-		const title = "Vote Kick"
-		const desc = `Do you wish to kick ${player}?`
-		const fieldTitle = "Reason for kick"
-		const fieldText = `${msg.member.user.username} Wishes to kick ${player} because: ${reason}`
+			const title = "Vote Kick"
+			const desc = `Do you wish to kick ${player}?`
+			const fieldTitle = "Reason for kick"
 
-		client.m.msg.createVote(title, desc, fieldTitle, fieldText, msg, disc)
-		.then(em => {
-			client.m.utils.getMember(player, client, msg)
-			.then(plr => {
-				if(plr === undefined){
-					client.m.utils.clearChat(msg, 1, client.channelId.voting);
-					return;
-				}
-				client.votes.set(em, [vote, plr]);
-			})
-		});
-
+			client.m.msg.createVote(title, desc, fieldTitle, reason, msg, disc)
+			.then(em => {
+				client.votes.set(em, [vote, player]);
+			});
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
 	}
 }

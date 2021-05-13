@@ -5,15 +5,20 @@ module.exports = {
 	description: "Bet that you will choose correctly",
 	options: {ShowInHelp: true, Category: "Gambling"},
 	run: async function(msg, client, disc, args){
-	    let bet = client.m.utils.suffixCheck(args[0])
-        if(bet == false) return client.eventEm.emit('InvalidCommand', "Highlow", args);
-        if(bet == "all") bet = await client.m.data.bal.getBalance(client, msg.member);
+        try{
+            let bet = client.m.utils.suffixCheck(args[0])
+            if(bet == false) return client.eventEm.emit('InvalidCommand', "Highlow", args);
+            if(bet == "all") bet = await client.m.data.bal.getBalance(client, msg.member);
 
-        if(!await client.m.data.bal.enoughMoney(client, msg.member, bet)) return
+            if(!await client.m.data.bal.enoughMoney(client, msg.member, bet)) return
 
-        client.m.data.bal.updateUserBalance(client, msg.member, -1*bet, "add");
+            client.m.data.bal.updateUserBalance(client, msg.member, -1*bet, "add");
 
-	    highlow(client, msg, disc, bet)
+            highlow(client, msg, disc, bet)
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
+	    
 	}
 }
 
@@ -31,13 +36,13 @@ async function highlow(client, msg, disc, bet){
     const filter = (reaction, user) => {
         if(user.id != msg.member.id) return false;
         let correct = false;
-        if(reaction.emoji.name == client.emoji[7]){
+        if(reaction.emoji.name == client.s.emoji[7]){
             checkIfRight(client, msg, disc, bet, number, hint, "h")
             correct = true
-        }else if(reaction.emoji.name == client.emoji[11] ){
+        }else if(reaction.emoji.name == client.s.emoji[11] ){
             checkIfRight(client, msg, disc, bet, number, hint, "l")
             correct = true
-        }else if(reaction.emoji.name == client.emoji[9] ){
+        }else if(reaction.emoji.name == client.s.emoji[9] ){
             checkIfRight(client, msg, disc, bet, number, hint, "j")
             correct = true
         }
@@ -47,9 +52,9 @@ async function highlow(client, msg, disc, bet){
     msg.channel.send(embed)
         .then(message => {
             message.awaitReactions(filter)
-            message.react(client.emoji[7]); //H
-            message.react(client.emoji[11]); //L
-            message.react(client.emoji[9]); //J
+            message.react(client.s.emoji[7]); //H
+            message.react(client.s.emoji[11]); //L
+            message.react(client.s.emoji[9]); //J
         })
 }
 

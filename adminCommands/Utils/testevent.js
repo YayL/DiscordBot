@@ -5,7 +5,11 @@ module.exports = {
 	description: "Test event",
 	options: {ShowInHelp: false},
 	run: function(msg, client, disc, args){
-		let xp = Number(args[0])
-		client.m.msg.reply(msg, "Your Level Is:", client.m.data.jobs.xpToLevel(xp), disc)
+		try{
+			client.eventEm.emit("rebirth", msg.member, msg.channel); // Rebirth event
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
+		
 	}
 }
