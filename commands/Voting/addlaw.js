@@ -1,8 +1,8 @@
 const vote = {
 	run: function(client, args){
-		client.m.data.rules.getMaxRuleId(client)
+		client.data.rules.getMaxRuleId(client)
 		.then(id => {
-			client.m.data.rules.updateRules(client, args[0], args[1], "add", id+1);
+			client.data.rules.updateRules(client, args[0], args[1], "add", id+1);
 		})
 	}
 }
@@ -10,12 +10,12 @@ const vote = {
 module.exports = {
 	name : "AddLaw",
 	alias : ["alaw"],
-	use: "-AddLaw \"Name\" (Description)",
+	use: "-AddLaw [Name] [Description]",
 	description : "Propose a new a law/rule to the server. (Make sure to use quotation marks if the name uses spaces)",
 	options: {ShowInHelp: true, Category: "Voting"},
 	run : function(msg, client, disc, args){
 		try{
-			[name, args] = client.m.utils.argsWithSpace(args);
+			[name, args] = client.utils.argsWithSpace(args);
 			const description = args.join(" ");
 
 			const title = "Law Proposition: ***" + name + "***";
@@ -23,7 +23,7 @@ module.exports = {
 			const fieldTitle = "What will this law do?";
 			const fieldText = description;
 
-			client.m.msg.createVote(title, desc, fieldTitle, fieldText, msg, disc)
+			client.msg.createVote(title, desc, fieldTitle, fieldText, msg, disc)
 			.then(em => {
 					client.votes.set(em, [vote, [name, description]]);
 			});
@@ -32,4 +32,3 @@ module.exports = {
         }
 	}
 }
-

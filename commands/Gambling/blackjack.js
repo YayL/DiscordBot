@@ -1,24 +1,24 @@
 module.exports = {
     name: "Blackjack",
-	alias: ["bl"],
+	alias: ["bj"],
 	use: "-Blackjack [bet]",
 	description: "Bet that you will win the blackjack",
 	options: {ShowInHelp: true, Category: "Gambling"},
 	run: async function(msg, client, disc, args){
         try{
-            let bet = client.m.utils.suffixCheck(args[0])
-            if(!bet) return client.eventEm.emit('InvalidCommand', msg, "Blackjack", args);
-            if(bet == "all") bet = await client.m.data.bal.getBalance(client, msg.member);
+            let bet = client.utils.suffixCheck(args[0])
+            if(bet == "all") bet = await client.data.user.getBalance(client, msg.member);
+            if(!bet || bet < 1) return client.eventEm.emit('InvalidInputAmount', msg);
 
-            if(!await client.m.data.bal.enoughMoney(client, msg.member, bet)) return
+            if(!await client.data.user.enoughMoney(client, msg.member, bet)) return
 
-            client.m.data.bal.updateUserBalance(client, msg.member, -1*bet, "add");
+            client.data.user.addBalance(client, msg.member, -1*bet, "add");
 
             blackjack(msg, client, disc, bet, msg.member)
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }
-        
+
     }
 }
 
@@ -54,20 +54,20 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
     embed.addField(`Dealers hand:`, `${getHand(dealerHand)}\nTotal: ${dlrPoints}`, true)
 
     if(plrBust&&dealerBust){
-        embed.addField(`Draw!`, `You both went bust. You keep $${client.m.utils.numberWithCommas(bet)}`)
-        client.m.data.bal.updateUserBalance(client, player, bet, "add")
+        embed.addField(`Draw!`, `You both went bust. You keep $${client.utils.numberWithCommas(bet, true)}`)
+        client.data.user.addBalance(client, player, bet, "add")
     }
-    else if((finished && (dlrPoints>plrPoints) && !dealerBust)|| plrBust) embed.addField(`Dealer won!`, `You lost $${client.m.utils.numberWithCommas(bet)}`)
+    else if((finished && (dlrPoints>plrPoints) && !dealerBust)|| plrBust) embed.addField(`Dealer won!`, `You lost $${client.utils.numberWithCommas(bet, true)}`)
     else if((finished && (plrPoints>dlrPoints) && !plrBust)|| dealerBust) {
         const winnings = Math.floor(bet*(Math.random()*(1.5-0.3)+0.3))
-        embed.addField(`You won!`, `You earned $${client.m.utils.numberWithCommas(winnings)}`)
-        client.m.data.bal.updateUserBalance(client, player, winnings+bet, "add")
+        embed.addField(`You won!`, `You earned $${client.utils.numberWithCommas(winnings, true)}`)
+        client.data.user.addBalance(client, player, winnings+bet, "add")
     }
     else if(plrBust) embed.addField(`BUST`, `You went above 21!`)
     else if(dealerBust) embed.addField(`You won!`, )
     else if(plrPoints==dlrPoints && finished){
-        embed.addField(`PUSH!`, `You got the same points as the dealer, you keep $${client.m.utils.numberWithCommas(bet)}`)
-        client.m.data.bal.updateUserBalance(client, player, bet, "add")
+        embed.addField(`PUSH!`, `You got the same points as the dealer, you keep $${client.utils.numberWithCommas(bet, true)}`)
+        client.data.user.addBalance(client, player, bet, "add")
     }
     else embed.addField(`\u200b\n:regional_indicator_h:  - Hit | :regional_indicator_s:  - Stand | :regional_indicator_d:  - Double`, "\u200b")
 
@@ -112,11 +112,13 @@ function generateDeck(){
 function handToPoints(hand=[]){
     let points = 0
     let ace = 0;
+    let index = 0;
     for(card of hand){
         let value = Number(card.Value)
-        if(isNaN(value)) value = (card.Value=="J"||card.Value=="Q"||card.Value=="K" ) ? 10 : 0
+        if(isNaN(value)) value = (card.Value=="J"||card.Value=="Q"||card.Value=="K" ) ? 10 : (index > 2) ? 0 : 11
         if(value==0) ace++;
         points += value
+        index++;
     }
     if(ace!=0) {
         if(points + 11 + ace-1 < 21) points += 11+ace-1

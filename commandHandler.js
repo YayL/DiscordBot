@@ -2,7 +2,7 @@ const m = require('./methodsLoader.js')
 
 const prefix = "-"
 
-/* 
+/*
 name -> Name of command
 alias -> List of Aliases
 description -> Short description of command
@@ -43,7 +43,7 @@ module.exports = {
 		if(msg.content.startsWith(prefix)){
 
 			var tempMessage = msg.content.slice(prefix.length); // Remove prefix from string
-			var args = tempMessage.split(" ");
+			var args = tempMessage.split(" ").filter(arg => arg !== '');
 
 			CommandName = args[0].toLowerCase();
 			args.shift(); // Remove first argument, CommandName, from array

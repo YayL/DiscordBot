@@ -1,11 +1,15 @@
+const jobs = require('./../../info/Jobs.js')
+
 module.exports = (client, disc) => {
 	console.log('Yeah, yeah! I am up...')
-	client.con.query(`SELECT * FROM jobs`, (e, rows) => {
-		if(e) console.error(e);
 
-		for(row of rows){
-			client.jobList.set(row.name, {base_pay: row.base_pay, requirement: row.job_level_requirement, job_options: row.upgrade_job_options})
+	for(var i=0; i<jobs.length;i++){
+		for(job of jobs[i]){
+			client.jobList.set(job.name, {base_pay: job.base_pay, requirement: i, job_options: job.job_options})
 		}
-		client.totalMoney = client.m.data.bal.updateTotalMoney(client)
-	})
+	}
+	client.highestJobRequirement = jobs.length
+	console.log(`Jobs loaded: ${client.jobList.array().length}`)
+
+	client.totalMoney = client.data.bal.updateTotalMoney(client)
 }

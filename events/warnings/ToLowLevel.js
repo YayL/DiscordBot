@@ -1,6 +1,6 @@
 module.exports = (client, discord, msg, user) => {
-    const levelRequired = client.m.data.jobs.xpToLevel(user.job_xp)
-    const xpRequired = client.m.data.jobs.totalLvlXp(levelRequired)-user.job_xp
+    const levelRequired = client.data.jobs.xpToLevel(user.job_xp)
+    const xpRequired = client.data.jobs.totalLvlXp(levelRequired)-user.job_xp
 
     const embed = new discord.MessageEmbed()
         .setTitle('*You require more experience!*')

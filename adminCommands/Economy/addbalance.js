@@ -9,11 +9,11 @@ module.exports = {
 			if(!args[0]) return;
 			
 			if(args[0] == "me"){
-			return client.m.data.bal.updateUserBalance(client, msg.author, args[1], "add");
+			return client.data.user.addBalance(client, msg.author, args[1], "add");
 			}
-			client.m.utils.getMember(args[0], msg)
+			client.utils.getMember(args[0], msg)
 			.then(member => {
-				return client.m.data.bal.updateUserBalance(client, member, args[1], "add");
+				return client.data.user.addBalance(client, member, args[1], "add");
 			})
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)

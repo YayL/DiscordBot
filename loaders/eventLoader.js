@@ -15,7 +15,7 @@ module.exports = (client, disc) => {
 		}
 	}
 
-	['client', 'guild', 'errors', 'userEvents', 'warnings'].forEach(e => loadEvent(e));
+	['client', 'guild', 'errors', 'userEvents', 'serverEvents', 'warnings'].forEach(e => loadEvent(e));
 	console.log(`Finished loading events!`)
 
 }

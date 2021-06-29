@@ -1,6 +1,6 @@
 const vote = {
 	run: function(client, index){
-		client.m.data.rules.updateRules(client, "", "", "del", index)
+		client.data.rules.updateRules(client, "", "", "del", index)
 	}
 }
 
@@ -14,10 +14,10 @@ module.exports = {
 		try{
 			let index = Number(args[0])
 			if(isNaN(index)){
-				return client.m.msg.errorReply(msg, "Make sure to input an actual law id");
+				return client.msg.errorReply(msg, "Make sure to input an actual law id");
 			}
-			let law = await client.m.data.rules.getRule(client, index).then(law => {return law});	
-			if(law.corelaw == 1) return client.m.msg.reply(msg,"*It is not allowed to delete the corelaw:* __" + law.rule_name +"__",
+			let law = await client.data.rules.getRule(client, index).then(law => {return law});	
+			if(law.corelaw == 1) return client.msg.reply(msg,"*It is not allowed to delete the corelaw:* __" + law.rule_name +"__",
 			"If you still have questions about this decision take it up with an Engineer!", disc);
 			
 			const title = "Propositon Remove Law: ***Law #" + index + " - " + law.rule_name +"***";
@@ -25,7 +25,7 @@ module.exports = {
 			const fieldTitle = "Why should we remove this law?";
 			const fieldText = args.slice(1).join(" ");
 			
-			client.m.msg.createVote(title, desc, fieldTitle, fieldText, msg, disc)
+			client.msg.createVote(title, desc, fieldTitle, fieldText, msg, disc)
 			.then(em => {
 				client.votes.set(em, [vote, index]);
 			});

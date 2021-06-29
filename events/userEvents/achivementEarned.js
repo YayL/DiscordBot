@@ -1,6 +1,6 @@
 module.exports = async (client, disc, channel, user, achivement) => {
 	try{
-		const userAchivementList = await client.m.data.user.get(client, user, 'achivements');
+		const userAchivementList = await client.data.user.get(client, user, 'achivements');
 		const hasAchivements = await userAchivementList?.split(',').some(a => a === achivement?.index.toString());
 		
 		if(!hasAchivements && achivement != undefined){
@@ -15,6 +15,6 @@ module.exports = async (client, disc, channel, user, achivement) => {
 			achivement?.run(client, user);
 		}
 	}catch(e){
-		client.m.msg.log(client.guild, e)
+		client.msg.log(client.guild, e)
 	}
 }

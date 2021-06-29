@@ -6,15 +6,15 @@ module.exports = {
 	options: {ShowInHelp: false},
 	run: function(msg, client, disc, args){
 		try{
-			let amount = client.m.utils.suffixCheck(args[1], true)
+			let amount = client.utils.suffixCheck(args[1], true)
 			if(!amount) return;
 			
 			if(args[0] == "me"){
-				return client.m.data.user.addXP(client, msg, msg.member, amount, false);
+				return client.data.user.addXP(client, msg, msg.member, amount, false);
 			}
-			client.m.utils.getMember(args[0], msg)
+			client.utils.getMember(args[0], msg)
 			.then(member => {
-				return client.m.data.user.addXP(client, msg, member, amount, false);
+				return client.data.user.addXP(client, msg, member, amount, false);
 			}).catch(e => {
 				client.eventEm.emit('CommandError', msg, this.name, args, e)
 			})

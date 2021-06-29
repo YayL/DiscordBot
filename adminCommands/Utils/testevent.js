@@ -6,7 +6,7 @@ module.exports = {
 	options: {ShowInHelp: false},
 	run: function(msg, client, disc, args){
 		try{
-			client.eventEm.emit("rebirth", msg.member, msg.channel); // Rebirth event
+			console.log(client.data.items.getItem(client, 1000))
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }

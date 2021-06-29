@@ -28,7 +28,7 @@ function printCommandCategories(msg, disc, client, cmds, category){
 
 module.exports = {
 	name : "Help",
-	alias : ["h", "info", "i", "cmds", "commands"],
+	alias : ["h", "cmds", "commands"],
 	use: "-help",
 	description : "Displays all available commands",
 	options: {ShowInHelp: true, Category: "Utils"},

@@ -7,24 +7,24 @@ module.exports = {
             sql = `INSERT INTO jobs (name, base_pay, job_level_requirement, upgrade_job_options) VALUES ('${name}', ${base_pay}, ${job_level_requirement}, '${upgrade_job_options}')`
             client.con.query(sql);
         }catch(e){
-            client.m.msg.log(client.guild, e)
+            client.msg.log(client.guild, e)
         }
         
     },
 
     nextLvlXp(lvl, calculate=false){
         if(!calculate && lvl > s.maxLevel && lvl%s.maxLevel !== 0) return "Max"
-        return 100*Math.pow(lvl+1,3);
+        return 100*Math.pow(2,lvl-1);
     },
 
     totalLvlXp(lvl, calculate=false){
-        if(!calculate && lvl > s.maxLevel && lvl%s.maxLevel !== 0) return Math.pow(10*(s.maxLevel*(s.maxLevel+1)/2), 2)
-        return Math.pow(10*((lvl+1)*(lvl+2)/2), 2)
+        if(!calculate && lvl > s.maxLevel && lvl%s.maxLevel !== 0) return this.totalLvlXp(s.maxLevel, true)
+        return 100*Math.pow(2, lvl-1)-100
     },
 
     xpToLevel(xp, calculate=false){
-        const lvl = Math.floor(Math.sqrt(2*Math.sqrt(xp)/10 + 0.25) - 0.5)
+        const lvl = Math.floor(Math.log(1+(xp/100))/Math.log(2))
         if (!calculate && lvl > s.maxLevel && lvl%s.maxLevel !== 0) return "Max"
-        return lvl
+        return lvl+1
     }
 }

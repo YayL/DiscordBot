@@ -9,12 +9,12 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "User"},
 	run : async function(msg, client, disc, args){
 		try{
-			const user = await client.m.data.user.get(client, msg.member, '*')
+			const user = await client.data.user.get(client, msg.member, '*')
 			const currentJob = await client.jobList.get(user.job_name);
 
-			if(currentJob.requirement > client.m.data.jobs.xpToLevel(user.job_xp)) return client.eventEm.emit('ToLowLevel', msg, user)
+			if(currentJob.requirement > client.data.jobs.xpToLevel(user.job_xp)) return client.eventEm.emit('ToLowLevel', msg, user)
 
-			const availableJobs = currentJob.job_options.split(",")
+			const availableJobs = currentJob.job_options
 
 		    const filter = async (reaction, user) => {
 		        if(user.id != msg.member.id) return false
@@ -45,7 +45,8 @@ module.exports = {
 	        	embed.addField(`:regional_indicator_${abc[0]}:`, `**Rebirth - Get a Money multiplier**`,true);
 		    }else{ 
 		    	for(i = 0; i<availableJobs.length;i++){
-		        	embed.addField(`:regional_indicator_${abc[i]}:`, `**${availableJobs[i]} - $${client.jobList.get(availableJobs[i]).base_pay}**`,true);
+		        	embed.addField(`:regional_indicator_${abc[i]}:`, `**${availableJobs[i]}`
+		        		+ ` - $${client.utils.numberWithCommas(client.jobList.get(availableJobs[i]).base_pay, true)}**`,true);
 	        	}
 	        }
 

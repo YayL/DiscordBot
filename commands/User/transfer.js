@@ -9,22 +9,22 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "User"},
 	run : async function(msg, client, disc, args){
         try{
-            let amount = client.m.utils.suffixCheck(args[0])
-            let totalBal = await client.m.data.bal.getBalance(client, msg.member)
+            let amount = client.utils.suffixCheck(args[0])
+            let totalBal = await client.data.user.getBalance(client, msg.member)
             
-            if(amount == false) return client.m.msg.reply(msg, 'XP Conversion', `You can convert $${client.m.utils.numberWithCommas(totalBal)} into ${client.m.utils.numberWithCommas(Math.floor((totalBal*xpRate)/conversionRate))}xp`, disc)
+            if(amount == false) return client.msg.reply(msg, 'XP Conversion', `You can convert $${client.utils.numberWithCommas(totalBal)} into ${client.utils.numberWithCommas(Math.floor((totalBal*xpRate)/conversionRate))}xp`, disc)
             if(amount == "all") amount = totalBal
 
-            if(!await client.m.data.bal.enoughMoney(client, msg.member, amount)) return
+            if(!await client.data.bal.enoughMoney(client, msg.member, amount)) return
 
             amount -= amount%conversionRate
-            if(amount==0) return client.m.msg.reply(msg, `Too small amount!`, `The amount specified requires to be above $${client.m.utils.numberWithCommas(conversionRate)}`, disc)
+            if(amount==0) return client.msg.reply(msg, `Too small amount!`, `The amount specified requires to be above $${client.utils.numberWithCommas(conversionRate)}`, disc)
 
-            client.m.msg.reply(msg, `You converted $${amount} to xp`, `$${client.m.utils.numberWithCommas(amount)}`
-             + ` is equal to ${client.m.utils.numberWithCommas(amount/conversionRate)}xp`, disc)
+            client.msg.reply(msg, `You converted $${amount} to xp`, `$${client.utils.numberWithCommas(amount)}`
+             + ` is equal to ${client.utils.numberWithCommas(amount/conversionRate)}xp`, disc)
 
-            client.m.data.bal.updateUserBalance(client, msg.member, -1*amount, "add");
-            client.m.data.user.addXP(client, msg, msg.member, amount/conversionRate);
+            client.data.user.addBalance(client, msg.member, -1*amount, "add");
+            client.data.user.addXP(client, msg, msg.member, amount/conversionRate);
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }

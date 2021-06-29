@@ -6,19 +6,19 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Gambling"},
 	run: async function(msg, client, disc, args){
         try{
-            let bet = client.m.utils.suffixCheck(args[0])
-            if(bet == false) return client.eventEm.emit('InvalidCommand', "Highlow", args);
-            if(bet == "all") bet = await client.m.data.bal.getBalance(client, msg.member);
+            let bet = client.utils.suffixCheck(args[0])
+            if(bet == "all") bet = await client.data.user.getBalance(client, msg.member);
+						if(!bet || bet < 1) return client.eventEm.emit('InvalidInputAmount', msg);
 
-            if(!await client.m.data.bal.enoughMoney(client, msg.member, bet)) return
+            if(!await client.data.user.enoughMoney(client, msg.member, bet)) return
 
-            client.m.data.bal.updateUserBalance(client, msg.member, -1*bet, "add");
+            client.data.user.addBalance(client, msg.member, -1*bet, "add");
 
             highlow(client, msg, disc, bet)
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }
-	    
+
 	}
 }
 
@@ -74,17 +74,17 @@ function reply(client, msg, disc, bet, number, correct, jackpot=false){
 
     const winnings = Math.floor(bet*(Math.random()*(0.8-0.05)+0.05))
     const lose_message = `\nYou lost the money you bet!`
-    const correct_message = `\nYou won an extra $${client.m.utils.numberWithCommas(winnings)}!`
-    const jackpot_message = `\nWell, this is rare! You won the jackpot of $${client.m.utils.numberWithCommas(winnings*100)}`
+    const correct_message = `\nYou won $${client.utils.numberWithCommas(winnings, true)}!`
+    const jackpot_message = `\nWell, this is rare! You won the jackpot of $${client.utils.numberWithCommas(winnings*100, true)}`
 
     let extra;
     if(correct && jackpot) {
         extra = jackpot_message;
-        client.m.data.bal.updateUserBalance(client, msg.member, bet + winnings*100, "add");
+        client.data.user.addBalance(client, msg.member, bet + winnings*100, "add");
     }
     else if(correct) {
         extra = correct_message;
-        client.m.data.bal.updateUserBalance(client, msg.member, bet + winnings, "add");
+        client.data.user.addBalance(client, msg.member, bet + winnings, "add");
     }else {
         extra = lose_message
     }

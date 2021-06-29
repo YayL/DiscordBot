@@ -6,7 +6,8 @@ module.exports = {
 	options: {ShowInHelp: false},
 	run: function(msg, client){
 		try{
-			client.m.data.bal.updateLB(client);
+			client.eventEm.emit('updateLB')
+			client.eventEm.emit('updateLB', 'lvl')
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }

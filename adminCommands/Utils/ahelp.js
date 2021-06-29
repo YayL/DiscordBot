@@ -31,7 +31,7 @@ function printCommandCategories(msg, disc, cmds){
 
 module.exports = {
 	name : "Ahelp",
-	alias : ["acmds", "ac"],
+	alias : ["acmds"],
 	use: "-Ahelp",
 	description : "Displays all Admin Commands",
 	options: {ShowInHelp: false},

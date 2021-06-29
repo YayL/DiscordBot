@@ -1,7 +1,7 @@
 xpTop = 40
 xpBottom = 5
 
-timeBetweenWork = 5
+timeBetweenWork = 2.5
 
 module.exports = {
 	name : "Work",
@@ -23,12 +23,14 @@ module.exports = {
 
 				xp_grant = Math.floor(Math.random() * (xpTop - xpBottom + 1) + xpBottom)
 				base_pay = client.jobList.get(user[0].job_name).base_pay
-				money_grant = Math.floor(base_pay * ((0.6*Math.random())/2 + 1))*(user[0].rebirths+1)
+				money_grant = Math.floor(base_pay * ((0.6*Math.random())/3 + 1))*(user[0].rebirths+1)
 
-				client.m.data.user.addXP(client, msg, msg.member, xp_grant, true)
-				client.m.data.bal.updateUserBalance(client, msg.author, money_grant, "add")
-				client.m.msg.reply(msg, "Great work!", `You earned **${xp_grant}xp** \n`
-					+`and **$${client.m.utils.numberWithCommas(money_grant)}**`, disc)
+				client.msg.reply(msg, "Great work!", `You earned **${xp_grant}xp** \n`
+					+`and **$${client.utils.numberWithCommas(money_grant, true)}**`, disc)
+				
+				client.data.user.addXP(client, msg, msg.member, xp_grant, true)
+				client.data.user.addBalance(client, msg.author, money_grant, "add")
+				
 			})
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)

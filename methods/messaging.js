@@ -2,6 +2,8 @@ function getErrorObject(){
     try { throw Error('') } catch(err) { return err; }
 }
 
+const s = require('../info/settings.js');
+
 module.exports = {
 	createVote(title, description, fieldTitle, fieldText, msg, discord){
 		try{
@@ -62,19 +64,21 @@ module.exports = {
 	},
 
 	log(guild, toLog, slicing=3){
-		try{
-			var stack = toLog.stack.split("\n").slice(1);
-			guild.channels.cache.get('842354024573566986').send({
-			    embed: {
-			      author: {name: `${toLog}`},
-			      color: "FFFFFF",
-			      description: `${stack}`,
-			      footer: { text: `Time to fix some bugs! Good luck!`},
-			    }
-		  	}).catch(console.error);
-    	}catch(e){
-    		console.log(e)
-    	}
+		if(s.log_errors_to_discord){
+			try{
+				var stack = toLog.stack.split("\n").slice(1);
+				guild.channels.cache.get('842354024573566986').send({
+				    embed: {
+				      author: {name: `${toLog}`},
+				      color: "FFFFFF",
+				      description: `${stack}`,
+				      footer: { text: `Time to fix some bugs! Good luck!`},
+				    }
+			  	}).catch(console.error);
+	    	}catch(e){
+	    		console.log(e)
+	    	}
+	    }else console.log(toLog)
 		
 	}
 }

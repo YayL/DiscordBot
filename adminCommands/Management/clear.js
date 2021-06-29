@@ -10,11 +10,11 @@ module.exports = {
 			if(isNaN(amount) || amount<1) return
 			while(amount > 100){
 				try{
-					await client.m.utils.clearChat(msg, 100);
+					await client.utils.clearChat(msg, 100);
 					amount -= 100;
 				}catch(e){break}
 			}
-			client.m.utils.clearChat(msg, amount);
+			client.utils.clearChat(msg, amount);
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }

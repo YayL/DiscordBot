@@ -9,12 +9,12 @@ module.exports = {
 			if(!args[0]) return
 
 			if(args[0] == "me"){
-				return client.m.data.user.resetUser(client, msg.member)
+				return client.data.user.resetUser(client, msg.member)
 			}
 
-			client.m.utils.getMember(args[0], msg)
+			client.utils.getMember(args[0], msg)
 			.then(member => {
-				return client.m.data.user.resetUser(client, member)
+				client.data.user.resetUser(client, member)
 			}).catch(e => {
 				client.eventEm.emit('CommandError', msg, this.name, args, e)
 			});

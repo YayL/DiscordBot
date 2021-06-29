@@ -10,7 +10,7 @@ function getChannel(msg, channel){
 	}catch(e){
 		cons.log(msg, e)
 	}
-	
+
 }
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
 
 	},
 
-	getMember: async (player, reference) => {
+	getMember: async (player, reference=null) => {
 		try{
 			if(player == undefined) return
 			if(player.startsWith('<@') && player.endsWith('>')) {
@@ -35,17 +35,27 @@ module.exports = {
 				return member;
 			});
     	}catch(e){
-    		cons.log(reference.guild, e)
+    		const allowSnowFlakeErrors = false;
+    		if(allowSnowFlakeErrors || e.stack.split('\n').slice(0, 1)[0] != 'DiscordAPIError: Invalid Form Body'){
+    			cons.log(reference.guild, e)
+    		}
     	}
-		
+
 	},
 
 	getChannel(msg, channel){
 		return getChannel(msg, channel);
 	},
 
-	numberWithCommas(n){
-		return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+
+	numberWithCommas(n, is_money=false){
+		if(is_money && n > 1e5){
+			const ind = Math.floor(Math.log10(n))/3 -1
+			var number_string = n.toLocaleString('fullwide', {useGrouping:false}).slice(0, 3+(Math.floor(Math.log10(n))%3))
+			return [number_string.slice(0, 1+Math.floor(Math.log10(n))%3), '.', number_string.slice(1+Math.floor(Math.log10(n))%3)].join('') + this.suffixList[ind >= this.suffixList.length ? this.suffixList.length-1 : Math.floor(ind)]
+		}
+		return n?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 	},
 
 	argsWithSpace(args){
@@ -56,34 +66,35 @@ module.exports = {
 				for(str of args){
 					name = name.concat(str, " ")
 					if (str.endsWith('"')){
-						endOfName = args.indexOf(str) +1;
+						endOfName = args.indexOf(str)+1;
 						break
 					}
 				}
-				name = name.replace(/(['"])/g, "");
+				name = name?.replace(/(['"])/g, "");
 			}else name=args[0]
 
-			return [name.slice(0,name.length-1), args.slice(endOfName==0 ? 1 : endOfName)];
+			return [name.slice(0,name.length), args.slice(endOfName==0 ? 1 : endOfName)];
     	}catch(e){
     		console.log(e)
     	}
-		
+
 	},
 
-	suffixList: ['k', 'm', 'b', 't'],
+	suffixList: ['K', 'M', 'B', 'T', 'Qd', 'Qn', 'Sx', 'Sp', 'Oc'],
 
 	suffixCheck(number, override=false){
 		try{
 			if(!number) return false;
 			if(!override && number.toLowerCase() == "all") return "all"
 			for(s of this.suffixList){
-				if(number.toLowerCase().endsWith(s)) return Number(number.slice(0,number.length - s.length))*(Math.pow(10, (this.suffixList.indexOf(s)+1)*3))
+				if(number.toLowerCase().endsWith(s.toLowerCase())) return Number(number.slice(0,number.length - s.length))*(Math.pow(10, (this.suffixList.indexOf(s)+1)*3))
 			}
 			if(isNaN(Number(number)) || (!override && Number(number)<1)) return false;
+
 			return Number(number);
     	}catch(e){
     		console.log(e)
     	}
-		
+
 	}
 }

@@ -10,7 +10,7 @@ module.exports = {
                 }
             });
         }).catch(e => {
-            client.m.msg.log(client.guild, e)
+            client.msg.log(client.guild, e)
         });
     },
 
@@ -21,7 +21,7 @@ module.exports = {
                 resolve(rows[0].value);
             });
         }).catch(e => {
-            client.m.msg.log(client.guild, e)
+            client.msg.log(client.guild, e)
         })
     },
 
@@ -32,7 +32,7 @@ module.exports = {
                 resolve(rows)
             });
         }).catch(e => {
-            client.m.msg.log(client.guild, e)
+            client.msg.log(client.guild, e)
         });
     },
 
@@ -51,7 +51,7 @@ module.exports = {
 
             client.con.query(sql);
         }catch(e){
-            client.m.msg.log(client.guild, e)
+            client.msg.log(client.guild, e)
         }
         
     }

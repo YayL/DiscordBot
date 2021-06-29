@@ -1,66 +1,157 @@
-function addUserToDatabase(client, plr){
-    client.con.query(`SELECT * FROM user WHERE id = '${plr.id}'`, async (e, rows) => {
-        if(!rows.length) client.con.query(`INSERT INTO user (id, achivements) VALUES ('${plr.id}', '')`);
+function addUserToDatabase(client, user){
+    client.con.query(`SELECT * FROM user WHERE id = '${user.id}'`, async (e, rows) => {
+        if(!rows.length) client.con.query(`INSERT INTO user (id, achivements) VALUES ('${user.id}', '')`);
     })
 }
 
-function checkLevelUP(client, msg, plr, xp, info){
+function checkLevelUP(client, msg, user, xp, previous_xp){
     try{
-        if(xp >= client.m.data.jobs.totalLvlXp(client.m.data.jobs.xpToLevel(info.job_xp))){
-            client.eventEm.emit('userLevelUP', msg, plr, xp);
+        if(xp > client.data.jobs.totalLvlXp(client.data.jobs.xpToLevel(previous_xp))){
+            
         }
     }catch(e){
-        client.m.msg.log(client.guild, e)
+        client.msg.log(client.guild, e)
     } 
 }
 
-module.exports = {
-    resetUser: async (client, user) => {
+function setBalance(user, amount, client){
+    client.con.query(`SELECT * FROM user WHERE id = '${user.id}'`, (e, rows) => {
         try{
-            client.con.query(`DELETE FROM user WHERE id = '${user.id}'`)
-            return new Promise((resolve) => {resolve(addUserToDatabase(client, user))})
+            if(e) throw e;
+            if(amount>client.maxMoney) amount = client.maxMoney
+            if(amount<0) amount=0
+
+            let sql;
+
+            if(rows.length < 1){
+                sql = `INSERT INTO user (id, bal) VALUES ('${user.id}', ${amount})`
+            }else{
+                sql = `UPDATE user SET bal = ${amount} WHERE id = '${user.id}'`
+            }
+
+            client.con.query(sql);
         }catch(e){
-            client.m.msg.log(client.guild, e)
+            client.msg.log(client.guild, e)
+        }
+
+    });
+}
+
+module.exports = {
+
+    addBalance(client, user, amount, type) {
+        try{
+            if(user == undefined) return
+            amount = client.utils.suffixCheck(amount.toString(), true)
+            if(!amount && amount != 0) return;
+            if(type == "add"){
+                if(amount == 0) return;
+                this.getBalance(client, user)
+                .then(a => {
+                    setBalance(user, a+amount, client);
+                });
+            }else{
+                setBalance(user, amount, client);
+            }
+        }catch(e){
+            client.msg.log(client.guild, e)
+        }
+    },
+
+    getBalance: async (client, user) => {
+        return new Promise(async (resolve) => {
+            resolve(await client.data.user.get(client, user, 'bal'));
+        }).catch(e => {
+            client.msg.log(client.guild, e)
+        })
+    },
+
+    addItems: async (client, user, items) => {
+        // Get user inventory
+        var inventory = await client.data.user.get(client, user, 'inventory')
+
+        // Check if inventory is able to be parsed
+        if(`${inventory}`.toLowerCase() == 'null') inventory = {};
+        else inventory = JSON.parse(inventory);
+
+        // Add items to the inventory or increase the count of that item
+        var hasChanged = false
+        for(item of items){
+            const amount_to_add = Number(item.count) // If statement somehow changes the value of item to actual item so must put this here
+            if(inventory.hasOwnProperty(item.id)){
+                inventory[item.id].count += amount_to_add;
+                hasChanged = true;
+            }else{
+                if(client.data.items.getItem(client, item.id) != 'Not Found'){
+                    inventory[item.id] = {count: isNaN(amount_to_add) ? 1 : amount_to_add}
+                    hasChanged = true;
+                }
+            }
+        }
+
+        if(hasChanged){
+            client.con.query(`UPDATE user SET inventory = '${JSON.stringify(inventory)}' WHERE id ='${user.id}' `)
+        }
+        
+    },
+
+    resetUser: async (client, user, rebirth=false) => {
+        try{
+            if(rebirth){
+                client.con.query(`UPDATE user SET rebirths = rebirths+1 WHERE id = '${user.id}'`)
+                client.con.query(`UPDATE user SET bal = 0 WHERE id = '${user.id}'`)
+                client.con.query(`UPDATE user SET job_xp = 0 WHERE id = '${user.id}'`)
+                client.con.query(`UPDATE user SET last_work = 0 WHERE id = '${user.id}'`)
+                client.con.query(`UPDATE user SET job_name = 'Unemployed' WHERE id = '${user.id}'`)
+            }else{
+                client.con.query(`DELETE FROM user WHERE id = '${user.id}'`)
+                addUserToDatabase(client, user)
+            }
+            
+        }catch(e){
+            client.msg.log(client.guild, e)
         }
             
     },
 
-    addXP(client, msg, plr, xp, set_work_timer) {
+    addXP: async (client, msg, user, xp, set_work_timer) => {
         try{
-            client.con.query(`SELECT * FROM user WHERE id = '${plr.id}'`, (e, rows) => {
+            client.con.query(`SELECT * FROM user WHERE id = '${user.id}'`, async (e, rows) => {
                 if(e) return console.log(e);
-                if(rows.length < 1) addUserToDatabase(client, plr)
+                if(rows.length < 1) addUserToDatabase(client, user)
                 xp += Number(rows[0].job_xp)
 
                 if(xp>client.maxXP) xp = client.maxXP
                 if(xp<0) xp=0
 
-                sql = `UPDATE user SET job_xp = ${xp} WHERE id = '${plr.id}'`
+                const previous_xp = await client.data.user.get(client, user, 'job_xp')
 
-                if(set_work_timer) client.con.query(`UPDATE user SET last_work = '${Date.now()}' WHERE id = '${plr.id}'`)
+                sql = `UPDATE user SET job_xp = ${xp} WHERE id = '${user.id}'`
+
+                if(set_work_timer) client.con.query(`UPDATE user SET last_work = '${Date.now()}' WHERE id = '${user.id}'`)
 
                 client.con.query(sql)
 
-                checkLevelUP(client, msg.channel, plr, xp, rows[0])
+                client.eventEm.emit('userLevelUP', msg.channel, user, xp, previous_xp);
             });
         }catch(e){
-            client.m.msg.log(client.guild, e)
+            client.msg.log(client.guild, e)
         }
         
     },
 
 
 
-    get: async(client, plr, info) => {
+    get: async(client, user, info) => {
         return new Promise(resolve => {
-                client.con.query(`SELECT ${info} FROM user WHERE id = '${plr.id}'`, async (e, rows) => {
+                client.con.query(`SELECT ${info} FROM user WHERE id = '${user.id}'`, async (e, rows) => {
                     try{
-                        if(info==="*" && rows.length==0) {
-                            await addUserToDatabase(client, plr)
-                            return resolve("notFound");
+                        if((info == '*' || info == 'achivements' || info == 'inventory') && rows.length==0) {
+                            await addUserToDatabase(client, user)
+                            return resolve(await client.data.user.get(client, user, info));
                         }
                         if(e){
-                            client.m.msg.log(client.guild, e)
+                            client.msg.log(client.guild, e)
                             return resolve(null);
                         }
                         if(info === "*") resolve(rows[0]);
@@ -71,12 +162,12 @@ module.exports = {
                             return resolve(rows[0][info]);
                         } 
                     }catch(e){
-                        client.m.msg.log(client.guild, e)
+                        client.msg.log(client.guild, e)
                     }
                         
                 })
         }).catch(e => {
-            client.m.msg.log(client.guild, e)
+            client.msg.log(client.guild, e)
         })
     }
 }
