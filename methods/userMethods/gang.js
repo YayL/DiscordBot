@@ -1,8 +1,8 @@
 module.exports = {
 	joinGang: async(client, gang, user_id, is_created=false) => {
-        client.con.query(`UPDATE user SET gang = '${gang.toLowerCase()}' WHERE id = '${user_id}'`)
+        client.con.query(`UPDATE user SET gang = '${gang.name.toLowerCase()}' WHERE id = '${user_id}'`)
         if(!is_created){
-            var members = JSON.parse((await client._user.gang.getGang(client, gang)).members)
+            var members = JSON.parse(gang.members)
             members.push(user_id)
             client.con.query(`UPDATE gangs SET members = '${JSON.stringify(members)}' WHERE name = '${gang}'`)
         }

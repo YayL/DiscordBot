@@ -13,9 +13,9 @@ module.exports = {
                         }
                         if(e){
                             client.msg.log(client.guild, e)
-                            return resolve(null);
+                            resolve(null);
                         }
-                        return resolve(rows[0]) 
+                        resolve(rows[0]) 
                     }catch(e){
                         client.msg.log(client.guild, e)
                         resolve(null)

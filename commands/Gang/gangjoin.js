@@ -12,9 +12,9 @@ module.exports = {
 
 			const name = args[0]
 
-			const gang = await client._user.gang.getGang(client, name)
+			const gang = await client.data.gang.getGang(client, name)
 
-			if(!client.data.gang.isGang(client, name, gang)) return client.eventEm.emit('gangNonExistent', msg, name)
+			if(gang == null) return client.eventEm.emit('gangNonExistent', msg, name)
 
 			const info = JSON.parse(gang.info)
 
@@ -23,7 +23,7 @@ module.exports = {
 				client.data.gang.remFromInviteList(client, gang, msg.author.id)
 			}
 
-			client._user.gang.joinGang(client, gang.name, msg.author.id)
+			client._user.gang.joinGang(client, gang, msg.author.id)
 
 			client.eventEm.emit('joinedGang', msg, JSON.parse(gang.info).NAME)
 

@@ -23,9 +23,7 @@ module.exports = {
 		var num = 0;
 		for(tier in client.items){
 			if(tier == 'color_table') break;
-			for(item of client.items[tier]){
-				num++;
-			}
+			num += client.items[tier].length
 		}
 		return num;
 	},

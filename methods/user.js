@@ -24,7 +24,6 @@ module.exports = {
     },
 
 
-
     get: async(client, user_id, info) => {
         return new Promise(resolve => {
                 client.con.query(`SELECT ${info} FROM user WHERE id = '${user_id}'`, async (e, rows) => {

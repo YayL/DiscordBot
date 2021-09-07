@@ -47,7 +47,21 @@ module.exports = {
 		return getChannel(msg, channel);
 	},
 
+	timeParser(str){
+		timeSuffixList = ['m', 'h', 'd', 'w'];
+		timeMultiplierList = [60, 3600, 86400, 604800]
+		try{
+			if(!str) return false;
+			for(i in this.suffixList){
+				if(str.toLowerCase().endsWith(timeSuffixList[i].toLowerCase())) return Number(str.slice(0,-1))*timeMultiplierList[i];
+			}
+			if(isNaN(Number(str)) || (!override && Number(str)<1)) return false;
 
+			return Number(number);
+    	}catch(e){
+    		console.log(e)
+    	}
+	},
 
 	fixNumber(n, is_money=false){
 		var isNeg = ''
