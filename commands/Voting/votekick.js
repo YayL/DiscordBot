@@ -7,13 +7,13 @@ const vote = {
 module.exports = {
 	name : "VoteKick",
 	alias : ["kick", "vk", "votek"],
-	use: "-VoteKick (@Member) (reason)",
+	use: "-VoteKick @[user] [reason]",
 	description : "Vote to kick a user",
 	options: {ShowInHelp: true, Category: "Voting"},
 	run : async function(msg, client, disc, args){
 		try{
 			const player = await client.utils.getMember(args[0], msg)
-			if(!player) return client.utils.clearChat(msg, 1, client.channelId.voting);
+			if(player == null) return client.utils.clearChat(msg, 1, client.channelId.voting);
 
 			var reason = args.slice(1).join(" ");
 

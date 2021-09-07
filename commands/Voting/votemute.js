@@ -10,13 +10,13 @@ const vote = {
 module.exports = {
 	name : "VoteMute",
 	alias : ["mute", "vm", "votem"],
-	use: "-VoteMute (@Member) (reason)",
+	use: "-VoteMute @[Member] [reason]",
 	description : "Vote to mute a user in Text Channels",
 	options: {ShowInHelp: true, Category: "Voting"},
 	run : async function(msg, client, disc, args){
 		try{
 			const player = await client.utils.getMember(args[0], msg);
-			if(!player) return client.utils.clearChat(msg, 1, client.channelId.voting);
+			if(player == null) return client.utils.clearChat(msg, 1, client.channelId.voting);
 
 			var reason = args.slice(1).join(" ");
 

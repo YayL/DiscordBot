@@ -1,9 +1,9 @@
 module.exports = {
 	name: "SetRebirth",
 	alias: ["setreb", "sreb"],
-	use: "-SetLevel @[user] [level]",
+	use: "-SetRebirth @[user] [level]",
 	description: "Set a user's level",
-	options: {ShowInHelp: false},
+	options: {ShowInHelp: false, Category: 'User'},
 	run: function(msg, client, disc, args){
 		try{
 			let rebirth = client.utils.suffixCheck(args[1], true)
@@ -16,6 +16,7 @@ module.exports = {
 
 			client.utils.getMember(args[0], msg)
 			.then(member => {
+				if(member == null) return
 				client.con.query(`UPDATE user SET rebirths = ${rebirth} WHERE id = ${member.id}`);
 				client.eventEm.emit('rebirth', member, msg.channel, rebirth);
 			}).catch(e => {

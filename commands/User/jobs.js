@@ -9,10 +9,10 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "User"},
 	run : async function(msg, client, disc, args){
 		try{
-			const user = await client.data.user.get(client, msg.member, '*')
+			const user = await client._user.get(client, msg.member.id, '*')
 			const currentJob = await client.jobList.get(user.job_name);
 
-			if(currentJob.requirement > client.data.jobs.xpToLevel(user.job_xp)) return client.eventEm.emit('ToLowLevel', msg, user)
+			if(currentJob.requirement > client.data.jobs.xpToLevel(user.job_xp)) return client.eventEm.emit('TooLowLevel', msg, user)
 
 			const availableJobs = currentJob.job_options
 
@@ -25,7 +25,7 @@ module.exports = {
 
 		        }else {
 		        	for(i = 0; i<availableJobs.length;i++){
-		            	if(reaction.emoji.name == client.s.emoji[i]){
+		            	if(reaction.emoji.name == client.s.EMOJIS[i]){
 		            		reaction.message.delete();
 		            		client.eventEm.emit('promotion', user, availableJobs[i]); // Promotion event
 						}
@@ -46,7 +46,7 @@ module.exports = {
 		    }else{ 
 		    	for(i = 0; i<availableJobs.length;i++){
 		        	embed.addField(`:regional_indicator_${abc[i]}:`, `**${availableJobs[i]}`
-		        		+ ` - $${client.utils.numberWithCommas(client.jobList.get(availableJobs[i]).base_pay, true)}**`,true);
+		        		+ ` - $${client.utils.fixNumber(client.jobList.get(availableJobs[i]).base_pay, true)}**`,true);
 	        	}
 	        }
 
@@ -54,9 +54,10 @@ module.exports = {
 	        .then(message => {
 	        	message.awaitReactions(filter)
 	            for(i = 0; i<availableJobs.length;i++){
-	            	message.react(client.s.emoji[i]).catch(e => {return});
+	            	message.react(client.s.EMOJIS[i]).catch(e => {return});
 	            }
-	        }).catch(e => {});
+	        });
+			msg.delete()
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }

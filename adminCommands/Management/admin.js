@@ -3,7 +3,7 @@ module.exports = {
 	alias : ["a"],
 	use: "-Admin",
 	description : "Give author admin role",
-	options: {ShowInHelp: false},
+	options: {ShowInHelp: false, Category: 'Management'},
 	run : function(msg, client, disc){
 		try{
 			msg.guild.roles.fetch(client.roleId.admin) // Get admin rank using its role id

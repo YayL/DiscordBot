@@ -5,7 +5,7 @@ module.exports = {
 	alias: ["urules", "ur"],
 	use: "-UpdateRules",
 	description: "Update rules",
-	options: {ShowInHelp: false},
+	options: {ShowInHelp: false, Category: 'Rules'},
 	run: function(msg, client, disc, args){
 		try{
 			ur.update(client, disc, msg);

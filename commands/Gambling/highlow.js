@@ -7,12 +7,12 @@ module.exports = {
 	run: async function(msg, client, disc, args){
         try{
             let bet = client.utils.suffixCheck(args[0])
-            if(bet == "all") bet = await client.data.user.getBalance(client, msg.member);
+            if(bet == "all") bet = await client._user.bal.getBalance(client, msg.member.id);
 						if(!bet || bet < 1) return client.eventEm.emit('InvalidInputAmount', msg);
 
-            if(!await client.data.user.enoughMoney(client, msg.member, bet)) return
+            if(!await client._user.bal.enoughMoney(client, msg.member.id, bet)) return
 
-            client.data.user.addBalance(client, msg.member, -1*bet, "add");
+            client._user.bal.addBalance(client, msg.member.id, -1*bet);
 
             highlow(client, msg, disc, bet)
         }catch(e){
@@ -36,25 +36,27 @@ async function highlow(client, msg, disc, bet){
     const filter = (reaction, user) => {
         if(user.id != msg.member.id) return false;
         let correct = false;
-        if(reaction.emoji.name == client.s.emoji[7]){
+        if(reaction.emoji.name == client.s.EMOJIS[7]){
             checkIfRight(client, msg, disc, bet, number, hint, "h")
             correct = true
-        }else if(reaction.emoji.name == client.s.emoji[11] ){
+        }else if(reaction.emoji.name == client.s.EMOJIS[11] ){
             checkIfRight(client, msg, disc, bet, number, hint, "l")
             correct = true
-        }else if(reaction.emoji.name == client.s.emoji[9] ){
+        }else if(reaction.emoji.name == client.s.EMOJIS[9] ){
             checkIfRight(client, msg, disc, bet, number, hint, "j")
             correct = true
         }
-        if(correct) reaction.message.delete();
+        if(correct) reaction.message.reactions.removeAll().then(message => {
+            message.delete();
+        });
     }
 
     msg.channel.send(embed)
         .then(message => {
             message.awaitReactions(filter)
-            message.react(client.s.emoji[7]); //H
-            message.react(client.s.emoji[11]); //L
-            message.react(client.s.emoji[9]); //J
+            message.react(client.s.EMOJIS[7]); //H
+            message.react(client.s.EMOJIS[11]); //L
+            message.react(client.s.EMOJIS[9]); //J
         })
 }
 
@@ -74,17 +76,17 @@ function reply(client, msg, disc, bet, number, correct, jackpot=false){
 
     const winnings = Math.floor(bet*(Math.random()*(0.8-0.05)+0.05))
     const lose_message = `\nYou lost the money you bet!`
-    const correct_message = `\nYou won $${client.utils.numberWithCommas(winnings, true)}!`
-    const jackpot_message = `\nWell, this is rare! You won the jackpot of $${client.utils.numberWithCommas(winnings*100, true)}`
+    const correct_message = `\nYou won $${client.utils.fixNumber(winnings, true)}!`
+    const jackpot_message = `\nWell, this is rare! You won the jackpot of $${client.utils.fixNumber(winnings*100, true)}`
 
     let extra;
     if(correct && jackpot) {
         extra = jackpot_message;
-        client.data.user.addBalance(client, msg.member, bet + winnings*100, "add");
+        client._user.bal.addBalance(client, msg.member.id, bet + winnings*100);
     }
     else if(correct) {
         extra = correct_message;
-        client.data.user.addBalance(client, msg.member, bet + winnings, "add");
+        client._user.bal.addBalance(client, msg.member.id, bet + winnings);
     }else {
         extra = lose_message
     }

@@ -11,7 +11,7 @@ function checkVotes(reaction, client, disc){
 
 module.exports = (client, disc, reaction) => {
 	if(reaction.message.channel.id == client.channelId.voting && reaction.emoji.name == '✅'
-		&& reaction.count >= Math.floor((reaction.message.guild.memberCount-client.botCount)/2)+1){
+		&& reaction.count >= Math.floor((reaction.message.guild.memberCount-client.botCount)*client.s.MAJORITY_RATE)+1){
 		checkVotes(reaction, client, disc);
 	}
 }

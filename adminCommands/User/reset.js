@@ -3,18 +3,19 @@ module.exports = {
 	alias: [],
 	use: "-reset @[user]",
 	description: "Reset a users data",
-	options: {ShowInHelp: false},
+	options: {ShowInHelp: false, Category: 'User'},
 	run: function(msg, client, disc, args){
 		try{
 			if(!args[0]) return
 
 			if(args[0] == "me"){
-				return client.data.user.resetUser(client, msg.member)
+				return client._user.resetUser(client, msg.member.id)
 			}
 
 			client.utils.getMember(args[0], msg)
 			.then(member => {
-				client.data.user.resetUser(client, member)
+				if(member == null) return
+				client._user.resetUser(client, member.id)
 			}).catch(e => {
 				client.eventEm.emit('CommandError', msg, this.name, args, e)
 			});

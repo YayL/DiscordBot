@@ -5,7 +5,7 @@ function printLeaderboard(client, disc, msg, fields, footer){
 
     embed.addFields(fields)
 
-    let seconds = (client.s.total_LB_Time - (Date.now()-client.timer.leaderboard))/1e3
+    let seconds = (client.s.TOTAL_LB_TIME - (Date.now()-client.leaderboardTimer))/1e3
     let minutes = Math.floor(seconds/60)
     seconds = Math.floor(seconds - minutes*60)
 
@@ -25,44 +25,38 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Economy"},
 	run: async function(msg, client, disc, args){
         try{
-            if(!args[0]) return
-
             const fields = []
             var name, footer;
             var index = 1;   
 
             // ------------------------ Money Leaderboard ------------------------
 
-            if(new RegExp(args[0].toLowerCase()).test("money")){
-                if(client.cachedMoneyLB.length == undefined) await client.eventEm.emit('updateLB');
-
+            if(args.length < 1 || new RegExp(args[0].toLowerCase()).test("money")){
                 for(val of client.cachedMoneyLB){
-                    name = await client.utils.getMember(val.id, msg).then(plr => {return plr.displayName})
+                    name = await client.utils.getMember(val.id, msg).then(plr => {return (plr != null ? plr.displayName : 'Unknown User')})
+                    
                     fields.push({
                         name: `**${index}. ${name}**`,
-                        value: `**$${client.utils.numberWithCommas(val.bal, true)} (${Math.round(val.bal*1e6/client.totalMoney)/1e4}%)**`
+                        value: `**$${client.utils.fixNumber(val.bal, true)} (${Math.round(val.bal*1e6/client.totalMoney)/1e4}%)**`
                     });
                     index += 1;
                 }
-
-                footer = `These guys are rich! You require a minimum of $${client.utils.numberWithCommas(client.s.lbMoneyMin)} to be on the leaderboard\n`
-                    +`Total Server Money: ${client.utils.numberWithCommas(client.totalMoney, true)}\n\nNext update in: `;
+                footer = `These guys are rich! You require a minimum of $${client.utils.fixNumber(client.s.LB_MONEY_MIN)} to be on the leaderboard\n`
+                    +`Total Server Money: ${client.utils.fixNumber(client.totalMoney, true)}\n\nNext update in: `;
 
             // ------------------------ Levels Leaderboard ------------------------
 
             }else if(new RegExp(args[0].toLowerCase()).test("levels")){
-                if(client.cachedLevelLB.length == undefined) await client.eventEm.emit('updateLB', 'lvl');
-
                 for(val of client.cachedLevelLB){
-                    name = await client.utils.getMember(val.id, msg).then(plr => {return plr.displayName})
+                    name = await client.utils.getMember(val.id, msg).then(plr => {return (plr != null ? plr.displayName : 'Unknown User')})
+
                     fields.push({
                         name: `**${index}. ${name}**`,
-                        value: `**Level: ${client.data.jobs.xpToLevel(val.job_xp)} (${client.utils.numberWithCommas(val.job_xp)}xp)**`
+                        value: `**Level: ${client.data.jobs.xpToLevel(val.job_xp)} (${client.utils.fixNumber(val.job_xp)}xp)**`
                     });
                     index += 1;
                 }
-
-                footer = `These guys have a lot of experience! You require level ${client.utils.numberWithCommas(client.s.lbLevelMin)} to be on the leaderboard\n`
+                footer = `These guys have a lot of experience! You require level ${client.utils.fixNumber(client.s.LB_LEVEL_MIN)} to be on the leaderboard\n`
                     +`\nNext update in: `;
             }
 

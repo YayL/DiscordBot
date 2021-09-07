@@ -1,5 +1,3 @@
-const m = require('./methodsLoader.js')
-
 const prefix = "-"
 
 /*
@@ -15,7 +13,7 @@ function notCommandChannel(msg, client, notError){
 		return false
 	}
 	if(!notError){
-		m.utils.clearChat(msg, 1);
+		msg.delete();
 	}
 	return true
 }
@@ -36,8 +34,10 @@ function checkIfAlias(cmdName, cmds){
 module.exports = {
 	handleCommand: (msg, client, Discord) => {
 		var commands = client.commands
-		if(client.adminList.includes(msg.author.id) && client.s.adminCommands){
+		if(client.adminList.includes(msg.author.id) && client.s.ADMIN_COMMANDS){
 			commands = client.commands.concat(client.adminCommands); // Combine commands and adminCommands
+		}else{
+			if(!client.allowCommands) return client.eventEm.emit('CommandsToggle', msg)
 		}
 
 		if(msg.content.startsWith(prefix)){
@@ -47,7 +47,7 @@ module.exports = {
 
 			CommandName = args[0].toLowerCase();
 			args.shift(); // Remove first argument, CommandName, from array
-
+			
 			const alias = checkIfAlias(CommandName, commands.array());
 			CommandName = alias != undefined ? alias.toLowerCase() : CommandName;
 

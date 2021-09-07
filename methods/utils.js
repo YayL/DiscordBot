@@ -17,28 +17,28 @@ module.exports = {
 	clearChat: async (msg, amount, channel) => {
 		channel = channel != undefined ? getChannel(msg, channel) : msg.channel;
 		channel.bulkDelete(amount).catch(e => {return}); // Remove set amount of messages younger than 2 weeks old
-
 	},
 
-	getMember: async (player, reference=null) => {
+	getMember: async (user_id, reference=null) => {
 		try{
-			if(player == undefined) return
-			if(player.startsWith('<@') && player.endsWith('>')) {
-				player = player.slice(2, -1);
-				if (player.startsWith('!')) {
-					player = player.slice(1);
+			if(user_id == undefined) return
+			if(user_id.startsWith('<@') && user_id.endsWith('>')) {
+				user_id = user_id.slice(2, -1);
+				if (user_id.startsWith('!')) {
+					user_id = user_id.slice(1);
 				}
 			}
-			return await reference.guild.members.fetch(player)
+			return await reference.guild.members.fetch(user_id)
 			.then(member => {
 				if(member.bot) return null;
 				return member;
 			});
     	}catch(e){
     		const allowSnowFlakeErrors = false;
-    		if(allowSnowFlakeErrors || e.stack.split('\n').slice(0, 1)[0] != 'DiscordAPIError: Invalid Form Body'){
+    		if(allowSnowFlakeErrors && (e.stack.split('\n').slice(0, 1)[0] == 'DiscordAPIError: Invalid Form Body' || e.stack.split('\n').slice(0, 1)[0] == 'DiscordAPIError: Unknown User')){
     			cons.log(reference.guild, e)
     		}
+    		return null
     	}
 
 	},
@@ -49,13 +49,18 @@ module.exports = {
 
 
 
-	numberWithCommas(n, is_money=false){
-		if(is_money && n > 1e5){
+	fixNumber(n, is_money=false){
+		var isNeg = ''
+		if(is_money && (-1e5 > n || n > 1e5)){
+			if(n < 0){
+				isNeg = '-'
+				n = Number(n.toLocaleString('fullwide', {useGrouping:false}).slice(1))
+			}
 			const ind = Math.floor(Math.log10(n))/3 -1
 			var number_string = n.toLocaleString('fullwide', {useGrouping:false}).slice(0, 3+(Math.floor(Math.log10(n))%3))
-			return [number_string.slice(0, 1+Math.floor(Math.log10(n))%3), '.', number_string.slice(1+Math.floor(Math.log10(n))%3)].join('') + this.suffixList[ind >= this.suffixList.length ? this.suffixList.length-1 : Math.floor(ind)]
+			return isNeg + [number_string.slice(0, 1+Math.floor(Math.log10(n))%3), '.', number_string.slice(1+Math.floor(Math.log10(n))%3)].join('') + this.suffixList[ind >= this.suffixList.length ? this.suffixList.length-1 : Math.floor(ind)]
 		}
-		return n?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+		return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 	},
 
 	argsWithSpace(args){
@@ -96,5 +101,9 @@ module.exports = {
     		console.log(e)
     	}
 
+	},
+
+	upFirstLetter(str){
+		return str.charAt(0).toUpperCase() + str.slice(1)
 	}
 }

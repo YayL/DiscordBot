@@ -6,5 +6,5 @@ module.exports = {
         }catch(e){
             client.msg.log(client.guild, e);
         }
-    }, client.s.total_LB_Time)
-}
+    }, client.s.TOTAL_LB_TIME)
+}   

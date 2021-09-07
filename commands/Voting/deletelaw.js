@@ -5,9 +5,9 @@ const vote = {
 }
 
 module.exports = {
-	name : "DeleteLaw",
-	alias : ["dlaw"],
-	use: "-DeleteLaw (Number) (Reason)",
+	name : "RemoveLaw",
+	alias : ["rlaw"],
+	use: "-RemoveLaw [Number] [Reason]",
 	description : "Create a vote to remove a new law/rule from the server",
 	options: {ShowInHelp: true, Category: "Voting"},
 	run : async function(msg, client, disc, args){
@@ -17,7 +17,7 @@ module.exports = {
 				return client.msg.errorReply(msg, "Make sure to input an actual law id");
 			}
 			let law = await client.data.rules.getRule(client, index).then(law => {return law});	
-			if(law.corelaw == 1) return client.msg.reply(msg,"*It is not allowed to delete the corelaw:* __" + law.rule_name +"__",
+			if(law.corelaw == 1) return client.msg.reply(msg,"*It is not possible to remove the corelaw:* __" + law.rule_name +"__",
 			"If you still have questions about this decision take it up with an Engineer!", disc);
 			
 			const title = "Propositon Remove Law: ***Law #" + index + " - " + law.rule_name +"***";

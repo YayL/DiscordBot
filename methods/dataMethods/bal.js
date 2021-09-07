@@ -18,18 +18,4 @@ module.exports = {
     	}
 
     },
-
-	async enoughMoney(client, msg, user, amount){
-		try{
-			const balance = await client.data.user.getBalance(client, user)
-	        if(balance<amount){
-	        	client.eventEm.emit('NotEnoughMoney', msg, user, (amount-balance));
-	        	return false;
-	        } 
-	        return true;
-    	}catch(e){
-    		client.msg.log(client.guild, e)
-    	}
-
-	}
 }

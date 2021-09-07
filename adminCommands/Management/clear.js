@@ -1,9 +1,9 @@
 module.exports = {
 	name: "Clear",
 	alias: ["prune", "c"],
-	use: "-Clear (amount)",
+	use: "-Clear [amount]",
 	description: "Remove a set amount of messages in current channel",
-	options: {ShowInHelp: false},
+	options: {ShowInHelp: false, Category: 'Management'},
 	run: async function(msg, client, disc, args){
 		try{
 			var amount = Number(args[0]) +1;

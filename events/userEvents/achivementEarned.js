@@ -1,8 +1,13 @@
 module.exports = async (client, disc, channel, user, achivement) => {
 	try{
-		const userAchivementList = await client.data.user.get(client, user, 'achivements');
-		const hasAchivements = await userAchivementList?.split(',').some(a => a === achivement?.index.toString());
+		if(achivement == undefined) return
+		var achivements = await client._user.get(client, user.id, 'achivements');
 		
+		if(`${achivements}`.toLowerCase() == 'null') achivements = [];
+        else achivements = JSON.parse(achivements);
+
+        const hasAchivements = achivements.includes(achivement.index)
+
 		if(!hasAchivements && achivement != undefined){
 			const embed = new disc.MessageEmbed()
 		        .setTitle(`**__New Achivement:__** *${achivement.name}*`)
@@ -10,9 +15,12 @@ module.exports = async (client, disc, channel, user, achivement) => {
 		        .setColor('#a87f32')
 
 	    	channel.send(embed);
-	    	client.con.query(`UPDATE user SET achivements = '${userAchivementList},${achivement.index}' WHERE id = '${user.id}'`)
 
-			achivement?.run(client, user);
+	    	achivements.push(achivement.index)
+
+	    	client.con.query(`UPDATE user SET achivements = '${JSON.stringify(achivements)}' WHERE id = '${user.id}'`)
+
+			achivement.run(client, user);
 		}
 	}catch(e){
 		client.msg.log(client.guild, e)

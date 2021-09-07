@@ -1,44 +1,39 @@
+// Current version: Lootboxes Update 0.6
+// Next Version: Gang Update 0.7
+
 	/* Changes for next Commit:
-    15) Added a lootbox system which currently supports a few boxes with some items. Will increase item amount
-    16) Got rid of the .m in the using of modules
-    17) Lootboxes now tell you everything you got and some info about the item
-    18) Changed the xp curve once again to be MUCH easier
-    19) Fixed some bugs with xp giving making the level up message appear everytime.
-    20) Fixed some issues with the -profile command
-    21) Fixed reset command not accuratly reseting money balance
-    22) Added limited item tier
-    23) Fixed issue with setting balance to 0
-    24) Fixed issue with -balance showing undefined if money wasn't abow 100k
-    25) Added a new category of commands "Items"
-    26) Added info command to lookup some info about an item
-    27) Removed -info and -i as aliases for the -help command
-    28) Added a -give command to give a user a certain item
-    29) Added a InvalidArgs warning event
-    30) Fixed some issues with giving items
-    31) Fixed an issue with resetting
-    32) Fixed an issue with new players being given incorrect values
-    33) Added money suffix to not enough money message
+	14) Fixed a issue with -jobs allowing the user to progress to one level above themselves
+	15) Added a gang system
+	16) Added the capability to create a new gang when the user reaches level 8
+	17) Added 6 gang commands: [Create, Disband, Join, Leave, Settings, Invite]
+	18) Added a gangWarnings & gangEvents folder for events
+	19) Changed all methods in user to directly use the user's id(user_id) instead of user.id
+	20) Added a new achivement for creating a gang
+	21) Added an admin command to update all gangs info if template is updated
+	22) Changed CommandError message to be less pronounced
+	23) Changed InvalidCommand message to be less pronounced
+	24) Fixed an issue with -shutdown command
+	25) Added 2 toggle commands [ErrorLogging, Commands]
+	26) Added the ability to sell a whole tier of items or whole inventory. Items without prices will not be sold like limiteds
+	27) Added so that opening lootboxes max count increases along with your rebirth count
+	28) Refactored some names and methods in client and added a userMethods folder
+	29) Added a name property to gang info to store the actual name to use later
+	30) Attempt a fix for an issue with leaderboards where if a user has left their name will not be available and then the user will be a "unknown us"
+	31) Reworked the help commands to be more easy to use and look more appealing
+	32) Added a new userCooldowns property of client and a data.cooldown method file which handles user cooldowns
+	33) Added reactions to help commands and a max timeout of 15seconds
+	34) Added a -setPerc command that sets a users bal to a certain percentage of the server's total balance
+	
+
 
     TODO NEXT:
-    0) Add a inventory command - DONE
-    1) Add saving of items in database using JSON - DONE
-    2) Add give item commands - DONE
-    3) Add items being given to the player after lootbox opened - DONE
-	4) Fix money not being taken from player after purchasing lootbox - FIXED
-	5) Fix lootboxing continuing even íf player doesn't have enough money - FIXED
+	1) Add more stuff to the gang system -- DOING
+	2) Allow -sell to sell a whole tier of items -- DONE
 
-*/
-/*
-	TODO Before release:
-	1) Finish the website -- CONSIDERING
-	2) Add API support to the website -- DEPENDENT
-	3) Add more to the economy branch -- WORKING ON
-	5) Add a guild/crew System.
-	6) Add lootboxes - DONE
-	7) Add an auction house and a market to sell loot to NPC
-	8) Add money AND xp/level leaderboard -- DONE
-	9) Add a job-tree or something - CONSIDERING
-	10) Add a command to look through all jobs and see if any are not linked up to any previous jobs -- DONE
+
+	TODO Before full release:
+	1) Add an auction house and a market to sell loot to NPC -- Partially Done (Auctions left)
+	2) Add more than 50 items 
 
 */
 
@@ -75,23 +70,23 @@ client.rules = new Discord.Collection(); // All voted rules and then there are c
 client.jobList = new Discord.Collection(); // All jobs Collection. Loaded from database
 client.highestJobRequirement = 0;
 
-client.achivementList = require('./info/Achivements.js')
-client.items = require('./info/Items.js')
-
 client.s = require('./info/settings.js')
 
 	// --- Global variables ---
 
-client.adminList = ['183617597365813248', '813580267277123615']; // List of super-admin IDs
+client.adminList = ['183617597365813248', '166063918979088384']; // List of super-admin IDs
 client.botCount = 3 // Amount of bots in the server
+
+client.allowCommands = true
 
 client.cachedMoneyLB = {} // Cached Money ranked Leaderboard
 client.cachedLevelLB = {} // Cached Level ranked Leaderboard
 client.totalMoney = 0 // Total capital of the whole server
 
-client.startUpTime = 0 // Time since the bot started
+client.startUpTime = 0 // Time off the bot start
 
 client.categoryList = []
+client.adminCategoryList = []
 
 client.guild = false
 
@@ -102,7 +97,7 @@ client.roleId = {
 };
 
 client.channelId = {
-	commandChannels: ['801914747599061022', '804277866790518804'], // [1] Bot-Commands [2] Admin-Commands
+	commandChannels: ['801914747599061022', '881480417797083177', '804277866790518804'], // [1] Bot-Commands [2] Admin-Commands
 	voting: '801914827760205885',
 	rules: '801916814501347329',
 	errors: '842354024573566986'
@@ -117,9 +112,15 @@ client.channelId = {
 
 // --- Timed Functions ---
 
-client.timer = {
-	leaderboard: 0 // Time of last update
+client.userCooldowns = {
+	work: new Discord.Collection()
 }
+
+client.userTimersCooldown = {
+	work: 2.5 * 60 * 1000 // 30min
+}
+
+client.leaderboardTimer = 0
 
 const timers = require('./timers.js')
 timers.leaderboard(client);
@@ -135,7 +136,7 @@ client.con = client.mysql.createConnection({
 
 client.con.connect(err => {
 	if(err) throw err;
-	console.log("Connected to DB!");
+	console.log("Connected to the Database!");
 });
 
 // --- Login bot ---

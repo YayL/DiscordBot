@@ -1,47 +1,99 @@
-function printCommandCategories(msg, disc, cmds){
-	let embed = new disc.MessageEmbed() // Create embeded message
-			.setTitle("*** Admin-Commands:***") // Set the title
-			.setFooter("Anarchy!"+"\u3000".repeat(100)+"|")
-			.setColor('#9aedea') // Give it a color in hexidecimal format
-		for(var i = 0; i < cmds.length; i++){ // Loop through command collection
-            if(i%8==0 && i != 0){
-                msg.author.send(embed);
-                embed = new disc.MessageEmbed() // Create embeded message
-					.setColor('#9aedea') // Give it a color in hexidecimal format
-					.setFooter("Anarchy!"+"\u3000".repeat(100)+"|");
+const categoryEmojiDict = {
+	'Economy': '💰',
+	'Gang': '👪',
+	'Items': '📦',
+	'Management': '💼',
+	'Rules': '⚖️',
+	'User': '🙍',
+	'Utils': '🛠️',
+}
+
+function sendDefaultHelpCommand(msg, client, disc, cmds){
+	var embed = new disc.MessageEmbed()
+		.setAuthor(`List of categories to choose from`)
+		.setColor('#41BDB8')
+		.setFooter(`-ahelp [category]`);
+
+	for(let category of client.adminCategoryList){
+		embed.addFields({
+			name: `${categoryEmojiDict[category]} ${category}`,
+			value: `\u200b`,
+			inline: true
+		})
+	}
+	const filter = (reaction, user) => {
+		if(user.id == msg.member.id){
+			let index = Object.values(categoryEmojiDict).indexOf(reaction.emoji.name);
+			if (index != -1){
+				reaction.message.reactions.removeAll().then(message => {
+					message.delete();
+				});
+				return sendSpecificHelpCommand(msg, client, disc, Object.keys(categoryEmojiDict)[index], cmds);
 			}
-			embed.addFields({
-				name: "---------------------",
-				value: "\u200b"},
-			{
-				name: "**__" + cmds[i].name + "__**",
-				value: cmds[i].description + "\n",
-				inline: false},
-			{
-				name: "***Use***",
-				value: "**" + cmds[i].use + "**\n",
-				inline: true},
-			{
-				name: "***Aliases***",
-				value: "[**" + cmds[i].alias.join(", ") + "**]\n" ,
-				inline: true})
 		}
-	msg.author.send(embed);
+		return false
+	}
+
+	msg.channel.send(embed)
+		.then(message => {
+			for(var key in categoryEmojiDict){
+				message.react(categoryEmojiDict[key])
+			}
+			message.awaitReactions(filter, {time: 15000}).then(m => {
+				if(!m.deleted) m.delete()
+			});
+		})
+}
+
+function sendSpecificHelpCommand(msg, client, disc, category, cmds){
+	if (category == undefined) return
+
+	const categoryIndex = client.adminCategoryList.map((category) => category.toLowerCase()).indexOf(category.toLowerCase())
+	if(categoryIndex == -1) return
+
+	const embed = new disc.MessageEmbed()
+		.setAuthor(`${client.adminCategoryList[categoryIndex]}'s Command List`)
+		.setColor(`#41BDB8`)
+
+	for(let cmd of cmds){
+		if(cmd.options.Category.toLowerCase() != client.adminCategoryList[categoryIndex].toLowerCase()) continue
+		embed.addFields({
+			name: `${cmd.name}`,
+			value: `${cmd.description}`,
+			inline: true
+		},
+		{
+			name: `How to Use`,
+			value: `**${cmd.use}**`,
+			inline: true
+		},
+		{
+			name: `Aliases`,
+			value: (cmd.alias.length != 0 ? cmd.alias : '\u200b'),
+			inline: true
+		})
+	}
+	
+	msg.channel.send(embed)
+	
+	return true
 }
 
 module.exports = {
-	name : "Ahelp",
-	alias : ["acmds"],
-	use: "-Ahelp",
-	description : "Displays all Admin Commands",
-	options: {ShowInHelp: false},
-	run : function(msg, client, disc){
+	name : "ahelp",
+	alias : ["ah", "cmds", "commands"],
+	use: "-ahelp [category]",
+	description : "Displays all available admin commands",
+	options: {ShowInHelp: false, Category: "Utils"},
+	run : function(msg, client, disc, args){
 		try{
-			const cmds = client.adminCommands.array();
-			printCommandCategories(msg, disc, cmds);
+			const cmds = client.adminCommands.array();	
+			if(sendSpecificHelpCommand(msg, client, disc, args[0], cmds)) return
+			
+			sendDefaultHelpCommand(msg, client, disc, cmds)
+
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }
-		
 	}
 }

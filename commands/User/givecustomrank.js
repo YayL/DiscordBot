@@ -3,10 +3,10 @@ module.exports = {
 	alias : ["gcr", "givecr", "gcustomrank", "gcustomr", "gcrank"],
 	use: "-GiveCustomRank [name] [hex-color]",
 	description : "Creates a new rank with custom color for you",
-	options: {ShowInHelp: true, Category: "User"},
+	options: {ShowInHelp: false, Category: "User"},
 	run : function(msg, client, disc, args){
 		try{
-			if(msg.member.roles.cache.array().length-1 <= client.s.maxRanks || client.adminList.includes(msg.member.id)){
+			if(msg.member.roles.cache.array().length < client.s.MAX_RANKS || client.adminList.includes(msg.member.id)){
 
 				if(msg.guild.roles.cache.find(role => role.name.toLowerCase() == args[0].toLowerCase())){return}
 

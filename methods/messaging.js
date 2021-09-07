@@ -64,12 +64,12 @@ module.exports = {
 	},
 
 	log(guild, toLog, slicing=3){
-		if(s.log_errors_to_discord){
+		if(s.LOG_ERRORS_TO_DISCORD){
 			try{
 				var stack = toLog.stack.split("\n").slice(1);
 				guild.channels.cache.get('842354024573566986').send({
 				    embed: {
-				      author: {name: `${toLog}`},
+				      author: {name: `❌ ${toLog} ❌`},
 				      color: "FFFFFF",
 				      description: `${stack}`,
 				      footer: { text: `Time to fix some bugs! Good luck!`},
@@ -78,7 +78,9 @@ module.exports = {
 	    	}catch(e){
 	    		console.log(e)
 	    	}
-	    }else console.log(toLog)
+	    }else {
+	    	console.log(toLog)
+	    }
 		
 	}
 }

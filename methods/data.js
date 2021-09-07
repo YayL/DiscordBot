@@ -1,7 +1,6 @@
-module.exports = {
-	bal: require('./dataMethods/bal.js'),
-	rules: require('./dataMethods/rules.js'),
-	jobs: require('./dataMethods/jobs.js'),
-	user: require('./dataMethods/user.js'),
-	items: require('./dataMethods/items.js')
-}
+exports.bal = require('./dataMethods/bal.js')
+exports.gang = require('./dataMethods/gang.js')
+exports.items = require('./dataMethods/items.js')
+exports.jobs = require('./dataMethods/jobs.js')
+exports.rules = require('./dataMethods/rules.js')
+exports.cooldown = require('./dataMethods/cooldown.js')

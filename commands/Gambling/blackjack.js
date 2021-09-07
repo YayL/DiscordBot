@@ -7,12 +7,12 @@ module.exports = {
 	run: async function(msg, client, disc, args){
         try{
             let bet = client.utils.suffixCheck(args[0])
-            if(bet == "all") bet = await client.data.user.getBalance(client, msg.member);
+            if(bet == "all") bet = await client._user.bal.getBalance(client, msg.member.id);
             if(!bet || bet < 1) return client.eventEm.emit('InvalidInputAmount', msg);
 
-            if(!await client.data.user.enoughMoney(client, msg.member, bet)) return
+            if(!await client._user.bal.enoughMoney(client, msg.member.id, bet)) return
 
-            client.data.user.addBalance(client, msg.member, -1*bet, "add");
+            client._user.bal.addBalance(client, msg.member.id, -1*bet);
 
             blackjack(msg, client, disc, bet, msg.member)
         }catch(e){
@@ -49,36 +49,44 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
     plrPoints = handToPoints(playerHand)
     dlrPoints = handToPoints(dealerHand)
 
+    // Add things to message
     embed.setTitle(`${player.displayName}'s blackjack game`)
     embed.addField(`${player.displayName}'s hand`, `${getHand(playerHand)}\nTotal: ${plrPoints}`, true)
     embed.addField(`Dealers hand:`, `${getHand(dealerHand)}\nTotal: ${dlrPoints}`, true)
+    // -------------------
 
+
+    // State of the game
     if(plrBust&&dealerBust){
-        embed.addField(`Draw!`, `You both went bust. You keep $${client.utils.numberWithCommas(bet, true)}`)
-        client.data.user.addBalance(client, player, bet, "add")
+        embed.addField(`Draw!`, `You both went bust. You keep $${client.utils.fixNumber(bet, true)}`)
+        client._user.bal.addBalance(client, player.id, bet)
     }
-    else if((finished && (dlrPoints>plrPoints) && !dealerBust)|| plrBust) embed.addField(`Dealer won!`, `You lost $${client.utils.numberWithCommas(bet, true)}`)
+    else if((finished && (dlrPoints>plrPoints) && !dealerBust)|| plrBust) embed.addField(`Dealer won!`, `You lost $${client.utils.fixNumber(bet, true)}`)
     else if((finished && (plrPoints>dlrPoints) && !plrBust)|| dealerBust) {
         const winnings = Math.floor(bet*(Math.random()*(1.5-0.3)+0.3))
-        embed.addField(`You won!`, `You earned $${client.utils.numberWithCommas(winnings, true)}`)
-        client.data.user.addBalance(client, player, winnings+bet, "add")
+        embed.addField(`You won!`, `You earned $${client.utils.fixNumber(winnings, true)}`)
+        client._user.bal.addBalance(client, player.id, winnings+bet)
     }
     else if(plrBust) embed.addField(`BUST`, `You went above 21!`)
     else if(dealerBust) embed.addField(`You won!`, )
     else if(plrPoints==dlrPoints && finished){
-        embed.addField(`PUSH!`, `You got the same points as the dealer, you keep $${client.utils.numberWithCommas(bet, true)}`)
-        client.data.user.addBalance(client, player, bet, "add")
+        embed.addField(`PUSH!`, `You got the same points as the dealer, you keep $${client.utils.fixNumber(bet, true)}`)
+        client._user.bal.addBalance(client, player.id, bet)
     }
     else embed.addField(`\u200b\n:regional_indicator_h:  - Hit | :regional_indicator_s:  - Stand | :regional_indicator_d:  - Double`, "\u200b")
+
+    // -------------------
 
     const filter = (reaction, user) => {
         if(user.id != player.id) return;
         let val = ""
-        if(reaction.emoji.name == client.s.emoji[7]) val = "h"// Hit
-        else if(reaction.emoji.name == client.s.emoji[18]) val = "s"// Stand
-        //else if(reaction.emoji.name == client.s.emoji[9]) val = "d" // Double
-        else return;
-        reaction.message.delete();
+        if(reaction.emoji.name == client.s.EMOJIS[7]) val = "h"// Hit
+        else if(reaction.emoji.name == client.s.EMOJIS[18]) val = "s"// Stand
+        //else if(reaction.emoji.name == client.s.EMOJIS[9]) val = "d" // Double
+        else return
+        reaction.message.reactions.removeAll().then(message => {
+            message.delete();
+        });
         blackjack(ref, client, discord, bet, player, cards, dealerHand, playerHand, val)
     }
 
@@ -88,8 +96,8 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
             try {
                 msg.awaitReactions(filter)
             }catch(e){console.log(1)}
-            msg.react(client.s.emoji[7]);
-            msg.react(client.s.emoji[18]);
+            msg.react(client.s.EMOJIS[7]);
+            msg.react(client.s.EMOJIS[18]);
             //msg.react(client.emoji[3]); Double
         })
 }
@@ -115,7 +123,7 @@ function handToPoints(hand=[]){
     let index = 0;
     for(card of hand){
         let value = Number(card.Value)
-        if(isNaN(value)) value = (card.Value=="J"||card.Value=="Q"||card.Value=="K" ) ? 10 : (index > 2) ? 0 : 11
+        if(isNaN(value)) value = (card.Value=="J"||card.Value=="Q"||card.Value=="K" ) ? 10 : (index > 2 ? 0 : 11)
         if(value==0) ace++;
         points += value
         index++;

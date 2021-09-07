@@ -1,4 +1,6 @@
-module.exports = (client, disc, msg, CommandName, args) => {
-    client.msg.errorReply(msg,"*The command:* **__" + CommandName + " " + args.join(" ") + "__**" + " *was not found or the arguments were incorrect!*",
-		 disc, "Check your command again, otherwise report this to @!YayL as soon as possible!");
+module.exports = (client, discord, msg, CommandName, args) => {
+    const embed = new discord.MessageEmbed()
+        .setTitle(`Command not found: __${CommandName} ${args.join(' ')}__`)
+        .setColor('b80909')
+    msg.channel.send(embed);
 }

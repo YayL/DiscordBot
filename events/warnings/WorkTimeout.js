@@ -1,5 +1,7 @@
 module.exports = (client, disc, msg, timeleft) => {
 
+    console.log(timeleft)
+
     let seconds = Math.floor(timeleft)+1
     let minutes = Math.floor(seconds/60)
     seconds = Math.floor(seconds - minutes*60)

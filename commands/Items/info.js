@@ -6,10 +6,8 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Items"},
 	run: function(msg, client, disc, args){
 		try{
-			
 			const item = client.data.items.getItem(client, Number(args[0]))
-
-			if(item == 'Not Found') return;
+			if(item == null) return client.eventEm.emit('ItemNotFound', msg, args[0]);
 
 			var limited = '';
 			if(item.tier == 'Limited'){
@@ -17,7 +15,8 @@ module.exports = {
 			}
 			var embed = new disc.MessageEmbed()
 				.setTitle(`ID: ${item.id} - ${item.name}`)
-				.setDescription(`***__Description:__*** \n*${item.description}*${limited}`)
+				.setDescription(`**__Description__** \n*${item.description}*\n\n**__Market Value:__ ${client.utils.fixNumber(item.value, true)}**` 
+					+ `${limited}`)
 				.setColor(`${client.items.color_table[client.items.lookup_table.indexOf(item.tier.toLowerCase())]}`)
 				.setFooter(`Origin: ${item.origin}`)
 

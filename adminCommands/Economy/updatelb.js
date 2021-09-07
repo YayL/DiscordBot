@@ -3,7 +3,7 @@ module.exports = {
 	alias: ["ulb"],
 	use: "-UpdateLB",
 	description: "Update Money Leaderboard",
-	options: {ShowInHelp: false},
+	options: {ShowInHelp: false, Category: 'Economy'},
 	run: function(msg, client){
 		try{
 			client.eventEm.emit('updateLB')

@@ -8,24 +8,28 @@
         try{
             await client.data.bal.updateTotalMoney(client);
 
-            const plr = args[0] == "me" || args[0] == undefined ? msg.member : await client.utils.getMember(args[0], msg).then(plr => {return plr})
+            const plr = args[0] == "me" || args.length == 0 ? msg.member : await client.utils.getMember(args[0], msg).then(plr => {return plr})
 
-            let user = await client.data.user.get(client, plr, '*')
-            user = user == "notFound" ? await client.data.user.get(client, msg.member, '*') : user
+            if(plr == null) return client.eventEm.emit('InvalidArgs', msg, this.use)
+
+            let user = await client._user.get(client, plr.id, '*')
+            user = user == "notFound" ? await client._user.get(client, msg.member.id, '*') : user
             const bal = user.bal;
             const job_name = user.job_name;
+            const gang_name = user.gang != null ? user.gang.charAt(0).toUpperCase() + user.gang.slice(1) : ''
             const job_xp = user.job_xp;
             const job_lvl = client.data.jobs.xpToLevel(job_xp, true);
             const requiredXp_ToNextLvl = client.data.jobs.nextLvlXp(job_lvl);
 
             profileInfo = "----------\n"
-                + `Bank Balance: **$${client.utils.numberWithCommas(bal, true)}**\n`
+                + `Bank Balance: **$${client.utils.fixNumber(bal, true)}**\n`
                 + `Percentage of Market Capital: **${Math.floor((bal/client.totalMoney)*1000000)/10000}% **\n`
                 + `Job Title: **${job_name}**\n`
-                + `Level: **${job_lvl >= client.s.maxLevel ? 'Max' : job_lvl}**\n`
-                + `Current XP: **${client.utils.numberWithCommas(job_xp-client.data.jobs.totalLvlXp(job_lvl))}`
-                + `/${job_lvl >= client.s.maxLevel ? "Max" : client.utils.numberWithCommas(requiredXp_ToNextLvl)}** `
-                + `--> Next Level: **${job_lvl >= client.s.maxLevel ? 'Max' : job_lvl+1}**\n`
+                + `Gang: **__${gang_name}__**\n`
+                + `Level: **${job_lvl >= client.s.MAX_LEVEL ? 'Max' : job_lvl}**\n`
+                + `Current XP: **${client.utils.fixNumber(job_xp-client.data.jobs.totalLvlXp(job_lvl))}`
+                + `/${job_lvl >= client.s.MAX_LEVEL ? "Max" : client.utils.fixNumber(requiredXp_ToNextLvl)}** `
+                + `--> Next Level: **${job_lvl >= client.s.MAX_LEVEL ? 'Max' : job_lvl+1}**\n`
                 + `Rebirths: **${user.rebirths}**`
 
             client.msg.reply(msg, `${plr.displayName}'s Profile:`, profileInfo, disc)

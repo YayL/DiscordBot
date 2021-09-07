@@ -8,13 +8,13 @@ module.exports = {
 		try{
 			const payee = await client.utils.getMember(args[0], msg);
 			let amount = client.utils.suffixCheck(args[1])
-      if(amount == false) return client.eventEm.emit('InvalidCommand', "Highlow", args);
-      if(amount == "all") amount = await client.data.user.getBalance(client, msg.member);
+      		if(amount == false || payee == null) return client.eventEm.emit('InvalidArgs', msg, this.use);
+      		if(amount == "all") amount = await client._user.bal.getBalance(client, msg.member.id);
 
-	        if(!await client.data.bal.enoughMoney(client, msg.member, amount)) return;
+	        if(!await client._user.bal.enoughMoney(client, msg.member.id, amount)) return;
 
-	        client.data.user.addBalance(client, msg.member, -1*amount, "add")
-	        client.data.user.addBalance(client, payee, amount, "add")
+	        client._user.bal.addBalance(client, msg.member.id, -1*amount)
+	        client._user.bal.addBalance(client, payee.id, amount)
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }
