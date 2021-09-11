@@ -1,9 +1,6 @@
 const vote = {
 	run: function(client, args){
-		client.data.rules.getMaxRuleId(client)
-		.then(id => {
-			client.data.rules.updateRules(client, args[0], args[1], "add", id+1);
-		})
+		client.data.rules.updateRules(client, args[0], args[1], "add");
 	}
 }
 
@@ -16,19 +13,19 @@ module.exports = {
 	run : function(msg, client, disc, args){
 		try{
 			[name, args] = client.utils.argsWithSpace(args);
-			const description = args.join(" ");
-
-			const title = "Law Proposition: ***" + name + "***";
-			const desc = `Do you agree with ${msg.member.user.username} that we need this law?`;
-			const fieldTitle = "What will this law do?";
-			const fieldText = description;
+			
+			const description = args.join(" "),
+				title = "Law Proposition: ***" + name + "***",
+				desc = `Do you agree with ${msg.member.user.username} that we need this law?`,
+				fieldTitle = "What will this law do?",
+				fieldText = description;
 
 			client.msg.createVote(title, desc, fieldTitle, fieldText, msg, disc)
 			.then(em => {
 					client.votes.set(em, [vote, [name, description]]);
 			});
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
 	}
 }

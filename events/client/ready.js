@@ -1,24 +1,25 @@
-const jobs = require('./../../info/Jobs.js')
+const jobs = require('./../../info/Jobs.js');
 
 module.exports = (client, disc) => {
-	for(var i=0; i<jobs.length;i++){
-		for(job of jobs[i]){
-			client.jobList.set(job.name, {base_pay: job.base_pay, requirement: i+1, job_options: job.job_options})
+
+	for(let i = 0; i < jobs.length; i++){
+		for(let job of jobs[i]){
+			client.jobList.set(job.name, {base_pay: job.base_pay, requirement: i+1, job_options: job.job_options});
 		}
 	}
-	client.highestJobRequirement = jobs.length
-	console.log(`Jobs: ${client.jobList.array().length}`)
+	client.highestJobRequirement = jobs.length;
+	console.log(`Jobs: ${client.jobList.array().length}`);
 
-	client.achivementList = require('./../../info/Achivements.js')
-	console.log(`Achivements: ${client.achivementList.length}`)
+	client.achivementList = require('./../../info/Achivements.js');
+	console.log(`Achivements: ${client.achivementList.length}`);
 	
-	client.items = require('./../../info/Items.js')
-	client.itemAmount = client.data.items.countItems(client)
-	console.log(`Items: ${client.itemAmount}`)
+	client.items = require('./../../info/Items.js');
+	client.itemAmount = client.data.items.countItems(client);
+	console.log(`Items: ${client.itemAmount}`);
 
-	client.totalMoney = client.data.bal.updateTotalMoney(client)
+	client.totalMoney = client.data.bal.updateTotalMoney(client);
 	client.eventEm.emit('updateLB');
 	client.eventEm.emit('updateLB', 'lvl');
 	
-	console.log('Yeah, yeah! I am up...')
+	console.log('Yeah, yeah! I am up...');
 }

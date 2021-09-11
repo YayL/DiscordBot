@@ -1,7 +1,7 @@
-const updaterules = require('./../../loaders/updateRules.js')
+const updaterules = require('./../../loaders/updateRules.js');
 
 function checkVotes(reaction, client, disc){
-	const command = client.votes.get(reaction.message)
+	const command = client.votes.get(reaction.message);
 	command[0].run(client, command[1]);
 	reaction.message.delete();
 	updaterules.update(client, disc, reaction.message);

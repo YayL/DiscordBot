@@ -7,11 +7,11 @@ module.exports = {
 	run : function(msg, client, disc){
 		try{
 			msg.guild.roles.fetch(client.roleId.member) // Get member rank using its role id
-			.then(role => {
-				msg.member.roles.add(role);
-			})
+				.then(role => {
+					msg.member.roles.add(role);
+				});
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
 		
 	}

@@ -6,11 +6,11 @@ module.exports = {
 	use: "-TestEvent",
 	description: "Test event",
 	options: {ShowInHelp: false, Category: 'Utils'},
-	run: function(msg, client, disc, args){
+	run: async function(msg, client, disc, args){
 		try{
-
+			console.log(client.utils.fixNumber(client.totalMoney, true));
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
 		
 	}

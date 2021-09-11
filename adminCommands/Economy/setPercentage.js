@@ -8,7 +8,6 @@ module.exports = {
 		try{
 			if(!args[0] || !args[1]) return;
 
-
             Percentage = Number(args[1])/100;
             Percentage = (Percentage < 0 ? 0 : (Percentage >= 1 ? 1 : Percentage));
 
@@ -16,14 +15,15 @@ module.exports = {
                 moneyRequired = ((client.totalMoney - await client._user.bal.getBalance(client, msg.member.id))*Percentage)/(1-Percentage);
 				return client._user.bal.addBalance(client, msg.author.id, moneyRequired, true);
 			}
+
 			client.utils.getMember(args[0], msg)
-			.then(async member => {
-				if(member == null) return
-                moneyRequired = ((client.totalMoney - await client._user.bal.getBalance(client, member.id))*Percentage)/(1-Percentage);
-				client._user.bal.addBalance(client, member.id, moneyRequired, true);
-			})
+				.then(async member => {
+					if(member == null) return;
+					moneyRequired = ((client.totalMoney - await client._user.bal.getBalance(client, member.id))*Percentage)/(1-Percentage);
+					client._user.bal.addBalance(client, member.id, moneyRequired, true);
+				})
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
 		
 		

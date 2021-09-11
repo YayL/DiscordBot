@@ -1,5 +1,5 @@
-const table = require('../../info/Items.js').lootbox_rates
-const lookup_table = require('../../info/Items.js').lookup_table
+const table = require('../../info/Items.js').lootbox_rates;
+const lookup_table = require('../../info/Items.js').lookup_table;
 
 function totalChanceOfItemsInTier(client, tier){
 	return client.items[tier].reduce((totalValue, val) => totalValue + val.rarity, 0);
@@ -15,35 +15,36 @@ function getItemTier(case_tier){
 
 	while(i <= random){
 		j += 1;
-		i += table[case_tier][j]
+		i += table[case_tier][j];
 	}
-	return j
+	return j;
 }
 
-function addToObjList(client, obj_list, item, chest_rarity, item_rarity){
+function addToObjList(obj_list, item){
 	var names = obj_list.map(obj => obj.name);
 
 	if(names.includes(item.name)){
 		obj_list[names.indexOf(item.name)].count++;
-	}else{
+	}
+	else{
 		obj_list.push({name: item.name, id: item.id,
-			count: 1, obj: item})
+			count: 1, obj: item});
 	}
 }
 
 module.exports = async (client, disc, msg, case_tier, obj_list) => {
 
-	const tier_to_roll = lookup_table[getItemTier(case_tier)]
-	const chest_chance = totalChanceOfTiersInChest(case_tier), item_chance = totalChanceOfItemsInTier(client,tier_to_roll)
+	const tier_to_roll = lookup_table[getItemTier(case_tier)],
+		item_chance = totalChanceOfItemsInTier(client,tier_to_roll);
 
 	var random = Math.random() * item_chance, j = -1, i = 0;
 
 	while(i <= random){
 		j += 1;
-		i += client.items[tier_to_roll][j].rarity
+		i += client.items[tier_to_roll][j].rarity;
 	}
 
-	addToObjList(client, obj_list, client.items[tier_to_roll][j])
+	addToObjList(client, obj_list, client.items[tier_to_roll][j]);
 
 }
 
