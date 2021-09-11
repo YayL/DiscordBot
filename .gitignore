@@ -1,5 +1,6 @@
 # npm/yarn
 node_modules/
+# Include lockfile?
 package-lock.json
 yarn.lock
 
@@ -7,8 +8,9 @@ yarn.lock
 .idea/
 .vscode/
 
-# Sensitive data
-passwords.js
+# Sensitive data/configuration
+passwords.json
+botConfig.json
 # Is this sensitive?
 info/
 
