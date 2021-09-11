@@ -21,6 +21,7 @@ module.exports = {
 		        	
 		        if(availableJobs[0] == ''){
 		        	reaction.message.delete();
+					if(client.data.listings.getUserListingsCount(client, user.id) > 0) return client.eventEm.emit('hasOpenListings', msg);
 		            client.eventEm.emit("rebirth", user, reaction.channel); // Rebirth event
 
 		        }else {

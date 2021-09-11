@@ -1,8 +1,7 @@
 module.exports = async (client, disc, user, channel, rebirth=false) => {
 
     if(!rebirth){
-    	rebirth = await client._user.get(client, user.id, 'rebirths')+1;
-
+    	rebirth = await client._user.get(client, user.id, 'rebirths') + 1;
 
     	client._user.resetUser(client, user.id, true);
     } 

@@ -6,7 +6,7 @@ module.exports = {
 	options: {ShowInHelp: false, Category: 'User'},
 	run: function(msg, client, disc, args){
 		try{
-			let level = client.utils.suffixCheck(args[1], true)
+			let level = client.utils.suffixCheck(args[1], true);
 			if(!level || 0 > level > 56) return;
 			
 			const xp = client.data.jobs.totalLvlXp(level, true);
@@ -16,17 +16,14 @@ module.exports = {
 			}
 
 			client.utils.getMember(args[0], msg)
-			.then(member => {
-				if(member == null) return
-				client._user.xp.setXP(client, msg, member.id, xp);
-			}).catch(e => {
-				client.eventEm.emit('CommandError', msg, this.name, args, e)
-			});
+				.then(member => {
+					if(member != null) 
+						client._user.xp.setXP(client, msg, member.id, xp);
+				});
 			
 			
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
-		
 	}
 }

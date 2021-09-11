@@ -6,29 +6,31 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Gang"},
 	run: async function(msg, client, disc, args){
 		try{
-			if(args.length == 0) return
+			if(args.length == 0) 
+				return;
 
-			if(await client._user.gang.inGang(client, msg.author.id)) return client.eventEm.emit('alreadyInGang', msg);
+			if(await client._user.gang.inGang(client, msg.author.id)) 
+				return client.eventEm.emit('alreadyInGang', msg);
 
-			const name = args[0]
+			const name = args[0],
+				gang = await client.data.gang.getGang(client, name),
+				info = gang.info;
 
-			const gang = await client.data.gang.getGang(client, name)
-
-			if(gang == null) return client.eventEm.emit('gangNonExistent', msg, name)
-
-			const info = JSON.parse(gang.info)
+			if(gang == null) 
+				return client.eventEm.emit('gangNonExistent', msg, name);
 
 			if(client.data.gang.isInviteOnly(client, info.SETTINGS)){
-				if(!client.data.gang.isInvited(client, info, msg.author.id)) return client.eventEm.emit('notInvited', msg)
-				client.data.gang.remFromInviteList(client, gang, msg.author.id)
+				if(! client.data.gang.isInvited(client, info, msg.author.id)) 
+					return client.eventEm.emit('notInvited', msg);
+				client.data.gang.remFromInviteList(client, gang, msg.author.id);
 			}
 
-			client._user.gang.joinGang(client, gang, msg.author.id)
+			client._user.gang.joinGang(client, gang, msg.author.id);
 
-			client.eventEm.emit('joinedGang', msg, JSON.parse(gang.info).NAME)
+			client.eventEm.emit('joinedGang', msg, info.NAME);
 
 		}catch(e){
-			client.eventEm.emit('CommandError', msg, this.name, args, e)
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
 		}
 		
 	}

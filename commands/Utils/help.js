@@ -6,7 +6,7 @@ const categoryEmojiDict = {
 	'User': '🙍',
 	'Utils': '🛠️',
 	'Voting': '🗳️',
-}
+};
 
 function sendDefaultHelpCommand(msg, client, disc, cmds){
 	var embed = new disc.MessageEmbed()
@@ -19,46 +19,53 @@ function sendDefaultHelpCommand(msg, client, disc, cmds){
 			name: `${categoryEmojiDict[category]} ${category}`,
 			value: `\u200b`,
 			inline: true
-		})
+		});
 	}
 
 	const filter = (reaction, user) => {
 		if(user.id == msg.member.id){
 			let index = Object.values(categoryEmojiDict).indexOf(reaction.emoji.name);
 			if (index != -1){
-				reaction.message.reactions.removeAll().then(message => {
-					message.delete();
-				});
-				return sendSpecificHelpCommand(msg, client, disc, Object.keys(categoryEmojiDict)[index], cmds);
+				reaction.message.reactions.removeAll()
+					.then(message => {
+						message.delete();
+					});
+				sendSpecificHelpCommand(msg, client, disc, Object.keys(categoryEmojiDict)[index], cmds);
+				return true;
 			}
 		}
-		return false
+		return false;
 	}
 
 	msg.channel.send(embed)
 		.then(message => {
 			for(var key in categoryEmojiDict){
-				message.react(categoryEmojiDict[key])
+				message.react(categoryEmojiDict[key]);
 			}
-			message.awaitReactions(filter, {time: 15000}).then(m => {
-				if(!m.deleted) m.delete()
-			});
+			message.awaitReactions(filter, {time: 25000})
+				.then(m => {
+					if(!message.deleted)
+						message.delete();
+				})
 		})
 }
 
 function sendSpecificHelpCommand(msg, client, disc, category, cmds){
-	if (category == undefined) return
+	if (category == undefined) 
+		return;
 
 	const categoryIndex = client.categoryList.map((category) => category.toLowerCase()).indexOf(category.toLowerCase())
-	if(categoryIndex == -1) return
+
+	if(categoryIndex == -1) 
+		return;
 
 	const embed = new disc.MessageEmbed()
 		.setAuthor(`${client.categoryList[categoryIndex]}'s Command List`)
-		.setColor(`#41BDB8`)
+		.setColor(`#41BDB8`);
 
 	for(let cmd of cmds){
-		if(cmd.options.Category.toLowerCase() != client.categoryList[categoryIndex].toLowerCase()) continue
-		if(!cmd.options.ShowInHelp) continue
+		if(cmd.options.Category.toLowerCase() != client.categoryList[categoryIndex].toLowerCase() || !cmd.options.ShowInHelp) 
+			continue
 
 		embed.addFields({
 			name: `${cmd.name}`,
@@ -74,12 +81,12 @@ function sendSpecificHelpCommand(msg, client, disc, category, cmds){
 			name: `Aliases`,
 			value: (cmd.alias.length != 0 ? cmd.alias : '\u200b'),
 			inline: true
-		})
+		});
 	}
 	
-	msg.channel.send(embed)
+	msg.channel.send(embed);
 	
-	return true
+	return true;
 }
 
 module.exports = {
@@ -90,13 +97,15 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Utils"},
 	run : function(msg, client, disc, args){
 		try{
-			const cmds = client.commands.array();	
-			if(sendSpecificHelpCommand(msg, client, disc, args[0], cmds)) return
+			const cmds = client.commands.array();
 			
-			sendDefaultHelpCommand(msg, client, disc, cmds)
+			if(sendSpecificHelpCommand(msg, client, disc, args[0], cmds)) 
+				return;
+			
+			sendDefaultHelpCommand(msg, client, disc, cmds);
 
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
 	}
 }

@@ -1,4 +1,4 @@
-var jobs = require('../../info/Jobs.js')
+const jobs = require('../../info/Jobs.js')
 
 module.exports = {
 	name: "Nonlinkedjobs",
@@ -15,7 +15,7 @@ module.exports = {
           for(jobToPromoteTo of previousJob.job_options){
             for(currentJob of jobs[i]){
               if(currentJob.name == jobToPromoteTo && !list.includes(currentJob.name)) {
-                list.push(currentJob.name)
+                list.push(currentJob.name);
                 break;
               }
             }
@@ -25,21 +25,20 @@ module.exports = {
         if(list.length !== 0){
           for(j of jobs[i]){
             if(!list.includes(j.name)){
-              found_jobs++
-              nonLinkedJobs.push(j.name)
+              found_jobs++;
+              nonLinkedJobs.push(j.name);
             }
           }
         }
         list = [];
       }
 
-      var text = `***__Here is the list:__*** \n` + nonLinkedJobs.join('\n')
+      var text = `***__Here is the list:__*** \n` + nonLinkedJobs.join('\n');
 
-      client.msg.reply(msg, `Non Linked Up Jobs: ${found_jobs}`, text, disc)
-      console.log('finished')
+      client.msg.reply(msg, `Non Linked Up Jobs: ${found_jobs}`, text, disc);
 
     }catch(e){
-        client.eventEm.emit('CommandError', msg, this.name, args, e)
+        client.eventEm.emit('CommandError', msg, this.name, args, e);
     }
 	}
 }

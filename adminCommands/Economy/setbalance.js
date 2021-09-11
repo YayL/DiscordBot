@@ -7,16 +7,16 @@ module.exports = {
 	run: function(msg, client, disc, args){
 		try{
 			if(!args[0]) return;
-			if(args[0] == "me"){
+
+			if(args[0] == "me")
 				return client._user.bal.addBalance(client, msg.author.id, args[1], true);
-			}
+			
 			client.utils.getMember(args[0], msg)
-			.then(member => {
-				if(member == null) return
-				client._user.bal.addBalance(client, member.id, args[1], true);
-			})
+				.then(member => {
+					if(member != null) return client._user.bal.addBalance(client, member.id, args[1], true);
+				})
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
 		
 		

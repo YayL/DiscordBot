@@ -1,7 +1,3 @@
-function getErrorObject(){
-    try { throw Error('') } catch(err) { return err; }
-}
-
 const s = require('../info/settings.js');
 
 module.exports = {
@@ -15,16 +11,18 @@ module.exports = {
 				.addFields({
 					name: fieldTitle,
 					value: fieldText
-				})
+				});
+
 			const channel = msg.guild.channels.cache.get(msg.client.channelId.voting);
+
 			return channel.send(embed)
-			.then(em => {
-				em.react("✅");
-				em.react("❌");
-				return em;
-			})
+				.then(em => {
+					em.react("✅");
+					em.react("❌");
+					return em;
+				});
     	}catch(e){
-    		this.log(msg.guild, e)
+    		this.log(msg.guild, e);
     	}
 	},
 
@@ -41,11 +39,11 @@ module.exports = {
 					value: text
 				})
 				.setColor('#b80909')
-				.setFooter(footer)
+				.setFooter(footer);
 
 			msg.channel.send(embed).catch(console.error);
     	}catch(e){
-    		this.log(msg.guild, e)
+    		this.log(msg.guild, e);
     	}
 	},
 
@@ -55,11 +53,11 @@ module.exports = {
 				.setTitle(`**${title}**`)
 				.setDescription(text)
 				.setColor('#0ac2c2')
-				.setFooter("Have a good day!")
+				.setFooter("Have a good day!");
 
 			msg.channel.send(embed).catch(console.error);
     	}catch(e){
-    		this.log(msg.guild, e)
+    		this.log(msg.guild, e);
     	}
 	},
 
@@ -67,6 +65,7 @@ module.exports = {
 		if(s.LOG_ERRORS_TO_DISCORD){
 			try{
 				var stack = toLog.stack.split("\n").slice(1);
+				
 				guild.channels.cache.get('842354024573566986').send({
 				    embed: {
 				      author: {name: `❌ ${toLog} ❌`},
@@ -76,10 +75,10 @@ module.exports = {
 				    }
 			  	}).catch(console.error);
 	    	}catch(e){
-	    		console.log(e)
+	    		console.log(e);
 	    	}
 	    }else {
-	    	console.log(toLog)
+	    	console.log(toLog);
 	    }
 		
 	}

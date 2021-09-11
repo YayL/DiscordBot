@@ -16,21 +16,24 @@ module.exports = {
 	run : async function(msg, client, disc, args){
 		try{
 			const player = await client.utils.getMember(args[0], msg);
-			if(player == null) return client.utils.clearChat(msg, 1, client.channelId.voting);
+
+			if(player == null) 
+				return client.utils.clearChat(msg, 1, client.channelId.voting);
 
 			var reason = args.slice(1).join(" ");
 
-			if(reason.length == 0) reason = 'Because I said so'
+			if(reason.length == 0) reason = 'Because I said so';
 
-			const title = "Vote Mute"
-			const desc = `Do you wish to chat-mute ${player}?`
-			const fieldTitle = "Reason for chat-mute: "
+			const title = "Vote Mute",
+				desc = `Do you wish to chat-mute ${player}?`,
+				fieldTitle = "Reason for chat-mute: ";
 
-			client.msg.createVote(title, desc, fieldTitle, reason, msg, disc).then(em => {
-				client.votes.set(em, [vote, player]);
-			});
+			client.msg.createVote(title, desc, fieldTitle, reason, msg, disc)
+				.then(em => {
+					client.votes.set(em, [vote, player]);
+				});
     }catch(e){
-        client.eventEm.emit('CommandError', msg, this.name, args, e)
+        client.eventEm.emit('CommandError', msg, this.name, args, e);
     }
 	}
 }

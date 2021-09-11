@@ -7,18 +7,18 @@ module.exports = {
     resetUser: async (client, user_id, rebirth=false) => {
         try{
             if(rebirth){
-                client.con.query(`UPDATE user SET rebirths = rebirths+1 WHERE id = '${user_id}'`)
-                client.con.query(`UPDATE user SET bal = 0 WHERE id = '${user_id}'`)
-                client.con.query(`UPDATE user SET job_xp = 0 WHERE id = '${user_id}'`)
-                client.con.query(`UPDATE user SET last_work = 0 WHERE id = '${user_id}'`)
-                client.con.query(`UPDATE user SET job_name = 'Unemployed' WHERE id = '${user_id}'`)
+                client.con.query(`UPDATE users SET rebirths = rebirths+1 WHERE id = '${user_id}'`);
+                client.con.query(`UPDATE users SET bal = 0 WHERE id = '${user_id}'`);
+                client.con.query(`UPDATE users SET job_xp = 0 WHERE id = '${user_id}'`);
+                client.con.query(`UPDATE users SET last_work = 0 WHERE id = '${user_id}'`);
+                client.con.query(`UPDATE users SET job_name = 'Unemployed' WHERE id = '${user_id}'`);
             }else{
-                client.con.query(`DELETE FROM user WHERE id = '${user_id}'`)
-                addUserToDatabase(client, user_id)
+                client.con.query(`DELETE FROM market WHERE userid = '${user_id}'`);
+                client.con.query(`DELETE FROM users WHERE id = '${user_id}'`);
+                addUserToDatabase(client, user_id);
             }
-            
         }catch(e){
-            client.msg.log(client.guild, e)
+            client.msg.log(client.guild, e);
         }
             
     },
@@ -26,40 +26,43 @@ module.exports = {
 
     get: async(client, user_id, info) => {
         return new Promise(resolve => {
-                client.con.query(`SELECT ${info} FROM user WHERE id = '${user_id}'`, async (e, rows) => {
+                client.con.query(`SELECT ${info} FROM users WHERE id = '${user_id}'`, async (e, {rows}) => {
                     try{
-                        if((info == '*' || info == 'achivements' || info == 'inventory') && rows.length==0) {
-                            await addUserToDatabase(client, user_id)
+                        if((info == '*' || info == 'achivements' || info == 'inventory') && rows.length == 0) {
+                            await addUserToDatabase(client, user_id);
                             return resolve(await client._user.get(client, user_id, info));
                         }
                         if(e){
-                            client.msg.log(client.guild, e)
+                            client.msg.log(client.guild, e);
                             return resolve(null);
                         }
-                        if(info === "*") resolve(rows[0]);
+
+                        if(info === "*") 
+                            resolve(rows[0]);
                         else{
                             if(rows[0] == undefined){
-                                return resolve(null)
+                                return resolve(null);
                             }
                             return resolve(rows[0][info]);
                         } 
                     }catch(e){
-                        client.msg.log(client.guild, e)
+                        client.msg.log(client.guild, e);
                     }
                         
                 })
         }).catch(e => {
-            client.msg.log(client.guild, e)
+            client.msg.log(client.guild, e);
         })
     },
 
     addUserToDatabase: (client, user_id) => {
-        addUserToDatabase(client, user_id)
+        addUserToDatabase(client, user_id);
     }
 }
 
 function addUserToDatabase(client, user_id){
-    client.con.query(`SELECT * FROM user WHERE id = '${user_id}'`, async (e, rows) => {
-        if(!rows.length) client.con.query(`INSERT INTO user (id) VALUES ('${user_id}')`);
+    client.con.query(`SELECT * FROM users WHERE id = '${user_id}'`, (e, {rows}) => {
+        if(rows.length == 0) 
+            client.con.query(`INSERT INTO users (id) VALUES ('${user_id}')`);
     })
 }

@@ -16,11 +16,11 @@ module.exports = {
 	options: {ShowInHelp: false, Category: 'Utils'},
 	run : function(msg, client, disc, args){
 		try{
-			client.allowCommands = false
-			msg.delete()
+			client.allowCommands = false;
+			msg.delete();
 			beforeExit(msg, client);
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
 		
 	}

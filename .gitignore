@@ -1,4 +1,15 @@
-/.idea
-/.vscode
-/passwords.js
-/website
+# npm/yarn
+node_modules/
+package-lock.json
+yarn.lock
+
+# Editor files
+.idea/
+.vscode/
+
+# Sensitive data
+passwords.js
+# Is this sensitive?
+info/
+
+website/

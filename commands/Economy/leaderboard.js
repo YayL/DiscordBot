@@ -1,18 +1,18 @@
+const name = (client, userid, msg) => client.utils.getMember(userid, msg)
+    .then(member => {
+        return member == null ? 'Unknown User' : member.displayName;
+    });
+
 function printLeaderboard(client, disc, msg, fields, footer){
-    const embed = new disc.MessageEmbed() // Create embeded message
-        .setTitle("***__LEADERBOARD:__***") // Set the title
-        .setColor('#9aedea') // Give it a color in hexidecimal format
 
-    embed.addFields(fields)
+    footer += client.utils.timeFormat((client.s.TOTAL_LB_TIME - (Date.now()-client.leaderboardTimer))/1e3);
 
-    let seconds = (client.s.TOTAL_LB_TIME - (Date.now()-client.leaderboardTimer))/1e3
-    let minutes = Math.floor(seconds/60)
-    seconds = Math.floor(seconds - minutes*60)
+    const embed = new disc.MessageEmbed()
+        .setTitle("***__LEADERBOARD:__***")
+        .setColor('#9aedea')
+        .setFooter(footer)
+        .addFields(fields);
 
-    if(minutes > 0){footer += ""+minutes+"min "+seconds+"s"
-    }else{footer += ""+seconds+"s"}
-
-    embed.setFooter(footer);
     msg.channel.send(embed);
 }
 
@@ -20,25 +20,23 @@ function printLeaderboard(client, disc, msg, fields, footer){
 module.exports = {
 	name: "Leaderboard",    
 	alias: ["lb"],
-	use: "-Leaderboard [type M/L]",
+	use: `-Leaderboard money
+          -Leaderboard levels`,
 	description: "See the server leaderboard",
-	options: {ShowInHelp: true, Category: "Economy"},
+	options: {ShowInHelp: true, Category: "Economy"},   
 	run: async function(msg, client, disc, args){
         try{
-            const fields = []
-            var name, footer;
-            var index = 1;   
+            let fields = [], footer, index = 1;
 
-            // ------------------------ Money Leaderboard ------------------------
+                // ------------------------ Money Leaderboard ------------------------
 
             if(args.length < 1 || new RegExp(args[0].toLowerCase()).test("money")){
-                for(val of client.cachedMoneyLB){
-                    name = await client.utils.getMember(val.id, msg).then(plr => {return (plr != null ? plr.displayName : 'Unknown User')})
-                    
-                    fields.push({
-                        name: `**${index}. ${name}**`,
-                        value: `**$${client.utils.fixNumber(val.bal, true)} (${Math.round(val.bal*1e6/client.totalMoney)/1e4}%)**`
-                    });
+                for(val of client.cachedMoneyLB){ 
+                    fields.push(
+                        {
+                            name: `**${index}. ${await name(client, val.id, msg)}**`,
+                            value: `**$${client.utils.fixNumber(val.bal, true)} (${Math.round(val.bal*1e6/client.totalMoney)/1e4}%)**`
+                        });
                     index += 1;
                 }
                 footer = `These guys are rich! You require a minimum of $${client.utils.fixNumber(client.s.LB_MONEY_MIN)} to be on the leaderboard\n`
@@ -48,12 +46,11 @@ module.exports = {
 
             }else if(new RegExp(args[0].toLowerCase()).test("levels")){
                 for(val of client.cachedLevelLB){
-                    name = await client.utils.getMember(val.id, msg).then(plr => {return (plr != null ? plr.displayName : 'Unknown User')})
-
-                    fields.push({
-                        name: `**${index}. ${name}**`,
-                        value: `**Level: ${client.data.jobs.xpToLevel(val.job_xp)} (${client.utils.fixNumber(val.job_xp)}xp)**`
-                    });
+                    fields.push(
+                        {
+                            name: `**${index}. ${await name(client, val.id, msg)}**`,
+                            value: `**Level: ${client.data.jobs.xpToLevel(val.job_xp)} (${client.utils.fixNumber(val.job_xp)}xp)**`
+                        });
                     index += 1;
                 }
                 footer = `These guys have a lot of experience! You require level ${client.utils.fixNumber(client.s.LB_LEVEL_MIN)} to be on the leaderboard\n`
@@ -63,12 +60,10 @@ module.exports = {
             // ------------------------ Print Leaderboard ------------------------
 
             if(fields.length > 0){
-                printLeaderboard(client, disc, msg, fields, footer)
+                printLeaderboard(client, disc, msg, fields, footer);
             }
-            
-            
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
                 
 	}

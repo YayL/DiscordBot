@@ -9,36 +9,39 @@ module.exports = {
 	run: async function(msg, client, disc, args){
 		try{
 			const inventory = await client._user.items.getInventory(client, msg.author.id),
-				inv_length = Object.keys(inventory).length
+				inventoryLength = Object.values(inventory).length,
+				page = (Number.isNaN(Number(args[0])) ? 1 : (Number(args[0]) > maxPages ? maxPages : (Number(args[0]) < 1 ? 1 : Number(args[0]))));
 
-			var max_pages = Math.floor((inv_length - 1) / max_items_per_page) + 1
+			let maxPages = Math.ceil(inventoryLength/max_items_per_page);
 
-			if(max_pages < 1) max_pages = 1
-			const page = isNaN(Number(args[0])) ? 
-				1 : (0 < Number(args) ? (Number(args[0]) < max_pages ? Number(args[0]) : max_pages) : 1 )
+			if(maxPages == 0) 
+				maxPages = 1;
 
+			let item,
+				value_of_inv = 0,
+				text = '';
 
-			const offset = ( page < max_pages ? 
-					max_items_per_page : inv_length - (max_items_per_page * (max_pages - 1)) )
+			for(let slot = max_items_per_page*(page-1)+1; slot <= max_items_per_page*page; slot++){
+				if(slot > inventoryLength)
+					break;
 
-			var value_of_inv = 0
+				item = await client.data.items.getItem(client, Object.keys(inventory)[slot-1]);
 
-			var text = '', item;
-			for(var slot = max_items_per_page*(page-1)+1; slot <= max_items_per_page*(page-1)+offset; slot++){
-				item = await client.data.items.getItem(client, Object.keys(inventory)[slot-1])
-				value_of_inv += (isNaN(Number(item.value)) ? 0 : item.value*inventory[item.id].count) // Check if a number if not 0 else value of item*count
-				text += `*${slot})* *(ID:${item.id})* ***${item.name}*** x${inventory[item.id].count} | **__${item.tier.charAt(0).toUpperCase() + item.tier.slice(1)}__**\n`
+				value_of_inv += (isNaN(Number(item.value)) ? 0 : item.value*inventory[item.id].count); // Checks if a value is limited or not
+
+				text += `*${slot})* *(ID:${item.id})* ***${item.name}*** x${inventory[item.id].count} | **__${item.tier.charAt(0).toUpperCase() + item.tier.slice(1)}__**\n`;
+
 			}
 			
-			var embed = new disc.MessageEmbed()
+			let embed = new disc.MessageEmbed()
 				.setTitle(`Inventory`)
 				.setDescription(`${text}\n--------------------\n $${client.utils.fixNumber(value_of_inv, true)}\n--------------------`)
 				.setColor('#4287f5')
-				.setFooter(`Page ${page}/${max_pages}`)
+				.setFooter(`Page ${page}/${maxPages}`);
 
 			msg.channel.send(embed);
 		}catch(e){
-			client.eventEm.emit('CommandError', msg, this.name, args, e)
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
 		}
 		
 	}

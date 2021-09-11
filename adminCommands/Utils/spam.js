@@ -10,7 +10,7 @@ module.exports = {
 				msg.channel.send(i);
 			}
 		}catch(e){
-			client.eventEm.emit('CommandError', msg, this.name, args, e)
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
 		}
 	}
 }

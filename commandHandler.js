@@ -10,19 +10,20 @@ run -> Calls command function
 
 function notCommandChannel(msg, client, notError){
 	if(client.channelId.commandChannels.includes(msg.channel.id)){
-		return false
+		return false;
 	}
+
 	if(!notError){
 		msg.delete();
 	}
-	return true
+
+	return true;
 }
 
 
 function checkIfAlias(cmdName, cmds){
 	for(const cmd of cmds){
 		for(var a of cmd.alias){
-
 			if(a.toLowerCase() === cmdName){
 				return cmd.name;
 			}
@@ -37,7 +38,8 @@ module.exports = {
 		if(client.adminList.includes(msg.author.id) && client.s.ADMIN_COMMANDS){
 			commands = client.commands.concat(client.adminCommands); // Combine commands and adminCommands
 		}else{
-			if(!client.allowCommands) return client.eventEm.emit('CommandsToggle', msg)
+			if(!client.allowCommands)
+				return client.eventEm.emit('CommandsToggle', msg);
 		}
 
 		if(msg.content.startsWith(prefix)){
@@ -53,10 +55,12 @@ module.exports = {
 
 			try{
 				commands.get(CommandName).run(msg, client, Discord, args, commands.array());
-				if(notCommandChannel(msg, client)) return
+				if(notCommandChannel(msg, client)) 
+					return;
 			}catch(e){
-				if(notCommandChannel(msg, client, false)) return
-				client.eventEm.emit('CommandError', msg, CommandName, args, e, true)
+				if(notCommandChannel(msg, client, false)) 
+					return;
+				client.eventEm.emit('CommandError', msg, CommandName, args, e, true);
 			}
 		}
 	}

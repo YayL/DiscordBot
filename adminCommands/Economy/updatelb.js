@@ -6,10 +6,10 @@ module.exports = {
 	options: {ShowInHelp: false, Category: 'Economy'},
 	run: function(msg, client){
 		try{
-			client.eventEm.emit('updateLB')
-			client.eventEm.emit('updateLB', 'lvl')
+			client.eventEm.emit('updateLB');
+			client.eventEm.emit('updateLB', 'lvl');
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
 		
 	}
