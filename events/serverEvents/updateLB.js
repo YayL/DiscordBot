@@ -22,6 +22,6 @@ module.exports = (client, disc, version) => {
 			resolve();
 		});
 	}).catch(e => {
-		client.msg.log(client.guild, e);
+		client.msg.log("ERR", e, client.guild);
 	})
 }

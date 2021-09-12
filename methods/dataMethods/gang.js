@@ -13,19 +13,19 @@ module.exports = {
                         }
 
                         if(e){
-                            client.msg.log(client.guild, e);
+                            client.msg.log("ERR", e, client.guild);
                             resolve(null);
                         }
                         resolve(rows[0]);
 
                     }catch(e){
-                        client.msg.log(client.guild, e);
+                        client.msg.log("ERR", e, client.guild);
                         resolve(null);
                     }
                         
                 })
         }).catch(e => {
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         })
 	},
 
@@ -62,22 +62,22 @@ module.exports = {
                         }
 
                         if(e){
-                            client.msg.log(client.guild, e);
+                            client.msg.log("ERR", e, client.guild);
                             return resolve(null);
                         }
 
                         return resolve(rows); 
                     }catch(e){
-                        client.msg.log(client.guild, e);
+                        client.msg.log("ERR", e, client.guild);
                         resolve(null);
                     }  
                 })
         }).catch(e => {
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         })
     },
 
-	isGang: async(client, name, override=false) => {
+	async isGang(client, name, override=false){
         if(override != false) 
             return override != null;
 

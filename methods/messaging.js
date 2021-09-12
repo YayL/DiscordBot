@@ -22,7 +22,7 @@ module.exports = {
 					return em;
 				});
     	}catch(e){
-    		this.log(msg.guild, e);
+    		this.log("ERR", e, msg.guild);
     	}
 	},
 
@@ -43,7 +43,7 @@ module.exports = {
 
 			msg.channel.send(embed).catch(console.error);
     	}catch(e){
-    		this.log(msg.guild, e);
+    		this.log("ERR", e, msg.guild);
     	}
 	},
 
@@ -57,29 +57,46 @@ module.exports = {
 
 			msg.channel.send(embed).catch(console.error);
     	}catch(e){
-    		this.log(msg.guild, e);
+    		this.log("ERR", e, msg.guild);
     	}
 	},
 
-	log(guild, toLog, slicing=3){
-		if(s.LOG_ERRORS_TO_DISCORD){
-			try{
-				var stack = toLog.stack.split("\n").slice(1);
-				
-				guild.channels.cache.get('842354024573566986').send({
-				    embed: {
-				      author: {name: `❌ ${toLog} ❌`},
-				      color: "FFFFFF",
-				      description: `${stack}`,
-				      footer: { text: `Time to fix some bugs! Good luck!`},
-				    }
-			  	}).catch(console.error);
-	    	}catch(e){
-	    		console.log(e);
-	    	}
-	    }else {
-	    	console.log(toLog);
-	    }
-		
-	}
+  logLevels: {
+    "TRACE": {level: 0, name: "TRACE", color: "#7fff7f", ansiColor: "92"},
+    "DEBUG": {level: 1, name: "DEBUG", color: "#888888", ansiColor: "90"},
+    "INFO":  {level: 2, name: "INFO",  color: "#ffffff", ansiColor: "97"},
+    "WARN":  {level: 3, name: "WARN",  color: "#ffff77", ansiColor: "33"},
+    "ERR":   {level: 4, name: "ERR",   color: "#ff0000", ansiColor: "91"},
+    "FATAL": {level: 5, name: "FATAL", color: "#770000", ansiColor: "31"},
+  },
+
+  log(level, msg, guild=null){
+    let logLevel = this.logLevels[level.toUpperCase()];
+    if(!logLevel) {
+      // NEVER remove logLevel.ERR
+      this.logC("ERR", "Invalid log level!", guild);
+      return 1;
+    } else if(logLevel.level < s.LOGGING_LEVEL) return 0;
+
+    let time = new Date();
+    let timestamp = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}:${String(time.getSeconds()).padStart(2, '0')}`;
+    let format = `\x1b[1;${logLevel.ansiColor}m[${level.toUpperCase()} ${timestamp}] ${msg}\x1b[0m`;
+    console.log(format);
+
+    if(s.LOG_TO_DISCORD && guild){
+      try{
+        guild.channels.cache.get(guild.client.channelId.log).send({
+          embed: {
+            author: {name: `${logLevel.name}`},
+            color: logLevel.color,
+            description: `${msg}`,
+            footer: { text: "Logging to discord enabled" },
+          },
+        });
+      }catch(e){
+        this.log("ERR", e, guild);
+      }
+    }
+    return 0;
+  },
 }

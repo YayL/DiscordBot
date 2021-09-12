@@ -7,7 +7,7 @@ async function setBalance(user_id, amount, client){
 
         client.con.query(`UPDATE users SET bal = ${amount} WHERE id = '${user_id}'`);
     }catch(e){
-        client.msg.log(client.guild, e);
+        client.msg.log("ERR", e, client.guild);
     }
 }
 
@@ -33,7 +33,7 @@ module.exports = {
                 setBalance(user_id, amount, client);
             }
         }catch(e){
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         }
     },
 
@@ -41,7 +41,7 @@ module.exports = {
         return new Promise(async (resolve) => {
             resolve(await client._user.get(client, user_id, 'bal'));
         }).catch(e => {
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         })
     },
 
@@ -55,7 +55,7 @@ module.exports = {
             } 
             return true;
         }catch(e){
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         }
 
     }

@@ -17,7 +17,7 @@ module.exports = {
 	            client.totalMoney = money;
 	        })
     	}catch(e){
-    		client.msg.log(client.guild, e);
+    		client.msg.log("ERR", e, client.guild);
     	}
 
     },

@@ -59,7 +59,7 @@ function listingsReactions(msg, commandExecutor_id, client, marketTable, startIn
 	msg.awaitReactions(filter, {time:35000}).then(m => {
 		if(!msg.deleted) msg.delete()
 	}).catch(e => {
-		console.log(e)
+		client.msg.log("ERR", e)
 	});
 
 	for(var i = 0; i<length; i++){

@@ -4,7 +4,7 @@ module.exports = {
             client.eventEm.emit('updateLB');
             client.eventEm.emit('updateLB', 'lvl');
         }catch(e){
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         }
     }, client.s.TOTAL_LB_TIME)
 }   

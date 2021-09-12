@@ -8,18 +8,18 @@ module.exports = (client, disc) => {
 		}
 	}
 	client.highestJobRequirement = jobs.length;
-	console.log(`Jobs: ${client.jobList.array().length}`);
+	client.msg.log("INFO", `Jobs: ${client.jobList.array().length}`);
 
 	client.achivementList = require('./../../info/Achivements.js');
-	console.log(`Achivements: ${client.achivementList.length}`);
+	client.msg.log("INFO", `Achivements: ${client.achivementList.length}`);
 	
 	client.items = require('./../../info/Items.js');
 	client.itemAmount = client.data.items.countItems(client);
-	console.log(`Items: ${client.itemAmount}`);
+	client.msg.log("INFO", `Items: ${client.itemAmount}`);
 
 	client.totalMoney = client.data.bal.updateTotalMoney(client);
 	client.eventEm.emit('updateLB');
 	client.eventEm.emit('updateLB', 'lvl');
 	
-	console.log('Yeah, yeah! I am up...');
+	client.msg.log("INFO", 'Yeah, yeah! I am up...');
 }
