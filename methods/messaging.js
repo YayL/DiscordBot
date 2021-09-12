@@ -41,7 +41,7 @@ module.exports = {
 				.setColor('#b80909')
 				.setFooter(footer);
 
-			msg.channel.send(embed).catch(console.error);
+			msg.channel.send(embed).catch(e => this.log("ERR", e));
     	}catch(e){
     		this.log("ERR", e, msg.guild);
     	}
@@ -55,7 +55,7 @@ module.exports = {
 				.setColor('#0ac2c2')
 				.setFooter("Have a good day!");
 
-			msg.channel.send(embed).catch(console.error);
+			msg.channel.send(embed).catch(e => this.log("ERR", e));
     	}catch(e){
     		this.log("ERR", e, msg.guild);
     	}

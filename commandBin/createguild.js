@@ -10,12 +10,12 @@ module.exports = {
 				.then(channel => {
 					let invite = channel.createInvite()
 						.then(invite => client.msg.log("INFO", invite))
-						.catch(console.error);
+						.catch(e => client.msg.log("ERR", e));
 					client.msg.log("INFO", invite.url);
 				})
-				.catch(console.error);
+				.catch(e => client.msg.log("ERR", e));
 			})
-			.catch(console.error);
+			.catch(e => client.msg.log("ERR", e));
 
 	}
 }

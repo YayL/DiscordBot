@@ -16,7 +16,7 @@ module.exports = (client, disc, version) => {
 	return new Promise(resolve => {
 		client.con.query(`SELECT * FROM users WHERE ${info} > ${min-1} ORDER BY ${info} DESC LIMIT ${client.s.LB_SIZE}`, (e, {rows}) => {
 			if(e) 
-				console.error(e);
+				client.msg.log("ERR", e);
 			client[cache] = rows;
 			client.leaderboardTimer = Date.now();
 			resolve();

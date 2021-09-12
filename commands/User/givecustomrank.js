@@ -20,7 +20,7 @@ module.exports = {
 					name: roleName
 				}})
 				.then(role => {
-					role.setColor(roleColor).catch(console.error);
+					role.setColor(roleColor).catch(e => client.msg.log("ERR", e));
 					role.setPosition(3);
 					msg.member.roles.add(role);
 				});
