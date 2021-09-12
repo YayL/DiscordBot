@@ -6,7 +6,7 @@ module.exports = {
 	use: "-TestEvent",
 	description: "Test event",
 	options: {ShowInHelp: false, Category: 'Utils'},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			client.msg.log("INFO", client.utils.fixNumber(client.totalMoney, true));
         }catch(e){

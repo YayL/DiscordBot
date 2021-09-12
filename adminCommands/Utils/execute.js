@@ -6,7 +6,7 @@ module.exports = {
 	use: "-Execute @[user/user_id] [Command Message] ",
 	description: "Force a user to execute a command",
 	options: {ShowInHelp: false, Category: 'Utils'},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			msg.member = client.utils.getMember(args[1], msg);
             msg.author = msg.mentions.users.array()[0];

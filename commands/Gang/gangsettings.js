@@ -4,7 +4,7 @@
 	use: "-GangSettings [setting] [on/off]",
 	description: "Change or show the gang settings",	
 	options: {ShowInHelp: true, Category: "Gang	"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{	
 
 			if(! await client._user.gang.inGang(client, msg.author.id)) 
@@ -18,7 +18,7 @@
 				value = false;
 
 			if(args.length == 0) 
-				return sendSettings(client, msg, disc, gang, info.SETTINGS);
+				return sendSettings(msg, discord, gang, info.SETTINGS);
 			
 			if(Object.keys(info.SETTINGS).includes(args[0].toUpperCase())){
 				if(args.length == 1) 
@@ -38,8 +38,8 @@
 	}
 }
 
-function sendSettings(client, msg, disc, gang, settings){
-	const embed = new disc.MessageEmbed(),
+function sendSettings(msg, discord, gang, settings){
+	const embed = new discord.MessageEmbed(),
 		settingKeys = Object.keys(settings), 
 		settingValues = Object.values(settings);
 

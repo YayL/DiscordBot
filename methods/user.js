@@ -63,6 +63,7 @@ module.exports = {
 function addUserToDatabase(client, user_id){
     client.con.query(`SELECT * FROM users WHERE id = '${user_id}'`, (e, {rows}) => {
         if(rows.length == 0) 
+            client.msg.log("DEBUG", `${rows.length}: ${rows}`);
             client.con.query(`INSERT INTO users (id) VALUES ('${user_id}')`);
     })
 }

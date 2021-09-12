@@ -13,7 +13,7 @@ module.exports = {
 	use: "-Lootbox [tier] [amount/max]",
 	description: "Open lootboxes for certain awards",
 	options: {ShowInHelp: true, Category: "Items"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			const tier = args.length >= 1 ? args[0].toLowerCase() : '';
 
@@ -21,7 +21,7 @@ module.exports = {
 				return client.eventEm.emit('unknownTier', msg, lookup_table);
 
 			if(args.length < 2) 
-				return sendLootInfo(client, disc, msg, tier, costCalculate(tier), color_table[lookup_table.indexOf(tier)]);
+				return sendLootInfo(client, discord, msg, tier, costCalculate(tier), color_table[lookup_table.indexOf(tier)]);
 			
 			const rebirths = await client._user.get(client, msg.author.id, 'rebirths') + 1,
 				amount = args.length >= 1 
@@ -47,7 +47,7 @@ module.exports = {
 				client.eventEm.emit('openLootBox', msg, tier, obj_list);
 			}
 
-			sendRewardMessage(client, disc, msg, tier, cost, amount, obj_list);
+			sendRewardMessage(client, discord, msg, tier, cost, amount, obj_list);
 			client._user.items.addItems(client, msg.author.id, obj_list);
 
 		}catch(e){
@@ -57,7 +57,7 @@ module.exports = {
 	}
 }
 
-function sendRewardMessage(client, disc, msg, tier, cost, amount, obj_list){
+function sendRewardMessage(client, discord, msg, tier, cost, amount, obj_list){
 
 	const value_of_box = obj_list.reduce((total, val) => total + (isNaN(Number(val.obj.value)) ? 0 : val.obj.value)*val.count, 0);
 
@@ -68,7 +68,7 @@ function sendRewardMessage(client, disc, msg, tier, cost, amount, obj_list){
 		text += `x${o.count} ${o.name}: $${client.utils.fixNumber(o.obj.value, true)} | ${o.obj.tier.charAt(0).toUpperCase() + o.obj.tier.slice(1)}\n`;
 	}
 
-	const embed = new disc.MessageEmbed()
+	const embed = new discord.MessageEmbed()
 	    .setTitle(`${msg.author.username}'s x${amount} ${tier.charAt(0).toUpperCase() + tier.slice(1)} lootbox:`)
 	    .setDescription(`${text}\n\nProfit: ${client.utils.fixNumber(value_of_box-cost, true)}`)
 	    .setColor(color_table[lookup_table.indexOf(tier)])
@@ -78,7 +78,7 @@ function sendRewardMessage(client, disc, msg, tier, cost, amount, obj_list){
 
 }
 
-function sendLootInfo(client, disc, msg, case_tier, cost, color){
+function sendLootInfo(client, discord, msg, case_tier, cost, color){
 
 	let text = '', inc = 0, lookup_table = require('../../info/Items.js').lookup_table;
 	
@@ -87,7 +87,7 @@ function sendLootInfo(client, disc, msg, case_tier, cost, color){
 		inc++;
 	}
 	
-	const embed = new disc.MessageEmbed()
+	const embed = new discord.MessageEmbed()
 	    .setTitle(`${case_tier} Lootbox rewards:`)
 	    .setDescription(text)
 	    .setColor(color)

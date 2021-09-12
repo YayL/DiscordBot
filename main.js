@@ -1,36 +1,20 @@
-// Current version: Gang Update 0.7
-// Next Version: Listings & Limiteds Update 0.8
+// Current version: Market Update 0.8.5
+// Next Version: Limiteds Update 0.9
 
 	/* Changes for next Commit:
-	1) Added a -execute command which makes a user execute a command
-	2) Added a -auction command that creates an auction
-	3) Fixed an issue with the sell command that made it not possible to sell individual items by item_id
-	4) Added an -auction command to add an auction
-	5) Added an hasItem method to check if a user has an item and a specific amount of that item
-	6) Changed how rules' ids are added
-	7) Added a timeFormat that turns seconds into days, hours, minutes and seconds
-	8) Added a -auctions command that can show users auctions, item auctions and tier auctions
-	9) Added the possibility to purchase auctions through the -auctions command
-	10) Fixed so that the help menu disappeares after the timer is done
-	11) Increased help timer by 10seconds
-	12) Renamed auction commands to -list and -listings to be more fitting
-	13) When a user rebirths they must now not have any listings open
-	14) Added so the -reset command removes all user listings
-	15) Total fixup and refactoring of all files other than the commandBin folder
-	16) Added a -suicide command so people can reset their players completetely
-	17) 
+	1) 
+	
 
     TODO NEXT:
-	1) Add a timer that every 5 minutes checks the listings with the lowest deadline if they have expiered and removes them
-	2) Add a command like -mylistings to be able to take down your listings
-	3) Add limited items
+	1) Add limited items
 
 
 	TODO Before full release:
 	1) Add more than 50 items
-	2) Add benefits of being in a gang
+	2) Add benefits to being in a gang
 	3) Add gang upgrades
-	4) Add gang leaderboards
+	4) Add gang ranks customisable by the owner
+	5) Add gang leaderboards
 
 */
 
@@ -120,13 +104,14 @@ client.userCooldowns = {
 
 // TODO: Config?
 client.userTimersCooldown = {
-	work: 2.5 * 60 * 1000 // 30min
+	work: 1.5 * 60 * 1000 // 1min 30sec
 };
 
 client.leaderboardTimer = 0;
 
 const timers = require('./timers.js');
 timers.leaderboard(client);
+timers.market(client);
 
 // --- Login bot ---
 

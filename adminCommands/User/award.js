@@ -4,7 +4,7 @@ module.exports = {
 	use: "-Award @[user] [Achivement ID]",
 	description: "Award a user an achivement",
 	options: {ShowInHelp: false, Category: 'User'},
-	run: function(msg, client, disc, args){
+	run: function(client, msg, args, discord){
 		try{
 			if(Number(args[1]) > client.achivementList.length-1) return; //reply "does not exist"
 

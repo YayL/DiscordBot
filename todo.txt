@@ -1,5 +1,4 @@
   Todo
-Templates for all info/ files
 Log more
 
   Done

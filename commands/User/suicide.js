@@ -4,7 +4,7 @@ module.exports = {
 	use: "-Suicide",
 	description : "Start a new life",
 	options: {ShowInHelp: true, Category: "User"},
-	run : function(msg, client, disc){
+	run : function(client, msg, args, discord){
 		try{
 			client._user.resetUser(client, msg.author.id);
             client.eventEm.emit('suicide', msg);

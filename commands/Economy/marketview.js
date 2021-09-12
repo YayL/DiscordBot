@@ -1,12 +1,12 @@
 const maxListingsPerPage = 10
 
-function handleListingMessage(msg, client, embed, marketTable, args){
+async function handleListingMessage(msg, client, embed, marketTable, args){
 	try{
 		const maxPages = Math.ceil(marketTable.length/maxListingsPerPage),
 			page = (Number.isNaN(Number(args[1])) ? 1 : (Number(args[1]) > maxPages ? maxPages : (Number(args[1]) < 1 ? 1 : Number(args[1]))));
 		
 		if(maxPages == 0){
-			embed.setDescription('None Found!');
+			embed.setDescription('**None found**')
 			return msg.channel.send(embed);
 		}
 		var loopLength = 0;
@@ -14,6 +14,11 @@ function handleListingMessage(msg, client, embed, marketTable, args){
 		for(var index =  maxListingsPerPage*(page-1); index < maxListingsPerPage*page; index++){
 			if(index == marketTable.length) 
 				break;
+
+			if(marketTable[index].deadline*1000 <= Date.now()){
+				client.data.market.remove(client, marketTable[index]);
+				continue;
+			}
 
 			const item = client.data.items.getItem(client, marketTable[index].item_id), 
 				time = client.utils.timeFormat(Math.ceil(marketTable[index].deadline - (Date.now()/1000)));
@@ -25,9 +30,13 @@ function handleListingMessage(msg, client, embed, marketTable, args){
 				});
 			}
 
+			let seller = await client.utils.getMember(marketTable[index].userid, msg)
+
 			embed.addFields({
 				name: `${client.s.EMOJIS[loopLength]} : (${item.tier}) ${client.utils.fixNumber(marketTable[index].amount)} ${item.name}`,
-				value: `💰Price: ${client.utils.fixNumber(marketTable[index].price, true)}\n⏳Ending in ${time}`,
+				value: `\u200b\n💰Price: **${client.utils.fixNumber(marketTable[index].price, true)}**
+				💼Seller: **${seller != null ? seller : 'Unknown'}**
+				⏳Ending in **${time}**`,
 				inline: true 
 			});
 
@@ -48,19 +57,34 @@ function handleListingMessage(msg, client, embed, marketTable, args){
 function listingsReactions(msg, commandExecutor_id, client, marketTable, startIndex, length){
 
 	const filter = async (reaction, user) => {
-		if(user.id != commandExecutor_id) return false
 		let index = client.s.EMOJIS.indexOf(reaction.emoji.name) + startIndex;
-		if(index - startIndex == -1) return false
 
-		client.eventEm.emit('purchaseListing', msg, marketTable[index].id, commandExecutor_id);
-		return true
+		if(user.id == commandExecutor_id && index - startIndex != -1){
+
+			if(!await client._user.bal.enoughMoney(client, user.id, marketTable[index].price))
+				return false;
+			
+
+			if(marketTable[index].deadline <= Math.floor(Date.now()/1000)){
+				client.eventEm.emit('ExpiredListing', msg, marketTable[index]);
+				return false;
+			}
+
+			if(user.id == marketTable[index].userid){
+				client.eventEm.emit('ownerBuyer', msg);
+				return false;
+			}
+
+			client.eventEm.emit('purchaseListing', msg, marketTable[index].id, commandExecutor_id);
+		}
+		
+		return false;
 	}
 
 	msg.awaitReactions(filter, {time:35000}).then(m => {
-		if(!msg.deleted) msg.delete()
-	}).catch(e => {
-		client.msg.log("ERR", e)
-	});
+		if(!msg.deleted) 
+			msg.delete()
+	})
 
 	for(var i = 0; i<length; i++){
 		msg.react(client.s.EMOJIS[i]).catch(e => {return});
@@ -76,7 +100,7 @@ module.exports = {
           -MarketView [type] [page]`,
 	description: "Get a list of what has been put on the",
 	options: {ShowInHelp: true, Category: "Economy"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			let sql, title;
 
@@ -91,6 +115,8 @@ module.exports = {
 			}
 			else if(!Number.isNaN(Number(args[0])))
 			{
+				if(!client.data.items.isItem(client, Number(args[0])))
+					return client.eventEm.emit('ItemNotFound', msg, Number(args[0]));
 				sql = `SELECT * FROM market WHERE item_id = ${Number(args[0])} ORDER BY price DESC`;
 				title = `${client.data.items.getItem(client, Number(args[0])).name}'s on the Market`;
 			}
@@ -100,7 +126,7 @@ module.exports = {
 				title = `${args[0]} items on the Market`;
 			}
 
-			setupForMessage(client, msg, args, disc, sql, title);
+			setupForMessage(client, msg, args, discord, sql, title);
 
 		}catch(e){
 			client.eventEm.emit('CommandError', msg, this.name, args, e);

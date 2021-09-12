@@ -4,7 +4,7 @@ module.exports = {
 	use: "-ForceLevel @[user]",
 	description: "Get a users level",
 	options: {ShowInHelp: false, Category: 'Utils'},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			let level = 0;
 

@@ -4,7 +4,7 @@ module.exports = {
 	use: "-SetRebirth @[user] [level]",
 	description: "Set a user's level",
 	options: {ShowInHelp: false, Category: 'User'},
-	run: function(msg, client, disc, args){
+	run: function(client, msg, args, discord){
 		try{
 			let rebirth = client.utils.suffixCheck(args[1], true);
 			if(!rebirth || 0 > rebirth) return;

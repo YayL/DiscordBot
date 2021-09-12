@@ -4,7 +4,7 @@ module.exports = {
 	use: "-GangDisband",
 	description: "Disband the guild you're a owner off",
 	options: {ShowInHelp: true, Category: "Gang"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 
 			if(! await client._user.gang.inGang(client, msg.author.id)) 

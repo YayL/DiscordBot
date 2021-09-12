@@ -9,11 +9,12 @@ module.exports = {
 	            if(!rows.length) 
 					return client.totalMoney = 0;
 
-	            let money = 0
+	            var money = 0
 
-	            for(row of rows)
-	                money += row.bal;
-	            
+	            for(let row of rows){
+					money += Number(row.bal);
+				}
+	                
 	            client.totalMoney = money;
 	        })
     	}catch(e){

@@ -4,14 +4,14 @@ module.exports = {
 	use: "-gang",
 	description: "Get some info about your gang",
 	options: {ShowInHelp: true, Category: "Gang"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 
 			if(!(await client._user.gang.inGang(client, msg.author.id))) return client.eventEm.emit('notInAGang', msg);
 
 			const gang = await client._user.gang.getGang(client, msg.author.id),
 				info = gang.info,
-				embed = new disc.MessageEmbed();
+				embed = new discord.MessageEmbed();
 
 			embed.addFields({
 				name: '👥 Members', 

@@ -8,8 +8,8 @@ const categoryEmojiDict = {
 	'Utils': '🛠️',
 }
 
-function sendDefaultHelpCommand(msg, client, disc, cmds){
-	var embed = new disc.MessageEmbed()
+function sendDefaultHelpCommand(client, msg, discord, cmds){
+	var embed = new discord.MessageEmbed()
 		.setAuthor(`List of categories to choose from`)
 		.setColor('#41BDB8')
 		.setFooter(`-ahelp [category]`);
@@ -30,7 +30,7 @@ function sendDefaultHelpCommand(msg, client, disc, cmds){
 					.then(message => {
 						message.delete();
 					});
-				return sendSpecificHelpCommand(msg, client, disc, Object.keys(categoryEmojiDict)[index], cmds);
+				return sendSpecificHelpCommand(client, msg, discord, Object.keys(categoryEmojiDict)[index], cmds);
 			}
 		}
 		return false;
@@ -48,14 +48,14 @@ function sendDefaultHelpCommand(msg, client, disc, cmds){
 		})
 }
 
-function sendSpecificHelpCommand(msg, client, disc, category, cmds){
+function sendSpecificHelpCommand(client, msg, discord, category, cmds){
 	if (category == undefined) return;
 
 	const categoryIndex = client.adminCategoryList.map((category) => category.toLowerCase()).indexOf(category.toLowerCase());
 
 	if(categoryIndex == -1) return;
 
-	const embed = new disc.MessageEmbed()
+	const embed = new discord.MessageEmbed()
 		.setAuthor(`${client.adminCategoryList[categoryIndex]}'s Command List`)
 		.setColor(`#41BDB8`);
 
@@ -90,12 +90,12 @@ module.exports = {
 	use: "-ahelp [category]",
 	description : "Displays all available admin commands",
 	options: {ShowInHelp: false, Category: "Utils"},
-	run : function(msg, client, disc, args){
+	run : function(client, msg, args, discord){
 		try{
 			const cmds = client.adminCommands.array();	
-			if(sendSpecificHelpCommand(msg, client, disc, args[0], cmds)) return;
+			if(sendSpecificHelpCommand(client, msg, discord, args[0], cmds)) return;
 			
-			sendDefaultHelpCommand(msg, client, disc, cmds);
+			sendDefaultHelpCommand(client, msg, discord, cmds);
 
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);

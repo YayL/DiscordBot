@@ -10,7 +10,7 @@ module.exports = {
 	use: "-AddLaw [Name] [Description]",
 	description : "Propose a new a law/rule to the server. (Make sure to use quotation marks if the name uses spaces)",
 	options: {ShowInHelp: true, Category: "Voting"},
-	run : function(msg, client, disc, args){
+	run : function(client, msg, args, discord){
 		try{
 			[name, args] = client.utils.argsWithSpace(args);
 			
@@ -20,7 +20,7 @@ module.exports = {
 				fieldTitle = "What will this law do?",
 				fieldText = description;
 
-			client.msg.createVote(title, desc, fieldTitle, fieldText, msg, disc)
+			client.msg.createVote(title, desc, fieldTitle, fieldText, msg, discord)
 			.then(em => {
 					client.votes.set(em, [vote, [name, description]]);
 			});

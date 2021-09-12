@@ -45,12 +45,12 @@ module.exports = {
         try{
             let sql;
             if(type == "add"){
-                sql = `INSERT INTO rules (rule_name, rule_desc) VALUES ('${name}', "${desc}")`;
+                sql = `INSERT INTO rules (id, name, description) VALUES (${client.data.rules.getMaxRuleId(client)+1},'${name}', "${desc}")`;
             }
             else if(type == "set"){
-                sql = `UPDATE rules SET rule_name = '${name}' WHERE ID = ${index}`;
+                sql = `UPDATE rules SET name = '${name}' WHERE ID = ${index}`;
                 client.con.query(sql);
-                sql = `UPDATE rules SET rule_desc = "${desc}" WHERE ID = ${index}`;
+                sql = `UPDATE rules SET description = "${desc}" WHERE ID = ${index}`;
             }
             else if(type == "del"){
                 sql = `DELETE FROM rules WHERE id=${index}`;

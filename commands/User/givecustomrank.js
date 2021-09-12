@@ -4,7 +4,7 @@ module.exports = {
 	use: "-GiveCustomRank [name] [hex-color]",
 	description : "Creates a new rank with custom color for you",
 	options: {ShowInHelp: true, Category: "User"},
-	run : function(msg, client, disc, args){
+	run : function(client, msg, args, discord){
 		try{
 			if(msg.member.roles.cache.array().length > client.s.MAX_RANKS ||
 			!client.adminList.includes(msg.member.id) ||
@@ -20,7 +20,7 @@ module.exports = {
 					name: roleName
 				}})
 				.then(role => {
-					role.setColor(roleColor).catch(e => client.msg.log("ERR", e));
+					role.setColor(roleColor).catch(console.error);
 					role.setPosition(3);
 					msg.member.roles.add(role);
 				});

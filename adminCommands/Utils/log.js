@@ -4,7 +4,7 @@ module.exports = {
   use: "-Log [Level] [Message]",
   description: "Logs a message",
   options: {ShowInHelp: false, Category: 'Utils'},
-  run: async (msg, client, disc, args) =>{
+  run: async (client, msg, args, discord) =>{
     try{
       let text = args.slice(1).join(" ");
 

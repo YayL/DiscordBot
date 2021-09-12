@@ -44,7 +44,7 @@ module.exports = async (client, disc, msg, case_tier, obj_list) => {
 		i += client.items[tier_to_roll][j].rarity;
 	}
 
-	addToObjList(client, obj_list, client.items[tier_to_roll][j]);
+	addToObjList(obj_list, client.items[tier_to_roll][j]);
 
 }
 

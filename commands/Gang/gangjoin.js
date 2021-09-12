@@ -4,7 +4,7 @@ module.exports = {
 	use: "-GangJoin [guild]",
 	description: "Join an existing open guild or guild you've been invited to",
 	options: {ShowInHelp: true, Category: "Gang"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			if(args.length == 0) 
 				return;

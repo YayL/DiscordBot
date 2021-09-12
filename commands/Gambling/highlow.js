@@ -4,7 +4,7 @@ module.exports = {
 	use: "-Highlow [bet]",
 	description: "Bet that you will choose correctly",
 	options: {ShowInHelp: true, Category: "Gambling"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
         try{
             let bet = client.utils.suffixCheck(args[0]);
 
@@ -19,7 +19,7 @@ module.exports = {
 
             client._user.bal.addBalance(client, msg.member.id, -1*bet);
 
-            highlow(client, msg, disc, bet)
+            highlow(client, msg, discord, bet)
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
@@ -27,10 +27,10 @@ module.exports = {
 	}
 }
 
-async function highlow(client, msg, disc, bet){
+async function highlow(client, msg, discord, bet){
     const number = Math.floor(Math.random() * 100) + 1,
         hint = Math.floor(Math.random() * 100) + 1,
-        embed = new disc.MessageEmbed();
+        embed = new discord.MessageEmbed();
     
 
     const filter = (reaction, user) => {
@@ -40,15 +40,15 @@ async function highlow(client, msg, disc, bet){
         let correct = false;
 
         if(reaction.emoji.name == client.s.EMOJIS[7]){
-            checkIfRight(client, msg, disc, bet, number, hint, "h");
+            checkIfRight(client, msg, discord, bet, number, hint, "h");
             correct = true;
         }
         else if(reaction.emoji.name == client.s.EMOJIS[11] ){
-            checkIfRight(client, msg, disc, bet, number, hint, "l");
+            checkIfRight(client, msg, discord, bet, number, hint, "l");
             correct = true;
         }
         else if(reaction.emoji.name == client.s.EMOJIS[9] ){
-            checkIfRight(client, msg, disc, bet, number, hint, "j");
+            checkIfRight(client, msg, discord, bet, number, hint, "j");
             correct = true;
         }
 
@@ -74,28 +74,28 @@ async function highlow(client, msg, disc, bet){
         })
 }
 
-function checkIfRight(client, msg, disc, bet, number, hint, choice){
+function checkIfRight(client, msg, discord, bet, number, hint, choice){
     if(choice == "h" && number>hint){
-        reply(client, msg, disc, bet, number, true);
+        reply(client, msg, discord, bet, number, true);
     }
     else if(choice == "l" && number<hint){
-        reply(client, msg, disc, bet, number, true);
+        reply(client, msg, discord, bet, number, true);
     }
     else if(choice == "j" && number==hint){
-        reply(client, msg, disc, bet, number, true, true);
+        reply(client, msg, discord, bet, number, true, true);
     }
     else{
-        reply(client, msg, disc, bet, number, false);
+        reply(client, msg, discord, bet, number, false);
     }
 }
 
-function reply(client, msg, disc, bet, number, correct, jackpot=false){
+function reply(client, msg, discord, bet, number, correct, jackpot=false){
 
     const winnings = Math.floor(bet*(Math.random()*(0.8-0.05)+0.05)),
         lose_message = `\nYou lost the money you bet!`,
         correct_message = `\nYou won $${client.utils.fixNumber(winnings, true)}!`,
         jackpot_message = `\nWell, this is rare! You won the jackpot of $${client.utils.fixNumber(winnings*100, true)}`,
-        embed = new disc.MessageEmbed();
+        embed = new discord.MessageEmbed();
     let extra;
 
     if(correct && jackpot) {

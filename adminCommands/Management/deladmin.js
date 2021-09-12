@@ -4,7 +4,7 @@ module.exports = {
 	use: "-DelAdmin",
 	description : "Delete role admin from author",
 	options: {ShowInHelp: false, Category: 'Management'},
-	run : function(msg, client, disc, args){
+	run : function(client, msg, args, discord){
 		try{
 			msg.guild.roles.fetch(client.roleId.admin)
 				.then(role => {

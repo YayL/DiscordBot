@@ -14,7 +14,7 @@ module.exports = {
 	use: "-Shutdown",
 	description: "Turns off the bot correctly",
 	options: {ShowInHelp: false, Category: 'Utils'},
-	run : function(msg, client, disc, args){
+	run : function(client, msg, args, discord){
 		try{
 			client.allowCommands = false;
 			msg.delete();

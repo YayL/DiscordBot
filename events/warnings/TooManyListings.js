@@ -1,6 +1,6 @@
 module.exports = (client, discord, msg) => {
     const embed = new discord.MessageEmbed()
-        .setTitle('You are not allowed to buy your own listing!')
+        .setTitle('You have too many listings open, remove some and try again!')
         .setColor('a86b2f');
         
     msg.channel.send(embed);

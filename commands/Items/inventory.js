@@ -6,7 +6,7 @@ module.exports = {
 	use: "-Inventory [page]",
 	description: "Check the items you have in your inventory",
 	options: {ShowInHelp: true, Category: "Items"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			const inventory = await client._user.items.getInventory(client, msg.author.id),
 				inventoryLength = Object.values(inventory).length,
@@ -33,7 +33,7 @@ module.exports = {
 
 			}
 			
-			let embed = new disc.MessageEmbed()
+			let embed = new discord.MessageEmbed()
 				.setTitle(`Inventory`)
 				.setDescription(`${text}\n--------------------\n $${client.utils.fixNumber(value_of_inv, true)}\n--------------------`)
 				.setColor('#4287f5')

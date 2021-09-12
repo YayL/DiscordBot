@@ -54,7 +54,7 @@ module.exports = {
 			CommandName = alias != undefined ? alias.toLowerCase() : CommandName;
 
 			try{
-				commands.get(CommandName).run(msg, client, Discord, args, commands.array());
+				commands.get(CommandName).run(client, msg, args, Discord, commands.array());
 				if(notCommandChannel(msg, client)) 
 					return;
 			}catch(e){

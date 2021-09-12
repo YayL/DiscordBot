@@ -13,7 +13,7 @@ module.exports = {
 	use: "-VoteMute @[Member] [reason]",
 	description : "Vote to mute a user in Text Channels",
 	options: {ShowInHelp: true, Category: "Voting"},
-	run : async function(msg, client, disc, args){
+	run : async function(client, msg, args, discord){
 		try{
 			const player = await client.utils.getMember(args[0], msg);
 
@@ -28,7 +28,7 @@ module.exports = {
 				desc = `Do you wish to chat-mute ${player}?`,
 				fieldTitle = "Reason for chat-mute: ";
 
-			client.msg.createVote(title, desc, fieldTitle, reason, msg, disc)
+			client.msg.createVote(title, desc, fieldTitle, reason, msg, discord)
 				.then(em => {
 					client.votes.set(em, [vote, player]);
 				});

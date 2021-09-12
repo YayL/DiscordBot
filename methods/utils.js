@@ -55,14 +55,17 @@ module.exports = {
 		try{
 			if(!str) 
 				return false;
-			for(i in this.suffixList){
-				if(str.toLowerCase().endsWith(timeSuffixList[i].toLowerCase())) 
-					return Number(str.slice(0,-1))*timeMultiplierList[i];
-			}
-			if(isNaN(Number(str)) || (!override && Number(str) < 1)) 
-				return false;
 
-			return Number(number);
+			if(isNaN(Number(str))){
+				for(i in this.suffixList){
+					if(str.toLowerCase().endsWith(timeSuffixList[i].toLowerCase())) 
+						return Number(str.slice(0,-1))*timeMultiplierList[i];
+				}
+				if(isNaN(Number(str)) || (!override && Number(str) < 1)) 
+					return false;	
+			}
+			
+			return Number(str);
     	}catch(e){
     		cons.log("ERR", e);
     	}

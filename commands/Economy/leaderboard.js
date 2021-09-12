@@ -3,11 +3,11 @@ const name = (client, userid, msg) => client.utils.getMember(userid, msg)
         return member == null ? 'Unknown User' : member.displayName;
     });
 
-function printLeaderboard(client, disc, msg, fields, footer){
+function printLeaderboard(client, discord, msg, fields, footer){
 
-    footer += client.utils.timeFormat((client.s.TOTAL_LB_TIME - (Date.now()-client.leaderboardTimer))/1e3);
+    footer += client.utils.timeFormat(Math.ceil((client.s.TOTAL_LB_TIME - (Date.now()-client.leaderboardTimer))/1e3));
 
-    const embed = new disc.MessageEmbed()
+    const embed = new discord.MessageEmbed()
         .setTitle("***__LEADERBOARD:__***")
         .setColor('#9aedea')
         .setFooter(footer)
@@ -24,7 +24,7 @@ module.exports = {
           -Leaderboard levels`,
 	description: "See the server leaderboard",
 	options: {ShowInHelp: true, Category: "Economy"},   
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
         try{
             let fields = [], footer, index = 1;
 
@@ -45,6 +45,7 @@ module.exports = {
             // ------------------------ Levels Leaderboard ------------------------
 
             }else if(new RegExp(args[0].toLowerCase()).test("levels")){
+                console.log('yes')
                 for(val of client.cachedLevelLB){
                     fields.push(
                         {
@@ -60,7 +61,7 @@ module.exports = {
             // ------------------------ Print Leaderboard ------------------------
 
             if(fields.length > 0){
-                printLeaderboard(client, disc, msg, fields, footer);
+                printLeaderboard(client, discord, msg, fields, footer);
             }
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);

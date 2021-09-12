@@ -4,7 +4,7 @@ module.exports = {
 	use: "-SetBalance @[user] [amount]",
 	description: "Set users bal",
 	options: {ShowInHelp: false, Category: 'Economy'},
-	run: function(msg, client, disc, args){
+	run: function(client, msg, args, discord){
 		try{
 			if(!args[0]) return;
 

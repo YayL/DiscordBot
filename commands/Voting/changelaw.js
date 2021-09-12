@@ -4,7 +4,7 @@ module.exports = {
 	use: "-ChangeLaw [Number] [New Description]",
 	description : "A command only spoken of in Myths!",
 	options: {ShowInHelp: false, Category: "Voting"}, // Change ShowInHelp when finished
-	run : function(msg, client, disc){
+	run : function(client, msg, args, discord){
 		try{
 
         }catch(e){
