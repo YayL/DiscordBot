@@ -1,0 +1,7 @@
+  Todo
+Templates for all info/ files
+Log more
+
+  Done
+Auto-generate db tables
+Log to file

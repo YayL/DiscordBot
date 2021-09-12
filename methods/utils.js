@@ -93,9 +93,8 @@ module.exports = {
 		return str;
 	},
 
-	fixNumber(n, is_money=false){
+	fixNumber(n='0', is_money=false){
 		var isNeg = '';
-    if(Number(n) == 0) return 0;
 
 		if(is_money && (-1e5 > n || n > 1e5)){
 			if(n < 0){
@@ -156,5 +155,11 @@ module.exports = {
 
 	upFirstLetter(str){
 		return str.charAt(0).toUpperCase() + str.slice(1);
-	}
+	},
+
+  removeAnsi(str) {
+    // Currently only removes SGR parameters (visual effects)
+    const re = /\x1b\[[0-9;]*m/g;
+    return str.replace(re, '');
+  },
 }

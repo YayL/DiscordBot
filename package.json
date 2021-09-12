@@ -1,7 +1,8 @@
 {
     "main": "main.js",
     "scripts": {
-        "dev": "nodemon server.js"
+        "dev": "nodemon server.js",
+        "setupdb": "node setupDB.js"
     },
     "dependencies": {
         "discord.js": "^12.5.3",

@@ -68,6 +68,7 @@ const events = require('events');
 // --- Collection Lists ---
 
 require('./methodsLoader.js')(client);
+client.msg._initLog();
 
 client.eventEm = new events.EventEmitter();
 

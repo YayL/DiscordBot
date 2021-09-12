@@ -1,3 +1,5 @@
+const fs = require("fs");
+const utils = require("./utils.js");
 const s = require('../info/settings.js');
 
 module.exports = {
@@ -61,17 +63,25 @@ module.exports = {
     	}
 	},
 
-  logLevels: {
-    "TRACE": {level: 0, name: "TRACE", color: "#7fff7f", ansiColor: "92"},
-    "DEBUG": {level: 1, name: "DEBUG", color: "#888888", ansiColor: "90"},
-    "INFO":  {level: 2, name: "INFO",  color: "#ffffff", ansiColor: "97"},
-    "WARN":  {level: 3, name: "WARN",  color: "#ffff77", ansiColor: "33"},
-    "ERR":   {level: 4, name: "ERR",   color: "#ff0000", ansiColor: "91"},
-    "FATAL": {level: 5, name: "FATAL", color: "#770000", ansiColor: "31"},
+  _logStream: null,
+  _logLevels: {
+    "TRACE": {level: 0, name: "TRACE", color: "#7fff7f", ansiColor: "38;5;10"},
+    "DEBUG": {level: 1, name: "DEBUG", color: "#888888", ansiColor: "38;5;7"},
+    "INFO":  {level: 2, name: "INFO",  color: "#ffffff", ansiColor: ""}, // Empty ANSI code is treated as reset
+    "WARN":  {level: 3, name: "WARN",  color: "#ffff77", ansiColor: "38;5;11"},
+    "ERR":   {level: 4, name: "ERR",   color: "#ff0000", ansiColor: "38;5;9"},
+    "FATAL": {level: 5, name: "FATAL", color: "#770000", ansiColor: "38;5;1"},
+  },
+  _initLog() {
+    if(s.LOG_TO_FILE) {
+      let logFile = "./bot.log";
+      this._logStream = fs.createWriteStream(logFile, {flags: 'w'});
+      this.log("INFO", `Logging to file: ${logFile}`)
+    }
   },
 
   log(level, msg, guild=null){
-    let logLevel = this.logLevels[level.toUpperCase()];
+    let logLevel = this._logLevels[level.toUpperCase()];
     if(!logLevel) {
       // NEVER remove logLevel.ERR
       this.logC("ERR", "Invalid log level!", guild);
@@ -80,8 +90,15 @@ module.exports = {
 
     let time = new Date();
     let timestamp = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}:${String(time.getSeconds()).padStart(2, '0')}`;
-    let format = `\x1b[1;${logLevel.ansiColor}m[${level.toUpperCase()} ${timestamp}] ${msg}\x1b[0m`;
+    let format = `\x1b[${logLevel.ansiColor}m[${level.toUpperCase()} ${timestamp}] ${msg}\x1b[m`;
+
+    // Log to console and file
     console.log(format);
+    if(s.LOG_TO_FILE)
+      // Logging to file with ANSI color, read with pager
+      if(!this._logStream.write((s.LOG_TO_FILE_ANSI ? format : utils.removeAnsi(format)) + '\n'))
+        // Flush stream if buffering
+        this._logStream.once("drain");
 
     if(s.LOG_TO_DISCORD && guild){
       try{
