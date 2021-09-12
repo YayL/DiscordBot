@@ -4,7 +4,7 @@ module.exports = {
 	use: "-reset @[user]",
 	description: "Reset a users data",
 	options: {ShowInHelp: false, Category: 'User'},
-	run: function(msg, client, disc, args){
+	run: function(client, msg, args, discord){
 		try{
 			if(!args[0]) return;
 

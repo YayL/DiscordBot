@@ -4,7 +4,7 @@ module.exports = {
 	use: "-Info [item_id]",
 	description: "Get some of the basic information about items",
 	options: {ShowInHelp: true, Category: "Items"},
-	run: function(msg, client, disc, args){
+	run: function(client, msg, args, discord){
 		try{
 			const item = client.data.items.getItem(client, Number(args[0]));
 
@@ -17,7 +17,7 @@ module.exports = {
 				limited = `\n\n*Total: ${item.count}*`;
 			}
 
-			var embed = new disc.MessageEmbed()
+			var embed = new discord.MessageEmbed()
 				.setTitle(`ID: ${item.id} - ${item.name}`)
 				.setDescription(`**__Description__** \n*${item.description}*\n\n**__Market Value:__ ${client.utils.fixNumber(item.value, true)}**` 
 					+ `${limited}`)

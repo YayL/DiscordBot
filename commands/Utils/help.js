@@ -95,14 +95,14 @@ module.exports = {
 	use: "-help [category]",
 	description : "Displays all available commands",
 	options: {ShowInHelp: true, Category: "Utils"},
-	run : function(msg, client, disc, args){
+	run : function(client, msg, args, discord){
 		try{
 			const cmds = client.commands.array();
 			
-			if(sendSpecificHelpCommand(msg, client, disc, args[0], cmds)) 
+			if(sendSpecificHelpCommand(msg, client, discord, args[0], cmds)) 
 				return;
 			
-			sendDefaultHelpCommand(msg, client, disc, cmds);
+			sendDefaultHelpCommand(msg, client, discord, cmds);
 
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);

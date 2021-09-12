@@ -4,7 +4,7 @@ module.exports = {
 	use: "-UpdateGangInfo",
 	description: "Update all gangs info to match the current info template",
 	options: {ShowInHelp: false, Category: 'Gang'},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			var gangs = await client.data.gang.getAllGangs(client), gang_template = client.s.GANG_INFO_TEMPLATE;
 

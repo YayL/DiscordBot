@@ -4,7 +4,7 @@ module.exports = {
 	use: "-GangInvite @[user]",
 	description: "Invite a user to your gang",
 	options: {ShowInHelp: true, Category: "Gang"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			if(! await client._user.gang.inGang(client, msg.author.id)) 
 				return client.eventEm.emit('notInAGang', msg);

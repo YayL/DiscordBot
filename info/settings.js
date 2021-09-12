@@ -13,8 +13,8 @@ module.exports = {
 	MAX_RANKS: 2,
 
 	// Leaderboard
-	LB_MONEY_MIN: 1000, // Leaderboard minimum money required to be displayed
-	LB_LEVEL_MIN: 3, // Leaderboard minimum level required to be displayed
+	LB_MONEY_MIN: 50, // Leaderboard minimum money required to be displayed
+	LB_LEVEL_MIN: 1, // Leaderboard minimum level required to be displayed
 	LB_SIZE: 10, // Amount of users displayed on lb
 
 	// Gangs
@@ -35,8 +35,9 @@ module.exports = {
 	maxLevel: 56,
 
 	// Timers
-	TOTAL_LB_TIME: 5*60*1000, // Every 5 mins
+	TOTAL_LB_TIME: 2.5*60*1000, // Every 5 mins
 	TOTAL_TM_TIME: 10*60*1000, // Every 10 mins
+	MARKET_CLEANING_TIMER: 5*60*1000 // Every 5 mins
 
 	
 }

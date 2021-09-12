@@ -4,7 +4,7 @@ module.exports = {
 	use: "-ToggleErrorLog",
 	description : "Toggles error logging on discord on/off",
 	options: {ShowInHelp: false, Category: 'Management'},
-	run : function(msg, client, disc){
+	run : function(client, msg, args, discord){
 		try{
 			msg.delete();
 			client.s.LOG_ERRORS_TO_DISCORD = (client.s.LOG_ERRORS_TO_DISCORD ? false : true);

@@ -1,3 +1,9 @@
 {
-    "scripts": {"dev": "nodemon server.js"}
+    "scripts": {
+        "dev": "nodemon server.js"
+    },
+    "dependencies": {
+        "discord.js": "^12.5.3",
+        "pg": "^8.7.1"
+    }
 }

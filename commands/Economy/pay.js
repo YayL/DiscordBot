@@ -4,7 +4,7 @@ module.exports = {
 	use: "-Pay @[user] [amount]",
 	description: "Give a user some amount of money",
 	options: {ShowInHelp: true, Category: 'Economy'},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			const payee = await client.utils.getMember(args[0], msg);
 			let amount = client.utils.suffixCheck(args[1]);

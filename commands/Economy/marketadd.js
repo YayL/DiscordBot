@@ -1,19 +1,19 @@
 module.exports = {
 	name: "MarketAdd",
 	alias: ["ma"],
-	use: "-MarketAdd [item_id] [amount] [price] [time_duration]",
+	use: "-MarketAdd [item_id] [amount] [price] [time_duration(30min miniumum)]",
 	description: "Create a market listing for an item",
 	options: {ShowInHelp: true, Category: "Economy"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 
 			const item_id = args[0], 
 				amount = args[1] == "all" ? -1 : client.utils.suffixCheck(args[1]), 
 				inventory = await client._user.items.getInventory(client, msg.author.id),
-				userListingCount = client.data.listings.getUserListingsCount(client, msg.author.id),
+				userListingCount = client.data.market.getUserCount(client, msg.author.id),
 				deadline = client.utils.timeParser(args[3]);
 			
-			if(Number.isNaN(Number(deadline))) 
+			if(Number.isNaN(Number(deadline)) && Number(deadline) > 30*60) 
 				return client.eventEm.emit('InvalidArgs', msg, this.use);
 
 			if(userListingCount >= client.s.maxListings) 
@@ -31,7 +31,7 @@ module.exports = {
 			const item = client.data.items.getItem(client,item_id),
 				price = client.utils.suffixCheck(args[2]);
 
-            client.data.listings.addListing(client, msg.author.id, item_id, amount, item.tier.toLowerCase(), Math.ceil(Date.now()/1000)+deadline, price, userListingCount);
+            client.data.market.add(client, msg.author.id, item_id, amount, item.tier.toLowerCase(), Math.ceil(Date.now()/1000)+deadline, price, userListingCount);
 			client._user.items.delItems(client, msg.author.id, [{id: item_id, count: amount}]);
 			client.eventEm.emit('newListing', msg, item.name, amount);
 

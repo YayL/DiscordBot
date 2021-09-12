@@ -4,7 +4,7 @@ module.exports = {
     use: "-sell [item_id] [amount]\n-sell [tier/all]",
     description: "Sell an item that is in your inventory",
     options: {ShowInHelp: true, Category: "Items"},
-    run: async function(msg, client, discord, args){
+    run: async function(client, msg, args, discord){
         try{
             const inventory = await client._user.items.getInventory(client, msg.author.id), 
                 item_id = Number(args[0]);

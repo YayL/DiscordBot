@@ -4,7 +4,7 @@ module.exports = {
 	use: "-Clear [amount]",
 	description: "Remove a set amount of messages in current channel",
 	options: {ShowInHelp: false, Category: 'Management'},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			var amount = Number(args[0]) + 1;
 

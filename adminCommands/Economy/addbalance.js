@@ -4,7 +4,7 @@ module.exports = {
 	use: "-AddBalance @[user] [amount]",
 	description: "Add to users bal",
 	options: {ShowInHelp: false, Category: 'Economy'},
-	run: function(msg, client, disc, args){
+	run: function(client, msg, args, discord){
 		try{
 			if(!args[0]) return;
 			

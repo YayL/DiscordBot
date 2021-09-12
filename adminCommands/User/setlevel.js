@@ -4,7 +4,7 @@ module.exports = {
 	use: "-SetLevel @[user] [level]",
 	description: "Set a user's level",
 	options: {ShowInHelp: false, Category: 'User'},
-	run: function(msg, client, disc, args){
+	run: function(client, msg, args, discord){
 		try{
 			let level = client.utils.suffixCheck(args[1], true);
 			if(!level || 0 > level > 56) return;

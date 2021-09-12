@@ -7,7 +7,7 @@ module.exports = {
 	use: "-Work",
 	description : "Earn some cash from the job you have",
 	options: {ShowInHelp: true, Category: "Economy"},
-	run : async function(msg, client, disc, args){
+	run : async function(client, msg, args, discord){
 
 		try{
 			const user = await client._user.get(client, msg.author.id, '*');
@@ -25,7 +25,7 @@ module.exports = {
 			client.msg.reply(msg, 
 					"Great work!", 
 					`You earned **${xp_grant}xp**\n and **$${client.utils.fixNumber(money_grant, true)}**`,
-					disc);
+					discord);
 			
 			client._user.xp.addXP(client, msg, msg.member.id, xp_grant, true);
 			client._user.bal.addBalance(client, msg.author.id, money_grant);

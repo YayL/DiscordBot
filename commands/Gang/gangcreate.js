@@ -4,7 +4,7 @@ module.exports = {
 	use: "-GangCreate [name(3-30characters)]",
 	description: "Create a new gang. Requires the creator to be level 8",
 	options: {ShowInHelp: true, Category: "Gang"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 
 			if(await client._user.get(client, msg.author.id, 'job_xp') < client.data.jobs.totalLvlXp(8, true)) 

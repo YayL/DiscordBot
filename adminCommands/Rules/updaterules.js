@@ -6,7 +6,7 @@ module.exports = {
 	use: "-UpdateRules",
 	description: "Update rules",
 	options: {ShowInHelp: false, Category: 'Rules'},
-	run: function(msg, client, disc, args){
+	run: function(client, msg, args, discord){
 		try{
 			ur.update(client, disc, msg);
         }catch(e){

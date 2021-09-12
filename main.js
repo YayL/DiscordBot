@@ -1,13 +1,12 @@
-// Current version: Market Update 0.8
+// Current version: Market Update 0.8.5
 // Next Version: Limiteds Update 0.9
 
 	/* Changes for next Commit:
+	1) 
 	
 
     TODO NEXT:
-	1) Add a timer that every 5 minutes checks the listings with the lowest deadline if they have expiered and removes them
-	2) Add a command like -mylistings to be able to take down your listings
-	3) Add limited items
+	1) Add limited items
 
 
 	TODO Before full release:
@@ -76,8 +75,6 @@ client.cachedMoneyLB = {} // Cached Money ranked Leaderboard
 client.cachedLevelLB = {} // Cached Level ranked Leaderboard
 client.totalMoney = 0 // Total capital of the whole server
 
-client.startUpTime = 0 // Time off the bot start
-
 client.categoryList = []
 client.adminCategoryList = []
 
@@ -115,13 +112,14 @@ client.userCooldowns = {
 }
 
 client.userTimersCooldown = {
-	work: 2.5 * 60 * 1000 // 30min
+	work: 1.5 * 60 * 1000 // 1min 30sec
 }
 
 client.leaderboardTimer = 0
 
 const timers = require('./timers.js')
 timers.leaderboard(client);
+timers.market(client);
 
 // --- Login bot ---
 

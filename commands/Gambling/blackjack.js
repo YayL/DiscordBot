@@ -4,7 +4,7 @@ module.exports = {
 	use: "-Blackjack [bet]",
 	description: "Bet that you will win the blackjack",
 	options: {ShowInHelp: true, Category: "Gambling"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
         try{
             let bet = client.utils.suffixCheck(args[0]);
 
@@ -19,7 +19,7 @@ module.exports = {
 
             client._user.bal.addBalance(client, msg.member.id, -1*bet);
 
-            blackjack(msg, client, disc, bet, msg.member);
+            blackjack(msg, client, discord, bet, msg.member);
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }

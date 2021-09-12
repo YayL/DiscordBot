@@ -7,7 +7,7 @@ module.exports = {
 	use: "-Jobs",
 	description : "Choose between the available jobs for you to do",
 	options: {ShowInHelp: true, Category: "User"},
-	run : async function(msg, client, disc, args){
+	run : async function(client, msg, args, discord){
 		try{
 			const user = await client._user.get(client, msg.member.id, '*')
 			const currentJob = await client.jobList.get(user.job_name);
@@ -37,7 +37,7 @@ module.exports = {
 
 	        // Send message
 
-	        const embed = new disc.MessageEmbed()
+	        const embed = new discord.MessageEmbed()
 		        .setTitle('**__List of Jobs:__**')
 	            .setColor("#2fa87a")
 	            .setFooter("Make sure to pick the right one for you!");

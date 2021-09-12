@@ -4,7 +4,7 @@ module.exports = {
 	use: "-GiveXP @[user] [amount]",
 	description: "Give a user some amount of xp",
 	options: {ShowInHelp: false, Category: 'User'},
-	run: function(msg, client, disc, args){
+	run: function(client, msg, args, discord){
 		try{
 			let amount = client.utils.suffixCheck(args[1], true);
 			if(!amount) return;

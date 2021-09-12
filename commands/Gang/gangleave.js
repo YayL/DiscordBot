@@ -4,7 +4,7 @@ module.exports = {
 	use: "-GangLeave",
 	description: "Leave the current guild you're in",
 	options: {ShowInHelp: true, Category: "Gang"},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			// Is not already in a guild
 			if(!(await client._user.gang.inGang(client, msg.author.id))) 

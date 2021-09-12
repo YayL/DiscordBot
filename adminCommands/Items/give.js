@@ -4,7 +4,7 @@ module.exports = {
 	use: "-Give @[user] [id] [amount]",
 	description : "Give an item to a user",
 	options: {ShowInHelp: false, Category: 'Items'},
-	run : async function(msg, client, disc, args){
+	run : async function(client, msg, args, discord){
 		try{
 			if(args.length < 1) return client.eventEm.emit('InvalidArgs', msg, this.use);
 

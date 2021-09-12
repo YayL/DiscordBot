@@ -4,7 +4,7 @@ module.exports = {
 	use: "-SetPercentage @[user] [Percentage]",
 	description: "Set users percentage of total server balance",
 	options: {ShowInHelp: false, Category: 'Economy'},
-	run: async function(msg, client, disc, args){
+	run: async function(client, msg, args, discord){
 		try{
 			if(!args[0] || !args[1]) return;
 
