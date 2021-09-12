@@ -11,8 +11,6 @@ yarn.lock
 # Sensitive data/configuration
 passwords.json
 botConfig.json
-# Is this sensitive?
-info/
 
 website/
 *.log
