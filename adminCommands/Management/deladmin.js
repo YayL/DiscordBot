@@ -9,7 +9,7 @@ module.exports = {
 			msg.guild.roles.fetch(client.roleId.admin)
 				.then(role => {
 					msg.member.roles.remove(role)
-					.catch(console.error);
+					.catch(e => client.msg.log("ERR", e));
 				})
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);

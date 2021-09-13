@@ -1,5 +1,5 @@
 module.exports = {
-	getInventory: async(client, user_id) => {
+	async getInventory(client, user_id){
         var inventory = await client._user.get(client, user_id, 'inventory');
 
         // Check if inventory is able to be parsed
@@ -8,7 +8,7 @@ module.exports = {
         return inventory;
     },
 
-    addItems: async(client, user_id, items) => {
+    async addItems(client, user_id, items){
         // Get user inventory
         var inventory = await client._user.items.getInventory(client, user_id);
 
@@ -35,7 +35,7 @@ module.exports = {
         
     },
 
-    delItems: async (client, user_id, items) => {
+    async delItems(client, user_id, items){
         // Get user inventory
         var inventory = await client._user.items.getInventory(client, user_id);
 
@@ -62,7 +62,7 @@ module.exports = {
         
     },
 
-    hasItem: (inventory, item_id, amount=1) =>{
+    hasItem(inventory, item_id, amount=1){
         return inventory[item_id] == undefined ? false : inventory[item_id].count >= amount;
     }
 }

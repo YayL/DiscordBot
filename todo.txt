@@ -1,0 +1,6 @@
+  Todo
+Log more
+
+  Done
+Auto-generate db tables
+Log to file

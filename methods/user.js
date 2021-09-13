@@ -4,7 +4,7 @@ module.exports = {
     items: require('./userMethods/items.js'),
     xp: require('./userMethods/xp.js'),
 
-    resetUser: async (client, user_id, rebirth=false) => {
+    async resetUser(client, user_id, rebirth=false){
         try{
             if(rebirth){
                 client.con.query(`UPDATE users SET rebirths = rebirths+1 WHERE id = '${user_id}'`);
@@ -18,13 +18,13 @@ module.exports = {
                 addUserToDatabase(client, user_id);
             }
         }catch(e){
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         }
             
     },
 
 
-    get: async(client, user_id, info) => {
+    async get(client, user_id, info){
         return new Promise(resolve => {
                 client.con.query(`SELECT ${info} FROM users WHERE id = '${user_id}'`, async (e, {rows}) => {
                     try{
@@ -33,7 +33,7 @@ module.exports = {
                             return resolve(await client._user.get(client, user_id, info));
                         }
                         if(e){
-                            client.msg.log(client.guild, e);
+                            client.msg.log("ERR", e, client.guild);
                             return resolve(null);
                         }
 
@@ -46,16 +46,16 @@ module.exports = {
                             return resolve(rows[0][info]);
                         } 
                     }catch(e){
-                        client.msg.log(client.guild, e);
+                        client.msg.log("ERR", e, client.guild);
                     }
                         
                 })
         }).catch(e => {
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         })
     },
 
-    addUserToDatabase: (client, user_id) => {
+    addUserToDatabase(client, user_id){
         addUserToDatabase(client, user_id);
     }
 }
@@ -63,7 +63,7 @@ module.exports = {
 function addUserToDatabase(client, user_id){
     client.con.query(`SELECT * FROM users WHERE id = '${user_id}'`, (e, {rows}) => {
         if(rows.length == 0) 
-            console.log(`${rows.length}: ${rows}`);
+            client.msg.log("DEBUG", `${rows.length}: ${rows}`);
             client.con.query(`INSERT INTO users (id) VALUES ('${user_id}')`);
     })
 }

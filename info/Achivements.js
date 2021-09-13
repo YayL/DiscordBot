@@ -74,7 +74,7 @@ module.exports = [
 		desc: 'You have rebirthed 10 times',
 		message: 'Congratulations, what a milestone. 10 Rebirths!',
 		run: (client, user) => {
-			console.log(`Avid Rebirth: 123`)
+			client.msg.log("DEBUG", `Avid Rebirth: 123`)
 		}
 	},
 

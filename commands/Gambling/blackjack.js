@@ -118,7 +118,7 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
             try {
                 msg.awaitReactions(filter);
             }catch(e){
-                console.log(1);
+                client.msg.log("DEBUG", 1);
             }
             msg.react(client.s.EMOJIS[7]);
             msg.react(client.s.EMOJIS[18]);

@@ -8,18 +8,18 @@ function getChannel(msg, channel){
 		}
 		return msg.guild.channels.cache.get(channel.match(regex)[0]);
 	}catch(e){
-		cons.log(msg, e);
+		cons.log("ERR", e, msg.guild);
 	}
 
 }
 
 module.exports = {
-	clearChat: async (msg, amount, channel) => {
+	async clearChat(msg, amount, channel){
 		channel = channel != undefined ? getChannel(msg, channel) : msg.channel;
 		channel.bulkDelete(amount).catch(e => {return}); // Remove set amount of messages younger than 2 weeks old
 	},
 
-	getMember: async (user_id, reference=null) => {
+	async getMember(user_id, reference=null){
 		try{
 			if(user_id == undefined) return
 			if(user_id.startsWith('<@') && user_id.endsWith('>')) {
@@ -37,7 +37,8 @@ module.exports = {
     		const allowSnowFlakeErrors = false;
     		if(allowSnowFlakeErrors && 
 				(e.stack.split('\n').slice(0, 1)[0] == 'DiscordAPIError: Invalid Form Body' || e.stack.split('\n').slice(0, 1)[0] == 'DiscordAPIError: Unknown User')){
-    			cons.log(reference.guild, e);
+          // reference can be null
+    			cons.log("ERR", e, reference.guild);
     		}
     		return null;
     	}
@@ -66,7 +67,7 @@ module.exports = {
 			
 			return Number(str);
     	}catch(e){
-    		console.log(e);
+    		cons.log("ERR", e);
     	}
 	},
 
@@ -128,7 +129,7 @@ module.exports = {
 
 			return [name.slice(0,name.length), args.slice(endOfName==0 ? 1 : endOfName)];
     	}catch(e){
-    		console.log(e)
+    		cons.log("ERR", e)
     	}
 
 	},
@@ -150,12 +151,18 @@ module.exports = {
 
 			return Number(number);
     	}catch(e){
-    		console.log(e);
+    		cons.log("ERR", e);
     	}
 
 	},
 
 	upFirstLetter(str){
 		return str.charAt(0).toUpperCase() + str.slice(1);
-	}
+	},
+
+  removeAnsi(str) {
+    // Currently only removes SGR parameters (visual effects)
+    const re = /\x1b\[[0-9;]*m/g;
+    return str.replace(re, '');
+  },
 }

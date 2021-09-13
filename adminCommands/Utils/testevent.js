@@ -8,7 +8,7 @@ module.exports = {
 	options: {ShowInHelp: false, Category: 'Utils'},
 	run: async function(client, msg, args, discord){
 		try{
-			console.log(client.utils.fixNumber(client.totalMoney, true));
+			client.msg.log("INFO", client.utils.fixNumber(client.totalMoney, true));
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }

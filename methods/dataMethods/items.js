@@ -18,7 +18,7 @@ module.exports = {
 
 			return client.items[client.items.lookup_table[tierIndex]][item];
 		}catch(e){
-			console.log(e);
+			client.msg.log("ERR", e);
 			return null;
 		}
 	},
