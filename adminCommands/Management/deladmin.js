@@ -11,9 +11,9 @@ module.exports = {
 					msg.member.roles.remove(role)
 					.catch(e => client.msg.log("ERR", e));
 				})
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 

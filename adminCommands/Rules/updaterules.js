@@ -9,9 +9,9 @@ module.exports = {
 	run: function(client, msg, args, discord){
 		try{
 			ur.update(client, disc, msg);
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e)
+		}
 		
 	}
 }

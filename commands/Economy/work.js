@@ -31,9 +31,9 @@ module.exports = {
 			client._user.bal.addBalance(client, msg.author.id, money_grant);
 			client.data.cooldown.addUserToCooldown(client, msg.author.id, 'work');
 			
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 	}
 }
 

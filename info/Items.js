@@ -50,8 +50,8 @@ exports.lootbox_rates = {
 		0.0000001 //God
 	],
 	legendary: [
-	    0, //Common
-	    0, //Uncommon
+		0, //Common
+		0, //Uncommon
 		0, //Rare
 		0.1, //Epic
 		0.35, //Exotic

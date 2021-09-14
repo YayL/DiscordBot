@@ -7,9 +7,9 @@ module.exports = {
 	run : function(client, msg, args, discord){
 		try{
 
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e)
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e)
+		}
 	}
 }
 

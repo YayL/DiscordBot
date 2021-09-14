@@ -9,11 +9,11 @@ module.exports = {
 	run: async function(client, msg, args, discord){
 		try{
 			msg.member = client.utils.getMember(args[1], msg);
-            msg.author = msg.mentions.users.array()[0];
-            msg.content = args.slice(1).join(" ");
+			msg.author = msg.mentions.users.array()[0];
+			msg.content = args.slice(1).join(" ");
 
-            commandHandler.handleCommand(msg, client, disc);
-            
+			commandHandler.handleCommand(msg, client, disc);
+			
 		}catch(e){
 			client.eventEm.emit('CommandError', msg, this.name, args, e);
 		}

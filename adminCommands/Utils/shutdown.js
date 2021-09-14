@@ -4,8 +4,8 @@ async function beforeExit(msg, client){
 			client.sleep(3500).then(() => {//Time might need to be increased if we add more stuff for it to do before it turns off
 				client.destroy();
 				process.exit(1);
+			})
 		})
-	})
 }
 
 module.exports = {
@@ -19,9 +19,9 @@ module.exports = {
 			client.allowCommands = false;
 			msg.delete();
 			beforeExit(msg, client);
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 }

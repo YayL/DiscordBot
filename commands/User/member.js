@@ -10,9 +10,9 @@ module.exports = {
 				.then(role => {
 					msg.member.roles.add(role);
 				});
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 }

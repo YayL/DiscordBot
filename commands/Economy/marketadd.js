@@ -23,7 +23,7 @@ module.exports = {
 				return client.eventEm.emit('ItemNotFound', msg, item_id);
 			
 			if(!client._user.items.hasItem(inventory, item_id, amount))
-                return client.eventEm.emit('NotEnoughItems', msg, amount, client.data.items.getItem(client,item_id).name);
+				return client.eventEm.emit('NotEnoughItems', msg, amount, client.data.items.getItem(client,item_id).name);
 
 			if(amount == -1) 
 				amount = inventory[item_id].count;
@@ -31,7 +31,7 @@ module.exports = {
 			const item = client.data.items.getItem(client,item_id),
 				price = client.utils.suffixCheck(args[2]);
 
-            client.data.market.add(client, msg.author.id, item_id, amount, item.tier.toLowerCase(), Math.ceil(Date.now()/1000)+deadline, price, userListingCount);
+			client.data.market.add(client, msg.author.id, item_id, amount, item.tier.toLowerCase(), Math.ceil(Date.now()/1000)+deadline, price, userListingCount);
 			client._user.items.delItems(client, msg.author.id, [{id: item_id, count: amount}]);
 			client.eventEm.emit('newListing', msg, item.name, amount);
 

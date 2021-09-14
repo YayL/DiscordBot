@@ -17,9 +17,9 @@ module.exports = {
 						return client.eventEm.emit('achivementEarned', msg.channel, member, client.achivementList[Number(args[1])]);
 				});
 
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 }

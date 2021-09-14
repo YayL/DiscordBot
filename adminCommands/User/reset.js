@@ -18,9 +18,9 @@ module.exports = {
 					client._user.resetUser(client, member.id);
 			});
 			
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 }

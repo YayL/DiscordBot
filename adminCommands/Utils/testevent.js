@@ -9,9 +9,9 @@ module.exports = {
 	run: async function(client, msg, args, discord){
 		try{
 			client.msg.log("INFO", client.utils.fixNumber(client.totalMoney, true));
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 }

@@ -9,9 +9,9 @@ module.exports = {
 			msg.delete();
 			client.allowCommands = (client.allowCommands ? false : true);
 			client.eventEm.emit('CommandsToggle', msg);
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 

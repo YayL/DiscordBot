@@ -6,8 +6,8 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Economy"},
 	run: function(client, msg, args, discord){
 		var formatter = new Intl.NumberFormat('en-US', {
-		  style: 'currency',
-		  currency: 'USD',
+			style: 'currency',
+			currency: 'USD',
 		});
 
 		try{

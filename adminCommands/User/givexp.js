@@ -17,9 +17,9 @@ module.exports = {
 					if(member != null) 
 						return client._user.xp.addXP(client, msg, member.id, amount, false);
 				})
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 }

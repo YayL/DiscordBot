@@ -17,9 +17,9 @@ module.exports = {
 				}catch(e){break}
 			}
 			client.utils.clearChat(msg, amount);
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 }

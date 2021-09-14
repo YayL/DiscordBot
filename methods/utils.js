@@ -33,15 +33,15 @@ module.exports = {
 					if(member.bot) return null;
 					return member;
 				});
-    	}catch(e){
-    		const allowSnowFlakeErrors = false;
-    		if(allowSnowFlakeErrors && 
+		}catch(e){
+			const allowSnowFlakeErrors = false;
+			if(allowSnowFlakeErrors && 
 				(e.stack.split('\n').slice(0, 1)[0] == 'DiscordAPIError: Invalid Form Body' || e.stack.split('\n').slice(0, 1)[0] == 'DiscordAPIError: Unknown User')){
-          // reference can be null
-    			cons.log("ERR", e, reference.guild);
-    		}
-    		return null;
-    	}
+				// reference can be null
+				cons.log("ERR", e, reference.guild);
+			}
+			return null;
+		}
 
 	},
 
@@ -66,9 +66,9 @@ module.exports = {
 			}
 			
 			return Number(str);
-    	}catch(e){
-    		cons.log("ERR", e);
-    	}
+		}catch(e){
+			cons.log("ERR", e);
+		}
 	},
 
 	timeFormat(totalSeconds){
@@ -128,9 +128,9 @@ module.exports = {
 				name=args[0];
 
 			return [name.slice(0,name.length), args.slice(endOfName==0 ? 1 : endOfName)];
-    	}catch(e){
-    		cons.log("ERR", e)
-    	}
+		}catch(e){
+			cons.log("ERR", e)
+		}
 
 	},
 
@@ -150,9 +150,9 @@ module.exports = {
 				return false;
 
 			return Number(number);
-    	}catch(e){
-    		cons.log("ERR", e);
-    	}
+		}catch(e){
+			cons.log("ERR", e);
+		}
 
 	},
 
@@ -160,9 +160,9 @@ module.exports = {
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	},
 
-  removeAnsi(str) {
-    // Currently only removes SGR parameters (visual effects)
-    const re = /\x1b\[[0-9;]*m/g;
-    return str.replace(re, '');
-  },
+	removeAnsi(str) {
+		// Currently only removes SGR parameters (visual effects)
+		const re = /\x1b\[[0-9;]*m/g;
+		return str.replace(re, '');
+	},
 }

@@ -12,7 +12,7 @@ module.exports = [
 	[ // ---------------------------- Level: 1 ----------------------------
 		{
 			name: 'Gamer', base_pay: 5,
-			job_options: ['Small YouTuber', 'Garbageman', 'Assistant',  'Police']
+			job_options: ['Small YouTuber', 'Garbageman', 'Assistant', 'Police']
 		},
 
 		{
@@ -22,12 +22,12 @@ module.exports = [
 
 		{
 			name: 'Coast Guard', base_pay: 40,
-			job_options: ['Marine', 'Garbageman',  'Police']
+			job_options: ['Marine', 'Garbageman', 'Police']
 		},
 
 		{
 			name: 'Carpenter', base_pay: 50,
-			job_options: ['Builder',  'Assistant']
+			job_options: ['Builder', 'Assistant']
 		},
 
 		{
@@ -581,7 +581,7 @@ module.exports = [
 	],
 
 	[// ---------------------------- Level: 16 ----------------------------
-	    {
+		{
 			name: 'Tesseractal', base_pay: 1.3e11,
 			job_options: ['']
 		}

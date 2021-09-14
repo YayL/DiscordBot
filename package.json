@@ -1,12 +1,12 @@
 {
-    "license": "GPL-3.0-or-later",
-    "main": "main.js",
-    "scripts": {
-        "dev": "nodemon server.js",
-        "setupdb": "node setupDB.js"
-    },
-    "dependencies": {
-        "discord.js": "^12.5.3",
-        "pg": "^8.7.1"
-    }
+	"license": "GPL-3.0-or-later",
+	"main": "main.js",
+	"scripts": {
+		"dev": "nodemon server.js",
+		"setupdb": "node setupDB.js"
+	},
+	"dependencies": {
+		"discord.js": "^12.5.3",
+		"pg": "^8.7.1"
+	}
 }

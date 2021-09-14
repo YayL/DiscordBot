@@ -17,9 +17,9 @@ module.exports = {
 			if(isNaN(id) || isNaN(amount)) return client.eventEm.emit('InvalidArgs', msg, this.use);
 
 			client._user.items.addItems(client, user.id, [{id: id, count: amount}]);
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 

@@ -23,8 +23,8 @@ module.exports = {
 						return client.msg.reply(msg, `${member.displayName}'s Level:`, `Level: **${level}**`, disc);
 					});
 			}
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 	}
 }

@@ -104,8 +104,8 @@ module.exports = {
 			
 			sendDefaultHelpCommand(msg, client, discord, cmds);
 
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 	}
 }

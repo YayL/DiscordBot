@@ -1,4 +1,4 @@
-const maxListingsPerPage = 10
+const maxListingsPerPage = 10;
 
 async function handleListingMessage(msg, client, embed, marketTable, args){
 	try{
@@ -11,7 +11,7 @@ async function handleListingMessage(msg, client, embed, marketTable, args){
 		}
 		var loopLength = 0;
 
-		for(var index =  maxListingsPerPage*(page-1); index < maxListingsPerPage*page; index++){
+		for(var index = maxListingsPerPage*(page-1); index < maxListingsPerPage*page; index++){
 			if(index == marketTable.length) 
 				break;
 
@@ -96,8 +96,8 @@ module.exports = {
 	name: "MarketView",
 	alias: ["mv"],
 	use: `-MarketView @[user]
-          -MarketView [item_id] [page]
-          -MarketView [type] [page]`,
+	      -MarketView [item_id] [page]
+	      -MarketView [type] [page]`,
 	description: "Get a list of what has been put on the",
 	options: {ShowInHelp: true, Category: "Economy"},
 	run: async function(client, msg, args, discord){

@@ -16,9 +16,9 @@ module.exports = {
 					if(member != null) 
 						return client._user.bal.addBalance(client, member.id, args[1]);
 				});
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 	}
 }

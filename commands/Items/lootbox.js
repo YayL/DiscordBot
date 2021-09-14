@@ -69,10 +69,10 @@ function sendRewardMessage(client, discord, msg, tier, cost, amount, obj_list){
 	}
 
 	const embed = new discord.MessageEmbed()
-	    .setTitle(`${msg.author.username}'s x${amount} ${tier.charAt(0).toUpperCase() + tier.slice(1)} lootbox:`)
-	    .setDescription(`${text}\n\nProfit: ${client.utils.fixNumber(value_of_box-cost, true)}`)
-	    .setColor(color_table[lookup_table.indexOf(tier)])
-	    .setFooter(`Price: $${client.utils.fixNumber(cost, true)} | Keep going! You'll find something awesome!`);
+		.setTitle(`${msg.author.username}'s x${amount} ${tier.charAt(0).toUpperCase() + tier.slice(1)} lootbox:`)
+		.setDescription(`${text}\n\nProfit: ${client.utils.fixNumber(value_of_box-cost, true)}`)
+		.setColor(color_table[lookup_table.indexOf(tier)])
+		.setFooter(`Price: $${client.utils.fixNumber(cost, true)} | Keep going! You'll find something awesome!`);
 
 	msg.channel.send(embed);
 
@@ -88,10 +88,10 @@ function sendLootInfo(client, discord, msg, case_tier, cost, color){
 	}
 	
 	const embed = new discord.MessageEmbed()
-	    .setTitle(`${case_tier} Lootbox rewards:`)
-	    .setDescription(text)
-	    .setColor(color)
-	    .setFooter(`Price: $${client.utils.fixNumber(cost, true)} | Try your luck and buy one or two, you'll find something awesome!`);
+		.setTitle(`${case_tier} Lootbox rewards:`)
+		.setDescription(text)
+		.setColor(color)
+		.setFooter(`Price: $${client.utils.fixNumber(cost, true)} | Try your luck and buy one or two, you'll find something awesome!`);
 
 	msg.channel.send(embed);
 	

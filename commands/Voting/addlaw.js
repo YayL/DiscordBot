@@ -22,10 +22,10 @@ module.exports = {
 
 			client.msg.createVote(title, desc, fieldTitle, fieldText, msg, discord)
 			.then(em => {
-					client.votes.set(em, [vote, [name, description]]);
+				client.votes.set(em, [vote, [name, description]]);
 			});
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 	}
 }

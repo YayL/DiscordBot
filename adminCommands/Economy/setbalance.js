@@ -15,9 +15,9 @@ module.exports = {
 				.then(member => {
 					if(member != null) return client._user.bal.addBalance(client, member.id, args[1], true);
 				})
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 		
 		
 	}

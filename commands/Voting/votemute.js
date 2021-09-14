@@ -32,8 +32,8 @@ module.exports = {
 				.then(em => {
 					client.votes.set(em, [vote, player]);
 				});
-    }catch(e){
-        client.eventEm.emit('CommandError', msg, this.name, args, e);
-    }
+		}catch(e){
+			client.eventEm.emit('CommandError', msg, this.name, args, e);
+		}
 	}
 }
