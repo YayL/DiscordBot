@@ -20,6 +20,6 @@ module.exports = async (client, disc, channel, user, achivement) => {
 			achivement.run(client, user);
 		}
 	}catch(e){
-		client.msg.log('ERR', client.guild, e);
+		client.msg.log("ERR", e, client.guild);
 	}
 }

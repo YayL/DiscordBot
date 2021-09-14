@@ -5,15 +5,22 @@ module.exports = {
 	MAX_RANKS: 2, // Does not include member or everyone. If user is in adminlist this number does not affect them.
 	MAJORITY_RATE: 1/2, // Voting amount required to be counted as "majority"
 
+<<<<<<< HEAD
 	LOG_TO_DISCORD: false,
   	LOG_TO_FILE: true,
   	LOG_TO_FILE_ANSI: true, // Use ANSI colors in log file. Will display weird in text editors, so read with a pager
   	LOGGING_LEVEL: 0, // Levels: 0 Trace, 1 Debug, 2 Info, 3 Warning, 4 Error, 5 Fatal
+=======
+	LOG_TO_DISCORD: true,
+  LOG_TO_FILE: true,
+  LOG_TO_FILE_ANSI: true, // Use ANSI colors in log file. Will display weird in text editors, so read with a pager
+  LOGGING_LEVEL: 0, // Levels: 0 Trace, 1 Debug, 2 Info, 3 Warning, 4 Error, 5 Fatal
+>>>>>>> c7eea3d28320b2eef5f4c81597dfca59ebec8e0b
 
 	EMOJIS: ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷', '🇸'],
 	LR_EMOJIS: ['⬅️', '➡️'],
 
-    // User
+	// User
 	MAX_RANKS: 2,
 
 	// Leaderboard

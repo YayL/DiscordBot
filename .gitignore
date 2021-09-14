@@ -1,5 +1,24 @@
+<<<<<<< HEAD
 /passwords.js
 /website
 /node_modules
 /.gitignore
 /passwords.json
+=======
+# npm/yarn
+node_modules/
+# Include lockfile?
+package-lock.json
+yarn.lock
+
+# Editor files
+.idea/
+.vscode/
+
+# Sensitive data/configuration
+passwords.json
+botConfig.json
+
+website/
+*.log
+>>>>>>> c7eea3d28320b2eef5f4c81597dfca59ebec8e0b

@@ -17,5 +17,5 @@ function loadFiles(client, directory){ // commands or adminCommands
 
 module.exports = (client, disc) => {
 	['adminCommands', 'commands'].forEach(category => loadFiles(client, category));
-	client.msg.log('INFO', 'Finished loading all Commands!')
+	client.msg.log("INFO", 'Finished loading all Commands!');
 }

@@ -7,6 +7,6 @@ module.exports = async (client, disc, msg, name) => {
 
 		msg.channel.send(embed);
 	}catch(e){
-		client.msg.log(client.guild, e);
+		client.msg.log("ERR", e, client.guild);
 	}
 }

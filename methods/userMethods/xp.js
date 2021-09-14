@@ -1,5 +1,5 @@
 module.exports = {
-	setXP: async(client, msg, user_id, xp, set_work_timer=false, add=false) => {
+	async setXP(client, msg, user_id, xp, set_work_timer=false, add=false){
         try{
             const job_xp = await client._user.get(client, user_id, 'job_xp');
 
@@ -16,7 +16,7 @@ module.exports = {
 
             client.eventEm.emit('userLevelUP', msg.channel, user_id, xp, job_xp);
         }catch(e){
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         }
     },
 

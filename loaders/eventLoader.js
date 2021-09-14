@@ -16,6 +16,5 @@ module.exports = (client, disc) => {
 	}
 
 	['client', 'guild', 'errors', 'userEvents', 'serverEvents', 'warnings', 'gangWarnings', 'gangEvents'].forEach(e => loadEvent(e));
-	client.msg.log('INFO', `Finished loading all Events!`)
-
+	client.msg.log("INFO", `Finished loading all Events!`);
 }

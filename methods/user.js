@@ -4,7 +4,7 @@ module.exports = {
     items: require('./userMethods/items.js'),
     xp: require('./userMethods/xp.js'),
 
-    resetUser: async (client, user_id, rebirth=false) => {
+    async resetUser(client, user_id, rebirth=false){
         try{
             if(rebirth){
                 client.con.query(`UPDATE users SET rebirths = rebirths+1 WHERE id = '${user_id}'`);
@@ -21,7 +21,7 @@ module.exports = {
                 
             }
         }catch(e){
-            client.msg.log('ERR', e);
+            client.msg.log("ERR", e, client.guild);
         }
             
     },

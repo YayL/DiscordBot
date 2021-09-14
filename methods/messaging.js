@@ -24,7 +24,7 @@ module.exports = {
 					return em;
 				});
     	}catch(e){
-    		this.log(msg.guild, e);
+    		this.log("ERR", e, msg.guild);
     	}
 	},
 
@@ -43,9 +43,9 @@ module.exports = {
 				.setColor('#b80909')
 				.setFooter(footer);
 
-			msg.channel.send(embed).catch(console.error);
+			msg.channel.send(embed).catch(e => this.log("ERR", e));
     	}catch(e){
-    		this.log(msg.guild, e);
+    		this.log("ERR", e, msg.guild);
     	}
 	},
 
@@ -57,12 +57,12 @@ module.exports = {
 				.setColor('#0ac2c2')
 				.setFooter("Have a good day!");
 
-			msg.channel.send(embed).catch(console.error);
+			msg.channel.send(embed).catch(e => this.log("ERR", e));
     	}catch(e){
-    		this.log(msg.guild, e);
+    		this.log("ERR", e, msg.guild);
     	}
 	},
-
+	
 	_logStream: null,
 	_logLevels: {
 	  "TRACE": {level: 0, name: "TRACE", color: "#7fff7f", ansiColor: "38;5;10"},

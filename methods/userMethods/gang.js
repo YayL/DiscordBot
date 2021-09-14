@@ -1,5 +1,5 @@
 module.exports = {
-	joinGang: async(client, gang, user_id, is_created=false) => {
+	async joinGang(client, gang, user_id, is_created=false){
         client.con.query(`UPDATE users SET gang = '${gang.toLowerCase()}' WHERE id = '${user_id}'`);
 
         if(!is_created){
@@ -11,7 +11,7 @@ module.exports = {
         
     },
 
-    leaveGang: async (client, user_id, delete_cmd=false) => {
+    async leaveGang(client, user_id, delete_cmd=false){
         if(!delete_cmd){
             const gang = await client._user.gang.getGang(client, user_id),
                 members = JSON.parse(gang.members).filter(id => id != user_id);
@@ -21,13 +21,13 @@ module.exports = {
         client.con.query(`UPDATE users SET gang = null WHERE id = '${user_id}'`);
     },
  
-    getGang: async (client, user_id) => {
+    async getGang(client, user_id){
         const gang = await client._user.get(client, user_id, 'gang');
 
         return (gang == null || gang.toString().length == 0  ? null : await client.data.gang.getGang(client, gang));
     },
 
-    inGang: async(client, user_id) => {
+    async inGang(client, user_id){
         return (await client._user.gang.getGang(client, user_id)) != null;
     },
 }

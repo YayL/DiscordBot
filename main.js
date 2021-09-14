@@ -125,4 +125,4 @@ timers.market(client);
 
 // --- Login bot ---
 
-client.login(pVars.token); // Activate/Login the bot-commands
+client.login(pVars.token); 

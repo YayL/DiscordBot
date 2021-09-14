@@ -16,7 +16,7 @@ module.exports = {
         .then(role => {
             msg.member.roles.add(role);
         })
-        .catch(console.error)
+        .catch(e => client.msg.log("ERR", e));
 	}
 
 }

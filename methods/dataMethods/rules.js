@@ -1,5 +1,5 @@
 module.exports = {
-    getRule: async (client, ID) => {
+    async getRule(client, ID){
         return new Promise(resolve => {
             client.con.query(`SELECT * FROM rules WHERE id = '${ID}'`, (e, {rows}) => {
                 if(e) 
@@ -13,11 +13,11 @@ module.exports = {
                 }
             });
         }).catch(e => {
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         });
     },
 
-    getMaxRuleId: async (client) => {
+    async getMaxRuleId(client){
         return new Promise(resolve => {
             client.con.query(`SELECT MAX(id) AS value FROM rules`, (e, {rows}) => {
                 if(e) 
@@ -25,11 +25,11 @@ module.exports = {
                 resolve(rows[0].value);
             });
         }).catch(e => {
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         })
     },
 
-    getAllRules: async (client) => {
+    async getAllRules(client){
         return new Promise(resolve => {
             client.con.query(`SELECT * FROM rules`, (e, {rows}) => {
                 if(e) 
@@ -37,7 +37,7 @@ module.exports = {
                 resolve(rows);
             });
         }).catch(e => {
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         });
     },
 
@@ -58,7 +58,7 @@ module.exports = {
 
             client.con.query(sql);
         }catch(e){
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         }
         
     }
