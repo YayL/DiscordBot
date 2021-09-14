@@ -6,9 +6,9 @@ module.exports = {
 	MAJORITY_RATE: 1/2, // Voting amount required to be counted as "majority"
 
 	LOG_TO_DISCORD: true,
-  LOG_TO_FILE: true,
-  LOG_TO_FILE_ANSI: true, // Use ANSI colors in log file. Will display weird in text editors, so read with a pager
-  LOGGING_LEVEL: 0, // Levels: 0 Trace, 1 Debug, 2 Info, 3 Warning, 4 Error, 5 Fatal
+	LOG_TO_FILE: true,
+	LOG_TO_FILE_ANSI: true, // Use ANSI colors in log file. Will display weird in text editors, so read with a pager
+	LOGGING_LEVEL: 0, // Levels: 0 Trace, 1 Debug, 2 Info, 3 Warning, 4 Error, 5 Fatal
 
 	EMOJIS: ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷', '🇸'],
 
@@ -24,11 +24,11 @@ module.exports = {
 	MIN_CREATE_LEVEL: 8, // Minimum level required to create a gang
 
 	GANG_INFO_TEMPLATE: {
-	    SETTINGS: {
-	        INVITE_ONLY: false,
-	    },
-	    INVITE_LIST: [],
-	    NAME: '',
+		SETTINGS: {
+			INVITE_ONLY: false,
+		},
+		INVITE_LIST: [],
+		NAME: '',
 	},
 
 
