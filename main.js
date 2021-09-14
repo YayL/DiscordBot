@@ -1,20 +1,30 @@
 // Current version: Market Update 0.8.5
 // Next Version: Limiteds Update 0.9
 
-	/* Changes for next Commit:
-	1) 
-	
+    /* Changes for next Commit:
+    1) Fixed some issues with gambling commands yielding insane profits because of a type error
+    2) Added so you can navigate your inventory using reactions
+    3) Fetched work from Simsva's fork of the bot which I found great.
+        - Better logging
+        - More easily customisable
+        - Easier to setup the bot for outsiders
+    4) Added a manual activation command and a timer that clears the database for duplicate data
+    5) 
 
-	TODO NEXT:
-	1) Add limited items
+    KNOWN BUGS:
+    1) Sometimes for an unknown reason a user's will duplicate upon creation. 
+    
+
+    TODO NEXT:
+    1) Add limited items
 
 
-	TODO Before full release:
-	1) Add more than 50 items
-	2) Add benefits to being in a gang
-	3) Add gang upgrades
-	4) Add gang ranks customisable by the owner
-	5) Add gang leaderboards
+    TODO Before full release:
+    1) Add more than 50 items
+    2) Add benefits to being in a gang
+    3) Add gang upgrades
+    4) Add gang ranks customisable by the owner
+    5) Add gang leaderboards
 
 */
 
@@ -22,26 +32,26 @@
 
 const Discord = require('discord.js'); // Getting discord module
 const client = new Discord.Client({
-	restTimeOffset: 0,
-	shards: 'auto',
-	ws: {
-		intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES", "GUILD_PRESENCES", "GUILD_MESSAGE_REACTIONS"]
-	}
+    restTimeOffset: 0,
+    shards: "auto",
+    ws: {
+        intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES", "GUILD_PRESENCES", "GUILD_MESSAGE_REACTIONS"]
+    }
 });
 
 // TODO: Save config directly to client?
 // TODO: Switch config to TOML for comments/structure
 // TODO: Standardize quotes, indentation, etc. (Create style guide)
 const botConfig = require("./botConfig.json");
-client.pVars = require('./passwords.json');
+const pVars = require('./passwords.json');
 
 const pg = require('pg');
 client.con = new pg.Pool({
-	user: client.pVars.dbUser,
-	host: client.pVars.dbHost,
-	database: client.pVars.dbName,
-	password: client.pVars.dbPass,
-	port: client.pVars.dbPort
+    user: pVars.dbUser,
+    host: pVars.dbHost,
+    database: pVars.dbName,
+    password: pVars.dbPass,
+    port: pVars.dbPort
 });
 
 const { promisify } = require('util');
@@ -93,18 +103,18 @@ client.channelId = botConfig.channelId;
 // --- Load in commands and events ---
 
 ['commandLoader', 'eventLoader'].forEach(h => {
-	require(`./loaders/${h}`)(client, Discord);
+    require(`./loaders/${h}`)(client, Discord);
 });
 
 // --- Timed Functions ---
 
 client.userCooldowns = {
-	work: new Discord.Collection()
+    work: new Discord.Collection()
 };
 
 // TODO: Config?
 client.userTimersCooldown = {
-	work: 1.5 * 60 * 1000 // 1min 30sec
+    work: 1.5 * 60 * 1000 // 1min 30sec
 };
 
 client.leaderboardTimer = 0;
@@ -115,4 +125,4 @@ timers.market(client);
 
 // --- Login bot ---
 
-client.login(client.pVars.token); // Activate/Login the bot-commands
+client.login(pVars.token); 

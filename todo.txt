@@ -1,6 +1,6 @@
-	Todo
+    Todo
 Log more
 
-	Done
+    Done
 Auto-generate db tables
 Log to file
