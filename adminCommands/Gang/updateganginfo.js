@@ -15,7 +15,7 @@ module.exports = {
 				gang_template_settings_keys = Object.keys(client.s.GANG_INFO_TEMPLATE.SETTINGS),
 				gang_template_settings_values = Object.values(client.s.GANG_INFO_TEMPLATE.SETTINGS);
 
-			var info, gangKeys, gangValues, settingKeys, settingValues;
+			var info, gangKeys, settingKeys;
 
 			for(var guild_index = 0; guild_index<gangs.length; guild_index++){
 				info = JSON.parse(gangs[guild_index].info), gangKeys = Object.keys(info);

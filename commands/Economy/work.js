@@ -10,7 +10,7 @@ module.exports = {
 	run : async function(client, msg, args, discord){
 
 		try{
-			const user = await client._user.get(client, msg.author.id, '*');
+			const user = await client._user.get(client, msg.author.id);
 
 			if(user.job_name == "Unemployed") 
 				return client.eventEm.emit('notEmployed', msg)

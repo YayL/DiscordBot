@@ -9,6 +9,6 @@ module.exports = (client, discord, msg, CommandName, args, e, cmdh=false) => {
             .setColor('b80909');
 
         msg.channel.send(embed);
-        client.msg.log(client.guild, e);
+        client.msg.log('ERR', e, msg.guild);
     }
 }

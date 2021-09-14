@@ -5,7 +5,7 @@ module.exports = {
 	alias: ["nlj"],
 	use: "-Nonlinkedjobs",
 	description: "Look through all jobs to see if any are not linked to previous jobs",
-	options: {ShowInHelp: false, Category: 'Utils'},
+	options: {ShowInHelp: false, Category: 'Management'},
 	run: async function(client, msg, args, discord){
 		try{
       var nonLinkedJobs = [], list = [], found_jobs = 0;

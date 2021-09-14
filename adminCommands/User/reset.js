@@ -9,7 +9,7 @@ module.exports = {
 			if(!args[0]) return;
 
 			if(args[0] == "me"){
-				return client._user.resetUser(client, msg.member.id);
+				return client._user.resetUser(client, msg.author.id);
 			}
 
 			client.utils.getMember(args[0], msg)

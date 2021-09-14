@@ -12,7 +12,7 @@ module.exports = {
             msg.author = msg.mentions.users.array()[0];
             msg.content = args.slice(1).join(" ");
 
-            commandHandler.handleCommand(msg, client, disc);
+            commandHandler.handleCommand(msg, client, discord);
             
 		}catch(e){
 			client.eventEm.emit('CommandError', msg, this.name, args, e);

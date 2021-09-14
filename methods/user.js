@@ -14,17 +14,20 @@ module.exports = {
                 client.con.query(`UPDATE users SET job_name = 'Unemployed' WHERE id = '${user_id}'`);
             }else{
                 client.con.query(`DELETE FROM market WHERE userid = '${user_id}'`);
-                client.con.query(`DELETE FROM users WHERE id = '${user_id}'`);
-                addUserToDatabase(client, user_id);
+                client.con.query(`DELETE FROM users WHERE id = '${user_id}'`)
+                    .then(_ => {
+                        addUserToDatabase(client, user_id);
+                    });
+                
             }
         }catch(e){
-            client.msg.log(client.guild, e);
+            client.msg.log('ERR', e);
         }
             
     },
 
 
-    get: async(client, user_id, info) => {
+    async get(client, user_id, info='*'){
         return new Promise(resolve => {
                 client.con.query(`SELECT ${info} FROM users WHERE id = '${user_id}'`, async (e, {rows}) => {
                     try{
@@ -33,7 +36,7 @@ module.exports = {
                             return resolve(await client._user.get(client, user_id, info));
                         }
                         if(e){
-                            client.msg.log(client.guild, e);
+                            client.msg.log("ERR", e, client.guild);
                             return resolve(null);
                         }
 
@@ -46,24 +49,20 @@ module.exports = {
                             return resolve(rows[0][info]);
                         } 
                     }catch(e){
-                        client.msg.log(client.guild, e);
+                        client.msg.log("ERR", e, client.guild);
                     }
                         
                 })
         }).catch(e => {
-            client.msg.log(client.guild, e);
+            client.msg.log("ERR", e, client.guild);
         })
     },
-
-    addUserToDatabase: (client, user_id) => {
-        addUserToDatabase(client, user_id);
-    }
 }
 
 function addUserToDatabase(client, user_id){
     client.con.query(`SELECT * FROM users WHERE id = '${user_id}'`, (e, {rows}) => {
         if(rows.length == 0) 
-            console.log(`${rows.length}: ${rows}`);
+            client.msg.log("DEBUG", `${rows.length}: ${rows}`);
             client.con.query(`INSERT INTO users (id) VALUES ('${user_id}')`);
     })
 }

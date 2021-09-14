@@ -12,13 +12,12 @@
 
             if(plr == null) return client.eventEm.emit('InvalidArgs', msg, this.use)
 
-            var user = await client._user.get(client, plr.id, '*')
-            user = user == "notFound" ? await client._user.get(client, msg.member.id, '*') : user
+            let user = await client._user.get(client, plr.id);
 
-            const bal = user.bal,
+            const bal = Number(user.bal),
                 job_name = user.job_name,
                 gang_name = user.gang != null ? user.gang.charAt(0).toUpperCase() + user.gang.slice(1) : 'Not in a gang',
-                job_xp = user.job_xp,
+                job_xp = Number(user.job_xp),
                 job_lvl = client.data.jobs.xpToLevel(job_xp, true),
                 requiredXp_ToNextLvl = client.data.jobs.nextLvlXp(job_lvl);
 

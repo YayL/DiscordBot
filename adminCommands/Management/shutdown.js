@@ -13,7 +13,7 @@ module.exports = {
 	alias : ["s"],
 	use: "-Shutdown",
 	description: "Turns off the bot correctly",
-	options: {ShowInHelp: false, Category: 'Utils'},
+	options: {ShowInHelp: false, Category: 'Management'},
 	run : function(client, msg, args, discord){
 		try{
 			client.allowCommands = false;

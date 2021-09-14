@@ -3,7 +3,7 @@ module.exports = {
         try{
             client.eventEm.emit('updateLB');
         }catch(e){
-            client.msg.log(client.guild, e);
+            client.msg.log('ERR', e);
         }
     }, client.s.TOTAL_LB_TIME),
 
@@ -15,7 +15,15 @@ module.exports = {
                 }
             });
         }catch(e){
-            client.msg.log(client.guild, e);
+            client.msg.log('ERR', e);
         }
-    }, client.s.MARKET_CLEANING_TIMER)
+    }, client.s.MARKET_CLEANING_TIMER),
+
+    database: (client) => setInterval(() => {
+        try{
+            client.data.cleanDatabase(client);
+        }catch(e){
+            client.msg.log('ERR', e);
+        }
+    }, client.s.DATABASE_CLEANING_TIMER)
 }   

@@ -9,7 +9,8 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "User"},
 	run : async function(client, msg, args, discord){
 		try{
-			const user = await client._user.get(client, msg.member.id, '*')
+			const user = await client._user.get(client, msg.member.id);
+
 			const currentJob = await client.jobList.get(user.job_name);
 
 			if(currentJob.requirement > client.data.jobs.xpToLevel(user.job_xp)) return client.eventEm.emit('TooLowLevel', msg, user)
@@ -58,7 +59,6 @@ module.exports = {
 	            	message.react(client.s.EMOJIS[i]).catch(e => {return});
 	            }
 	        });
-			msg.delete()
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }

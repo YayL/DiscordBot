@@ -7,7 +7,7 @@ module.exports = {
 					return;
 
 	            if(!rows.length) 
-					return client.totalMoney = 0;
+					return client.totalMoney = 1;
 
 	            var money = 0
 
@@ -15,7 +15,7 @@ module.exports = {
 					money += Number(row.bal);
 				}
 	                
-	            client.totalMoney = money;
+	            client.totalMoney = money != 0 ? money : 1;
 	        })
     	}catch(e){
     		client.msg.log(client.guild, e);

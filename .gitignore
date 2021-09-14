@@ -1,3 +1,5 @@
 /passwords.js
 /website
 /node_modules
+/.gitignore
+/passwords.json

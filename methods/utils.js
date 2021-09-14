@@ -14,11 +14,13 @@ function getChannel(msg, channel){
 }
 
 module.exports = {
+	// Used to clear messages in a discord channel that the bot is in
 	clearChat: async (msg, amount, channel) => {
 		channel = channel != undefined ? getChannel(msg, channel) : msg.channel;
 		channel.bulkDelete(amount).catch(e => {return}); // Remove set amount of messages younger than 2 weeks old
 	},
 
+	// returns a promise of the member with the inputted id or if not found a null value
 	getMember: async (user_id, reference=null) => {
 		try{
 			if(user_id == undefined) return
@@ -44,10 +46,15 @@ module.exports = {
 
 	},
 
+	// Returns a channel like the name says
 	getChannel(msg, channel){
 		return getChannel(msg, channel);
 	},
 
+	// This parses a string for a number follwed by a time suffix and returns the time in seconds for it
+	// Ex: 20m -> 20 minutes -> 20*60 = 1200
+	// Ex: 1h30m -> Error
+	// Ex: 1.5h -> 1.5 hours -> 1.5*60*60 = 90*60 = 5400
 	timeParser(str){
 		timeSuffixList = ['m', 'h', 'd', 'w'];
 		timeMultiplierList = [60, 3600, 86400, 604800];
@@ -70,6 +77,8 @@ module.exports = {
     	}
 	},
 
+	// Takes a number as an input that is in seconds and makes it into a time string
+	// Ex: 100000 -> 1d 3h 46m 40s
 	timeFormat(totalSeconds){
 		let str = '' 
 		let days = Math.floor(totalSeconds/(60*60*24))
@@ -95,6 +104,9 @@ module.exports = {
 		return str;
 	},
 
+	// This turns a number into a number with a suffix attached to it and two decimals
+	// Ex: 125000000 -> 1.25B
+	// Ex: 724320000000 -> 724.32T
 	fixNumber(n='0', is_money=false){
 		var isNeg = '';
 
@@ -110,6 +122,8 @@ module.exports = {
 		return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	},
 
+	// This takes a list of args and parses it if the first argument starts with a " and another that ends with a " and returns it as one argument
+	// Ex: "hello is my name" 123 hour -> ["hello is my name", [123, hour]]
 	argsWithSpace(args){
 		try{
 			let name = "";
@@ -133,8 +147,10 @@ module.exports = {
 
 	},
 
-	suffixList: ['K', 'M', 'B', 'T', 'Qd', 'Qn', 'Sx', 'Sp', 'Oc'],
 
+	// This does the opposite of the fixNUmber function as it turns a string with a suffix into one without
+	// 103.3k -> 103300
+	suffixList: ['K', 'M', 'B', 'T', 'Qd', 'Qn', 'Sx', 'Sp', 'Oc'],
 	suffixCheck(number, override=false){
 		try{
 			if(!number) 
@@ -155,7 +171,15 @@ module.exports = {
 
 	},
 
+	// This uppercases the first letter in a string
+	// Ex: *hello" -> "Hello"
 	upFirstLetter(str){
 		return str.charAt(0).toUpperCase() + str.slice(1);
-	}
+	},
+	
+	removeAnsi(str) {
+		// Currently only removes SGR parameters (visual effects)
+		const re = /\x1b\[[0-9;]*m/g;
+		return str.replace(re, '');
+	  },
 }
