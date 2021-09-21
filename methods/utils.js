@@ -15,13 +15,13 @@ function getChannel(msg, channel){
 
 module.exports = {
     async clearChat(msg, amount, channel){
-        channel = channel != undefined ? getChannel(msg, channel) : msg.channel;
+        channel = channel ? getChannel(msg, channel) : msg.channel;
         channel.bulkDelete(amount).catch(e => {return}); // Remove set amount of messages younger than 2 weeks old
     },
 
     async getMember(user_id, reference=null){
         try{
-            if(user_id == undefined) return
+            if(!user_id) return;
             if(user_id.startsWith('<@') && user_id.endsWith('>')) {
                 user_id = user_id.slice(2, -1);
                 if (user_id.startsWith('!')) {

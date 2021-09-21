@@ -16,7 +16,6 @@ function printLeaderboard(client, discord, msg, fields, footer){
     msg.channel.send(embed);
 }
 
-
 module.exports = {
     name: "Leaderboard",    
     alias: ["lb"],
@@ -26,42 +25,44 @@ module.exports = {
     options: {ShowInHelp: true, Category: "Economy"},
     run: async function(client, msg, args, discord){
         try{
-            let fields = [], footer, index = 1;
+            client.msg.log("DEBUG", "Leaderboard");
+            let fields = [], footer = "";
 
             // ------------------------ Money Leaderboard ------------------------
 
             if(args.length < 1 || new RegExp(args[0].toLowerCase()).test("money")){
-                for(val of client.cachedMoneyLB){ 
-                    fields.push(
-                        {
-                            name: `**${index}. ${await name(client, val.id, msg)}**`,
-                            value: `**$${client.utils.fixNumber(val.bal, true)} (${Math.round(val.bal*1e6/client.totalMoney)/1e4}%)**`
+                client.con.query(`SELECT * FROM money_lb(${client.s.LB_MONEY_MIN}, ${client.s.LB_SIZE})`, async (e, {rows}) => {
+                    if(e) return client.msg.log("ERROR", e);
+
+                    for(let row of rows)
+                        fields.push({
+                            name: `**${fields.length+1}. ${await name(client, row.id, msg)}**`,
+                            value: `**$${client.utils.fixNumber(row.bal, true)} (${Math.round(row.bal*1e6/client.totalMoney)/1e4}%)**`
                         });
-                    index += 1;
-                }
-                footer = `These guys are rich! You require a minimum of $${client.utils.fixNumber(client.s.LB_MONEY_MIN)} to be on the leaderboard\n`
-                    +`Total Server Money: ${client.utils.fixNumber(client.totalMoney, true)}\n\nNext update in: `;
+                    footer = `These guys are rich! You require a minimum of $${client.utils.fixNumber(client.s.LB_MONEY_MIN)} to be on the leaderboard\n`
+                        +`Total Server Money: ${client.utils.fixNumber(client.totalMoney, true)}\n\nNext update in: `;
+
+                    if(fields.length > 0)
+                        printLeaderboard(client, discord, msg, fields, footer);
+                });
 
             // ------------------------ Levels Leaderboard ------------------------
-
+            
             }else if(new RegExp(args[0].toLowerCase()).test("levels")){
-                console.log('yes')
-                for(val of client.cachedLevelLB){
-                    fields.push(
-                        {
-                            name: `**${index}. ${await name(client, val.id, msg)}**`,
-                            value: `**Level: ${client.data.jobs.xpToLevel(val.job_xp)} (${client.utils.fixNumber(val.job_xp)}xp)**`
+                client.con.query(`SELECT * FROM levels_lb(${client.s.LB_LEVEL_MIN}, ${client.data.jobs.totalLvlXp(client.s.LB_SIZE)})`, async (e, {rows}) => {
+                    if(e) return client.msg.log("ERROR", e);
+
+                    for(let row of rows)
+                        fields.push({
+                            name: `**${fields.length+1}. ${await name(client, row.id, msg)}**`,
+                            value: `**Level: ${client.data.jobs.xpToLevel(row.job_xp)} (${client.utils.fixNumber(row.job_xp)}xp)**`
                         });
-                    index += 1;
-                }
-                footer = `These guys have a lot of experience! You require level ${client.utils.fixNumber(client.s.LB_LEVEL_MIN)} to be on the leaderboard\n`
-                    +`\nNext update in: `;
-            }
+                    footer = `These guys have a lot of experience! You require level ${client.utils.fixNumber(client.s.LB_LEVEL_MIN)} to be on the leaderboard\n`
+                        +`\nNext update in: `;
 
-            // ------------------------ Print Leaderboard ------------------------
-
-            if(fields.length > 0){
-                printLeaderboard(client, discord, msg, fields, footer);
+                    if(fields.length > 0)
+                        printLeaderboard(client, discord, msg, fields, footer);
+                });
             }
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);

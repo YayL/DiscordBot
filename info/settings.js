@@ -8,7 +8,7 @@ module.exports = {
     LOG_TO_DISCORD: false,
     LOG_TO_FILE: true,
     LOG_TO_FILE_ANSI: true, // Use ANSI colors in log file. Will display weird in text editors, so read with a pager
-    LOGGING_LEVEL: 0, // Levels: 0 Trace, 1 Debug, 2 Info, 3 Warning, 4 Error, 5 Fatal
+    LOGGING_LEVEL: 1, // Levels: 0 Trace, 1 Debug, 2 Info, 3 Warning, 4 Error, 5 Fatal
 
     EMOJIS: ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷', '🇸'],
     LR_EMOJIS: ['⬅️', '➡️'],
