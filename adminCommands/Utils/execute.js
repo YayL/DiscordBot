@@ -19,8 +19,8 @@ module.exports = {
 
             commandHandler.handleCommand(msg, client, discord);
             
-		}catch(e){
-			client.eventEm.emit('CommandError', msg, this.name, args, e);
-		}
-	}
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e);
+        }
+    }
 }

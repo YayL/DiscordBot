@@ -2,23 +2,23 @@ const table = require('../../info/Items.js').lootbox_rates;
 const lookup_table = require('../../info/Items.js').lookup_table;
 
 function totalChanceOfItemsInTier(client, tier){
-	return client.items[tier].reduce((totalValue, val) => totalValue + val.rarity, 0);
+    return client.items[tier].reduce((totalValue, val) => totalValue + val.rarity, 0);
 }
 
 function totalChanceOfTiersInChest(box){
-	return table[box].reduce((totalValue, val) => totalValue + val);
+    return table[box].reduce((totalValue, val) => totalValue + val);
 }
 
 // Randomly get the tier of the lootcrate
 function getItemTier(case_tier){
 
-	var random = Math.random() * totalChanceOfTiersInChest(case_tier),j = -1, i = 0;
+    var random = Math.random() * totalChanceOfTiersInChest(case_tier),j = -1, i = 0;
 
-	while(i <= random){
-		j += 1;
-		i += table[case_tier][j];
-	}
-	return j;
+    while(i <= random){
+        j += 1;
+        i += table[case_tier][j];
+    }
+    return j;
 }
 
 

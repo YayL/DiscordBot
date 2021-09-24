@@ -2,12 +2,12 @@ const moneyRate = 5e7;
 const xpRate = 1;
 
 module.exports = {
-	name : "Transfer",
-	alias : ["tr"],
-	use: "-Transfer [amount]",
-	description : `Transfer Money to XP with a conversion rate of ${xpRate}xp:$${moneyRate}`,
-	options: {ShowInHelp: true, Category: "User"},
-	run : async function(client, msg, args, discord){
+    name : "Transfer",
+    alias : ["tr"],
+    use: "-Transfer [amount]",
+    description : `Transfer Money to XP with a conversion rate of ${xpRate}xp:$${moneyRate}`,
+    options: {ShowInHelp: true, Category: "User"},
+    run : async function(client, msg, args, discord){
         try{
             let amount = client.utils.suffixCheck(args[0]), totalBal = await client._user.bal.getBalance(client, msg.member.id);
             const currentXP = await client._user.get(client, msg.author.id, 'job_xp');
@@ -43,7 +43,7 @@ module.exports = {
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
-		
-	}
+        
+    }
 }
 

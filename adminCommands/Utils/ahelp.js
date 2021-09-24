@@ -1,11 +1,11 @@
 const categoryEmojiDict = {
-	'Economy': '💰',
-	'Gang': '👪',
-	'Items': '📦',
-	'Management': '💼',
-	'Rules': '⚖️',
-	'User': '🙍',
-	'Utils': '🛠️',
+    'Economy': '💰',
+    'Gang': '👪',
+    'Items': '📦',
+    'Management': '💼',
+    'Rules': '⚖️',
+    'User': '🙍',
+    'Utils': '🛠️',
 }
 
 const max_commands_per_page = 8;
@@ -16,13 +16,13 @@ function sendDefaultHelpCommand(client, msg, discord){
 		.setColor('#41BDB8')
 		.setFooter(`-help [category]`);
 
-	for(let category of client.adminCategoryList){
-		embed.addFields({
-			name: `${categoryEmojiDict[category]} ${category}`,
-			value: `\u200b`,
-			inline: true
-		});
-	}
+    for(let category of client.adminCategoryList){
+        embed.addFields({
+            name: `${categoryEmojiDict[category]} ${category}`,
+            value: `\u200b`,
+            inline: true
+        });
+    }
 
 	const filter = (reaction, user) => {
 		if(user.id == msg.member.id){
@@ -150,5 +150,5 @@ module.exports = {
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
-	}
+    }
 }

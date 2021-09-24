@@ -1,12 +1,12 @@
 module.exports = [
-	{
-		name: 'Aliens?',
-		index: 0,
-		id: 'L10',
-		desc: 'You have reached level 10',
-		message: 'Congratulations, you are no longer restrained to this world!',
-		run: (client, user) => {}
-	},
+    {
+        name: 'Aliens?',
+        index: 0,
+        id: 'L10',
+        desc: 'You have reached level 10',
+        message: 'Congratulations, you are no longer restrained to this world!',
+        run: (client, user) => {}
+    },
 
 	{
 		name: 'Maniac',
@@ -61,27 +61,27 @@ module.exports = [
 		run: (client, user) => {}
 	},
 
-	{
-		name: 'A God Among Men',
-		index: 6,
-		id: 'L10-',
-		desc: 'You got to level 10 without buying any XP',
-		message: 'Holy shit, this if something is impressive. Congratulations of getting to level 10 without buying your way.',
-		run: (client, user) => {
-			//Gift "Hand of God"
-		}
-	},
+    {
+        name: 'A God Among Men',
+        index: 6,
+        id: 'L10-',
+        desc: 'You got to level 10 without buying any XP',
+        message: 'Holy shit, this if something is impressive. Congratulations of getting to level 10 without buying your way.',
+        run: (client, user) => {
+            //Gift "Hand of God"
+        }
+    },
 
-	{
-		name: 'Avid Rebirther',
-		index: 10,
-		id: 'R10',
-		desc: 'You have rebirthed 10 times',
-		message: 'Congratulations, what a milestone. 10 Rebirths!',
-		run: (client, user) => {
-			client.msg.log("DEBUG", `Avid Rebirth: 123`)
-		}
-	},
+    {
+        name: 'Avid Rebirther',
+        index: 10,
+        id: 'R10',
+        desc: 'You have rebirthed 10 times',
+        message: 'Congratulations, what a milestone. 10 Rebirths!',
+        run: (client, user) => {
+            client.msg.log("DEBUG", `Avid Rebirth: 123`)
+        }
+    },
 
 	{
 		name: 'Rebirthing 101',

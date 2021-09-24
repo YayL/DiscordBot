@@ -1,5 +1,5 @@
 module.exports = {
-    leaderboard: (client) => setInterval(() => {   // Update Leaderboard
+    leaderboard: (client) => setInterval(() => { // Update Leaderboard
         try{
             client.eventEm.emit('updateLB');
         }catch(e){

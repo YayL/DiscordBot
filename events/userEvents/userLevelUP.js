@@ -13,5 +13,5 @@ module.exports = async (client, discord, channel, user_id, xp_amount, previous_x
 
     channel.send(embed);
 
-	client.eventEm.emit('achivementEarned', channel, user, client.achivementList.find(element => element.id == `L${lvl}`));
+    client.eventEm.emit('achivementEarned', channel, user, client.achivementList.find(element => element.id == `L${lvl}`));
 }

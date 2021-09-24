@@ -14,11 +14,11 @@ module.exports = {
 
 			const user = await client._user.get(client, msg.member.id);
 
-			const currentJob = await client.jobList.get(user.job_name);
+            const currentJob = await client.jobList.get(user.job_name);
 
-			if(currentJob.requirement > client.data.jobs.xpToLevel(user.job_xp)) return client.eventEm.emit('TooLowLevel', msg, user)
+            if(currentJob.requirement > client.data.jobs.xpToLevel(user.job_xp)) return client.eventEm.emit('TooLowLevel', msg, user)
 
-			const availableJobs = currentJob.job_options
+            const availableJobs = currentJob.job_options
 
 		    const filter = async (reaction, user) => {
 		        if(user.id != msg.member.id) return false
@@ -29,23 +29,23 @@ module.exports = {
 						return client.eventEm.emit('HasOpenListings', msg);
 		            client.eventEm.emit("rebirth", user, msg.channel); // Rebirth event
 
-		        }else {
-		        	for(i = 0; i<availableJobs.length;i++){
-		            	if(reaction.emoji.name == client.s.EMOJIS[i]){
-		            		reaction.message.delete();
-		            		client.eventEm.emit('promotion', user, availableJobs[i]); // Promotion event
-						}
-	            	}
-		        }
-	            return false;
-	        }
+                }else {
+                    for(i = 0; i<availableJobs.length;i++){
+                        if(reaction.emoji.name == client.s.EMOJIS[i]){
+                            reaction.message.delete();
+                            client.eventEm.emit('promotion', user, availableJobs[i]); // Promotion event
+                        }
+                    }
+                }
+                return false;
+            }
 
-	        // Send message
+            // Send message
 
-	        const embed = new discord.MessageEmbed()
-		        .setTitle('**__List of Jobs:__**')
-	            .setColor("#2fa87a")
-	            .setFooter("Make sure to pick the right one for you!");
+            const embed = new discord.MessageEmbed()
+                .setTitle('**__List of Jobs:__**')
+                .setColor("#2fa87a")
+                .setFooter("Make sure to pick the right one for you!");
 
 	        if(availableJobs.length == 0){
 	        	embed.addField(`:regional_indicator_${abc[0]}:`, `**Rebirth - Get a Money multiplier**`,true);
@@ -68,7 +68,7 @@ module.exports = {
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)
         }
-		
-	}
+        
+    }
 }
 

@@ -1,17 +1,17 @@
 module.exports = {
-	name: "Highlow",
-	alias: ["hl"],
-	use: "-Highlow [bet]",
-	description: "Bet that you will choose correctly",
-	options: {ShowInHelp: true, Category: "Gambling"},
-	run: async function(client, msg, args, discord){
+    name: "Highlow",
+    alias: ["hl"],
+    use: "-Highlow [bet]",
+    description: "Bet that you will choose correctly",
+    options: {ShowInHelp: true, Category: "Gambling"},
+    run: async function(client, msg, args, discord){
         try{
             let bet = client.utils.suffixCheck(args[0]);
 
             if(bet == "all") 
                 bet = await client._user.bal.getBalance(client, msg.member.id);
 
-			if(!bet || bet < 1) 
+            if(!bet || bet < 1) 
                 return client.eventEm.emit('InvalidInputAmount', msg);
 
             if(!await client._user.bal.enoughMoney(client, msg, Number(bet))) 
@@ -24,7 +24,7 @@ module.exports = {
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
 
-	}
+    }
 }
 
 async function highlow(client, msg, discord, bet){

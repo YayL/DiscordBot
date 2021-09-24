@@ -20,14 +20,14 @@ function notCommandChannel(client, msg){
 
 
 function checkIfAlias(cmdName, cmds){
-	for(const cmd of cmds){
-		for(var a of cmd.alias){
-			if(a.toLowerCase() === cmdName){
-				return cmd.name;
-			}
-		}
-	}
-	return null;
+    for(const cmd of cmds){
+        for(var a of cmd.alias){
+            if(a.toLowerCase() === cmdName){
+                return cmd.name;
+            }
+        }
+    }
+    return null;
 }
 
 module.exports = {
@@ -42,7 +42,7 @@ module.exports = {
 				return client.eventEm.emit('CommandsToggle', msg);
 		}
 
-		if(msg.content.startsWith(prefix)){
+        if(msg.content.startsWith(prefix)){
 
 			if(notCommandChannel(client, msg))
 				return;

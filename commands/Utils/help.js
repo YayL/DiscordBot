@@ -1,11 +1,11 @@
 const categoryEmojiDict = {
-	'Economy': '💰',
-	'Gambling': '🎰',
-	'Gang': '👪',
-	'Items': '📦',
-	'User': '🙍',
-	'Utils': '🛠️',
-	'Voting': '🗳️',
+    'Economy': '💰',
+    'Gambling': '🎰',
+    'Gang': '👪',
+    'Items': '📦',
+    'User': '🙍',
+    'Utils': '🛠️',
+    'Voting': '🗳️',
 };
 
 const max_commands_per_page = 8;
@@ -16,13 +16,13 @@ function sendDefaultHelpCommand(client, msg, discord){
 		.setColor('#41BDB8')
 		.setFooter(`-help [category]`);
 
-	for(let category of client.categoryList){
-		embed.addFields({
-			name: `${categoryEmojiDict[category]} ${category}`,
-			value: `\u200b`,
-			inline: true
-		});
-	}
+    for(let category of client.categoryList){
+        embed.addFields({
+            name: `${categoryEmojiDict[category]} ${category}`,
+            value: `\u200b`,
+            inline: true
+        });
+    }
 
 	const filter = (reaction, user) => {
 		if(user.id == msg.member.id){
@@ -39,27 +39,27 @@ function sendDefaultHelpCommand(client, msg, discord){
 		return false;
 	}
 
-	msg.channel.send(embed)
-		.then(message => {
-			for(var key in categoryEmojiDict){
-				message.react(categoryEmojiDict[key]);
-			}
-			message.awaitReactions(filter, {time: 25000})
-				.then(m => {
-					if(!message.deleted)
-						message.delete();
-				})
-		})
+    msg.channel.send(embed)
+        .then(message => {
+            for(var key in categoryEmojiDict){
+                message.react(categoryEmojiDict[key]);
+            }
+            message.awaitReactions(filter, {time: 25000})
+                .then(m => {
+                    if(!message.deleted)
+                        message.delete();
+                })
+        })
 }
 
 function sendSpecificHelpCommand(client, msg, discord, category, page){
 	if (category == undefined) 
 		return;
 
-	const categoryIndex = client.categoryList.map((category) => category.toLowerCase()).indexOf(category.toLowerCase())
+    const categoryIndex = client.categoryList.map((category) => category.toLowerCase()).indexOf(category.toLowerCase())
 
-	if(categoryIndex == -1) 
-		return;
+    if(categoryIndex == -1) 
+        return;
 
 	const embed = new discord.MessageEmbed()
 		.setAuthor(`${client.categoryList[categoryIndex]}'s Command List`)
@@ -151,5 +151,5 @@ module.exports = {
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
-	}
+    }
 }

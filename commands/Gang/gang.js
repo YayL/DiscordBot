@@ -31,13 +31,13 @@ module.exports = {
 				inline: true
 			});
 
-			embed.setTitle(`Gang Info: *__${info.NAME}__*`);
-			embed.setColor(`#4a1818`);
+            embed.setTitle(`Gang Info: *__${info.NAME}__*`);
+            embed.setColor(`#4a1818`);
 
-			msg.channel.send(embed);
-		}catch(e){
-			client.eventEm.emit('CommandError', msg, this.name, args, e)
-		}
-		
-	}
+            msg.channel.send(embed);
+        }catch(e){
+            client.eventEm.emit('CommandError', msg, this.name, args, e)
+        }
+        
+    }
 }

@@ -9,11 +9,11 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Economy"},
 	run : async function(client, msg, args, discord){
 
-		try{
-			const user = await client._user.get(client, msg.author.id);
+        try{
+            const user = await client._user.get(client, msg.author.id);
 
-			if(user.job_name == "Unemployed") 
-				return client.eventEm.emit('notEmployed', msg)
+            if(user.job_name == "Unemployed") 
+                return client.eventEm.emit('notEmployed', msg)
 
 			if(client.data.cooldown.isOnCooldown(client, msg.author.id, 'work')) 
 				return client.eventEm.emit('Timeout', msg, client.data.cooldown.getTimeLeft(client, msg.author.id, 'work'));
@@ -42,6 +42,6 @@ module.exports = {
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
-	}
+    }
 }
 

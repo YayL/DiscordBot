@@ -30,7 +30,7 @@ module.exports = {
         try{
             let fields = [], footer, index = 1;
 
-                // ------------------------ Money Leaderboard ------------------------
+            // ------------------------ Money Leaderboard ------------------------
 
             if(args.length < 1 || new RegExp(args[0].toLowerCase()).test("money")){
                 for(val of client.cachedMoneyLB){ 
@@ -97,7 +97,7 @@ module.exports = {
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
-                
-	}
+        
+    }
 }
 

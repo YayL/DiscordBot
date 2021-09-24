@@ -1,5 +1,5 @@
 module.exports = {
-	async getInventory(client, user_id){
+    async getInventory(client, user_id){
         var inventory = await client._user.get(client, user_id, 'inventory');
 
         // Check if inventory is able to be parsed

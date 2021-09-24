@@ -1,10 +1,10 @@
     module.exports = {
-	name : "Profile",
-	alias : ["p"],
-	use: "-Profile",
-	description : "Gives you some information about yourself",
-	options: {ShowInHelp: true, Category: "User"},
-	run: async function(client, msg, args, discord){
+    name : "Profile",
+    alias : ["p"],
+    use: "-Profile",
+    description : "Gives you some information about yourself",
+    options: {ShowInHelp: true, Category: "User"},
+    run: async function(client, msg, args, discord){
         try{
             await client.data.bal.updateTotalMoney(client);
 
@@ -35,7 +35,7 @@
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
-	    
-	}
+        
+    }
 }
 

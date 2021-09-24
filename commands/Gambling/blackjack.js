@@ -1,10 +1,10 @@
 module.exports = {
     name: "Blackjack",
-	alias: ["bj"],
-	use: "-Blackjack [bet]",
-	description: "Bet that you will win the blackjack",
-	options: {ShowInHelp: true, Category: "Gambling"},
-	run: async function(client, msg, args, discord){
+    alias: ["bj"],
+    use: "-Blackjack [bet]",
+    description: "Bet that you will win the blackjack",
+    options: {ShowInHelp: true, Category: "Gambling"},
+    run: async function(client, msg, args, discord){
         try{
             let bet = client.utils.suffixCheck(args[0]);
 

@@ -16,11 +16,11 @@ module.exports = async (client, disc, channel, user, achivement, achivements = f
 		        .addField('\u200b',`*${achivement.message}*`)
 		        .setColor('#a87f32');
 
-	    	channel.send(embed);
+            channel.send(embed);
 
-	    	achivements.push(achivement.index);
+            achivements.push(achivement.index);
 
-	    	client.con.query(`UPDATE users SET achivements = '${JSON.stringify(achivements)}' WHERE id = '${user.id}'`);
+            client.con.query(`UPDATE users SET achivements = '${JSON.stringify(achivements)}' WHERE id = '${user.id}'`);
 
 			achivement.run(client, user);
 

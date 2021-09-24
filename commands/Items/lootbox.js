@@ -62,14 +62,14 @@ module.exports = {
 
 function sendRewardMessage(client, discord, msg, tier, cost, amount, obj_list){
 
-	const value_of_box = obj_list.reduce((total, val) => total + (isNaN(Number(val.obj.value)) ? 0 : val.obj.value)*val.count, 0);
+    const value_of_box = obj_list.reduce((total, val) => total + (isNaN(Number(val.obj.value)) ? 0 : val.obj.value)*val.count, 0);
 
 	let text = '';
 	obj_list = client.data.items.sortItems(obj_list, true);
 
-	for(o of obj_list){
-		text += `x${o.count} ${o.name}: $${client.utils.fixNumber(o.obj.value, true)} | ${o.obj.tier.charAt(0).toUpperCase() + o.obj.tier.slice(1)}\n`;
-	}
+    for(o of obj_list){
+        text += `x${o.count} ${o.name}: $${client.utils.fixNumber(o.obj.value, true)} | ${o.obj.tier.charAt(0).toUpperCase() + o.obj.tier.slice(1)}\n`;
+    }
 
 	const embed = new discord.MessageEmbed()
 	    .setTitle(`${msg.author.username}'s x${client.utils.fixNumber(Number(amount), true)} ${tier.charAt(0).toUpperCase() + tier.slice(1)} lootbox:`)
@@ -77,27 +77,27 @@ function sendRewardMessage(client, discord, msg, tier, cost, amount, obj_list){
 	    .setColor(color_table[lookup_table.indexOf(tier)])
 	    .setFooter(`Price: $${client.utils.fixNumber(cost, true)} | Keep going! You'll find something awesome!`);
 
-	msg.channel.send(embed);
+    msg.channel.send(embed);
 
 }
 
 function sendLootInfo(client, discord, msg, case_tier, cost, color){
 
-	let text = '', inc = 0, lookup_table = require('../../info/Items.js').lookup_table;
-	
-	for(v of table[case_tier]){
-		text += `${lookup_table[inc]}: ${v*100}%\n`;
-		inc++;
-	}
-	
-	const embed = new discord.MessageEmbed()
-	    .setTitle(`${case_tier} Lootbox rewards:`)
-	    .setDescription(text)
-	    .setColor(color)
-	    .setFooter(`Price: $${client.utils.fixNumber(cost, true)} | Try your luck and buy one or two, you'll find something awesome!`);
+    let text = '', inc = 0, lookup_table = require('../../info/Items.js').lookup_table;
+    
+    for(v of table[case_tier]){
+        text += `${lookup_table[inc]}: ${v*100}%\n`;
+        inc++;
+    }
+    
+    const embed = new discord.MessageEmbed()
+        .setTitle(`${case_tier} Lootbox rewards:`)
+        .setDescription(text)
+        .setColor(color)
+        .setFooter(`Price: $${client.utils.fixNumber(cost, true)} | Try your luck and buy one or two, you'll find something awesome!`);
 
-	msg.channel.send(embed);
-	
+    msg.channel.send(embed);
+    
 }
 
 const full_lookup_table = require('../../info/Items.js').lookup_table;

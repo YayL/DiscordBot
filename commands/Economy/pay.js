@@ -9,8 +9,8 @@ module.exports = {
 			const payee = msg.mentions.users.array()[0];
 			let amount = client.utils.suffixCheck(args[1]);
 
-      		if(amount == false || payee == null) 
-				return client.eventEm.emit('InvalidArgs', msg, this.use);
+            if(amount == false || payee == null) 
+                return client.eventEm.emit('InvalidArgs', msg, this.use);
 
 			if(client.data.cooldown.isOnCooldown(client, msg.author.id, 'pay'))
 				return client.eventEm.emit('Timeout', msg, client.data.cooldown.getTimeLeft(client, msg.author.id, 'pay'));
@@ -21,8 +21,8 @@ module.exports = {
 	        if(!await client._user.bal.enoughMoney(client, msg, amount)) 
 				return;
 
-	        client._user.bal.addBalance(client, msg.member.id, -1*amount);
-	        client._user.bal.addBalance(client, payee.id, amount);
+            client._user.bal.addBalance(client, msg.member.id, -1*amount);
+            client._user.bal.addBalance(client, payee.id, amount);
 
 			client.data.cooldown.addUserToCooldown(client, msg.author.id, 'pay');
 
@@ -30,5 +30,5 @@ module.exports = {
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
-	}
+    }
 }
