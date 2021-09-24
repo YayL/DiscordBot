@@ -10,7 +10,7 @@ async function beforeExit(msg, client){
 
 module.exports = {
 	name: "Shutdown",
-	alias : ["s"],
+	alias : [],
 	use: "-Shutdown",
 	description: "Turns off the bot correctly",
 	options: {ShowInHelp: false, Category: 'Management'},

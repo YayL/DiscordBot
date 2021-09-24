@@ -1,3 +1,4 @@
+const { dir } = require('console');
 const fs = require('fs');
 
 function loadFiles(client, directory){ // commands or adminCommands
@@ -11,6 +12,12 @@ function loadFiles(client, directory){ // commands or adminCommands
 		for (file of commandFiles){
 			const command = require(`../${directory}/${category}/${file}`); // Get exported part of file
 			client[directory].set(command.name.toLowerCase(), command); // Add file to command collection
+			
+			const c = directory+'Categories';
+
+			if(client[c][category.toLowerCase()] == undefined)
+				client[c][category.toLowerCase()] = []
+			client[c][category.toLowerCase()].push(command.name.toLowerCase());
 		}
 	}
 }

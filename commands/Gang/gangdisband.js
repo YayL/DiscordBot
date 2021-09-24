@@ -6,21 +6,15 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Gang"},
 	run: async function(client, msg, args, discord){
 		try{
-
-			if(! await client._user.gang.inGang(client, msg.author.id)) 
+			const gang = await client.gang.user.getGang(client, msg.author.id);
+			if(! await client.gang.user.inGang(client, msg.author.id, gang)) 
 				return client.eventEm.emit('notInAGang', msg);
 
-			if(! await client.data.gang.isOwner(client, msg.author.id)) 
+			if(! await client.gang.permissions.isOwner(client, msg.author.id)) 
 				return client.eventEm.emit('notGangOwner', msg);
-			
-			const gang = await client._user.gang.getGang(client, msg.author.id);
-			const members = gang.members;
 
-			for(member_id of members){
-				client._user.gang.leaveGang(client, member_id, true);
-			}
+			client.gang.management.disbandGang(client, gang.name)
 
-			client.con.query(`DELETE FROM gangs WHERE name = '${gang.name}'`);
 			client.eventEm.emit('disbandGang', msg, gang.info.NAME);
 			
 		}catch(e){

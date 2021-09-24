@@ -14,7 +14,7 @@ module.exports = {
             if(!bet || bet < 1) 
                 return client.eventEm.emit('InvalidInputAmount', msg);
 
-            if(!await client._user.bal.enoughMoney(client, msg.member.id, Number(bet))) 
+            if(!await client._user.bal.enoughMoney(client, msg, Number(bet))) 
                 return;
 
             client._user.bal.addBalance(client, msg.member.id, -1*Number(bet));

@@ -8,16 +8,14 @@ options -> Different options boolean form
 run -> Calls command function
 */
 
-function notCommandChannel(msg, client, notError){
-	if(client.channelId.commandChannels.includes(msg.channel.id)){
+function notCommandChannel(client, msg){
+	if(client.channelId.commandChannels.includes(msg.channel.id) || client.channelId.lootboxChannels.includes(msg.channel.id)){
 		return false;
 	}
 
-	if(!notError){
-		msg.delete();
-	}
+	msg.delete();
 
-	return true;
+	return !(client.adminList.includes(msg.author.id) && client.s.ADMIN_COMMANDS);
 }
 
 
@@ -34,7 +32,9 @@ function checkIfAlias(cmdName, cmds){
 
 module.exports = {
 	handleCommand: (msg, client, Discord) => {
-		var commands = client.commands
+
+		let commands = client.commands
+
 		if(client.adminList.includes(msg.author.id) && client.s.ADMIN_COMMANDS){
 			commands = client.commands.concat(client.adminCommands); // Combine commands and adminCommands
 		}else{
@@ -44,8 +44,13 @@ module.exports = {
 
 		if(msg.content.startsWith(prefix)){
 
+			if(notCommandChannel(client, msg))
+				return;
+
 			var tempMessage = msg.content.slice(prefix.length); // Remove prefix from string
 			var args = tempMessage.split(" ").filter(arg => arg !== '');
+
+			if(args[0] == undefined) return client.eventEm.emit('CommandNotSpecified', msg);
 
 			CommandName = args[0].toLowerCase();
 			args.shift(); // Remove first argument, CommandName, from array
@@ -55,11 +60,7 @@ module.exports = {
 
 			try{
 				commands.get(CommandName).run(client, msg, args, Discord, commands.array());
-				if(notCommandChannel(msg, client)) 
-					return;
 			}catch(e){
-				if(notCommandChannel(msg, client, false)) 
-					return;
 				client.eventEm.emit('CommandError', msg, CommandName, args, e, true);
 			}
 		}

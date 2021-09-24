@@ -1,6 +1,6 @@
 module.exports = {
 	name: "Clear",
-	alias: ["prune", "c"],
+	alias: ["prune"],
 	use: "-Clear [amount]",
 	description: "Remove a set amount of messages in current channel",
 	options: {ShowInHelp: false, Category: 'Management'},

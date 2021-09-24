@@ -6,7 +6,7 @@ module.exports = async (client, disc, msg, listing_id, buyer_id) => {
         if(rows[0].user == buyer_id) 
             return client.eventEm.emit('ownerBuyer', msg);
 
-        if(!await client._user.bal.enoughMoney(client, msg.member.id, rows[0].price)) 
+        if(!await client._user.bal.enoughMoney(client, msg, rows[0].price)) 
             return client.eventEm.emit('notEnoughMoney', msg);
 
         client._user.items.addItems(client, buyer_id, [{id: rows[0].item_id, count: rows[0].amount}]);

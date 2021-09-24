@@ -1,26 +1,33 @@
 module.exports = {
-	name: "gang",
+	name: "Gang",
 	alias: ['g'],
-	use: "-gang",
+	use: "-Gang",
 	description: "Get some info about your gang",
 	options: {ShowInHelp: true, Category: "Gang"},
 	run: async function(client, msg, args, discord){
 		try{
 
-			if(!(await client._user.gang.inGang(client, msg.author.id))) return client.eventEm.emit('notInAGang', msg);
+			if(!(await client.gang.user.inGang(client, msg.author.id))) return client.eventEm.emit('notInAGang', msg);
 
-			const gang = await client._user.gang.getGang(client, msg.author.id),
+			const gang = await client.gang.user.getGang(client, msg.author.id),
 				info = gang.info,
-				embed = new discord.MessageEmbed();
+				embed = new discord.MessageEmbed(),
+				level = client.data.jobs.xpToLevel(gang.xp);
 
 			embed.addFields({
 				name: '👥 Members', 
-				value: `${gang.members.length}/10\nInvite people using -ginvite`,
+				value: `${gang.members.length}/${client.gang.info.getGangUpgrade(client, gang, 'Member')}\nInvite people using -ginvite`,
 				inline: true
 			},
 			{
-				name: '-',
-				value: '-',
+				name: '⚙️ Level',
+				value: `**Level:** ${level}`
+						+ `\n**Current XP:** ${Number(gang.xp) - client.data.jobs.totalLvlXp(level, true)}/${client.data.jobs.nextLvlXp(level)}`,
+				inline: true
+			},
+			{
+				name: `💰 Bank Balance`,
+				value: `**Bank Balance:** $${client.utils.fixNumber(Number(gang.bank), true)}`,
 				inline: true
 			});
 

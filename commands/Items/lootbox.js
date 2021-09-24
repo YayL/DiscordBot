@@ -15,6 +15,10 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Items"},
 	run: async function(client, msg, args, discord){
 		try{
+			
+			if(!client.channelId.lootboxChannels.includes(msg.channel.id))
+				return msg.delete();
+
 			const tier = args.length >= 1 ? args[0].toLowerCase() : '';
 
 			if(!lookup_table.includes(tier))
@@ -23,8 +27,8 @@ module.exports = {
 			if(args.length < 2) 
 				return sendLootInfo(client, discord, msg, tier, costCalculate(tier), color_table[lookup_table.indexOf(tier)]);
 			
-			const rebirths = await client._user.get(client, msg.author.id, 'rebirths') + 1,
-				amount = args.length >= 1 
+			const rebirths = await client._user.get(client, msg.author.id, 'rebirths') + 1;
+			const amount = args.length >= 1 
 				? ((args[1].toLowerCase() == 'max') 
 					? max_lootboxes(rebirths) 
 					: 0 < Number(args[1]) 
@@ -36,18 +40,17 @@ module.exports = {
 				
 			const cost = costCalculate(tier)*amount;
 
-			if(!client._user.bal.enoughMoney(client, msg, msg.member.id, cost)) 
-				return;
+			if(! await client._user.bal.enoughMoney(client, msg, cost)) return;
+
+			if(client.data.cooldown.isOnCooldown(client, msg.author.id, 'lootbox'))
+				return client.eventEm.emit('Timeout', msg, client.data.cooldown.getTimeLeft(client, msg.author.id, 'lootbox'));
 
 			client._user.bal.addBalance(client, msg.author.id, -1*cost);
 
-			var obj_list = [];
-
-			for(var count = 0; count < amount; count++){
-				client.eventEm.emit('openLootBox', msg, tier, obj_list);
-			}
+			const obj_list = getItem(client, tier, amount);
 
 			sendRewardMessage(client, discord, msg, tier, cost, amount, obj_list);
+			client.data.cooldown.addUserToCooldown(client, msg.author.id, 'lootbox');
 			client._user.items.addItems(client, msg.author.id, obj_list);
 
 		}catch(e){
@@ -61,7 +64,7 @@ function sendRewardMessage(client, discord, msg, tier, cost, amount, obj_list){
 
 	const value_of_box = obj_list.reduce((total, val) => total + (isNaN(Number(val.obj.value)) ? 0 : val.obj.value)*val.count, 0);
 
-	var text = '';
+	let text = '';
 	obj_list = client.data.items.sortItems(obj_list, true);
 
 	for(o of obj_list){
@@ -69,7 +72,7 @@ function sendRewardMessage(client, discord, msg, tier, cost, amount, obj_list){
 	}
 
 	const embed = new discord.MessageEmbed()
-	    .setTitle(`${msg.author.username}'s x${amount} ${tier.charAt(0).toUpperCase() + tier.slice(1)} lootbox:`)
+	    .setTitle(`${msg.author.username}'s x${client.utils.fixNumber(Number(amount), true)} ${tier.charAt(0).toUpperCase() + tier.slice(1)} lootbox:`)
 	    .setDescription(`${text}\n\nProfit: ${client.utils.fixNumber(value_of_box-cost, true)}`)
 	    .setColor(color_table[lookup_table.indexOf(tier)])
 	    .setFooter(`Price: $${client.utils.fixNumber(cost, true)} | Keep going! You'll find something awesome!`);
@@ -96,3 +99,62 @@ function sendLootInfo(client, discord, msg, case_tier, cost, color){
 	msg.channel.send(embed);
 	
 }
+
+const full_lookup_table = require('../../info/Items.js').lookup_table;
+
+function totalChanceOfItemsInTier(client, tier){
+	return client.items[tier].reduce((totalValue, val) => totalValue + val.rarity, 0);
+}
+
+function totalChanceOfTiersInChest(box){
+	return table[box].reduce((totalValue, val) => totalValue + val);
+}
+
+// Randomly get the tier of the lootcrate
+function getItemTier(case_tier){
+
+	let random = Math.random() * totalChanceOfTiersInChest(case_tier),j = -1, i = 0;
+
+	while(i <= random){
+		j += 1;
+		i += table[case_tier][j];
+	}
+	return j;
+}
+
+function getItem(client, case_tier, amount){
+	let obj_list = [], names = [], 
+	item, chance_list = {}, item_chance, 
+	tier_to_roll, random;
+	
+	for(let count = 0; count < amount; count++){
+		tier_to_roll = full_lookup_table[getItemTier(case_tier)];
+
+		if(chance_list[tier_to_roll] != undefined){
+			item_chance = chance_list[tier_to_roll];
+		}
+		else{
+			item_chance = totalChanceOfItemsInTier(client, tier_to_roll);
+			chance_list[tier_to_roll] = item_chance;
+		}
+
+		random = Math.random() * item_chance, j = -1, i = 0;
+
+		while(i <= random){
+			j += 1;
+			i += client.items[tier_to_roll][j].rarity;
+		}
+		item = client.items[tier_to_roll][j];
+
+		if(names.includes(item.name)){
+			obj_list[names.indexOf(item.name)].count++;
+		}
+		else{
+			obj_list.push({name: item.name, id: item.id,
+				count: 1, obj: item});
+			names.push(item.name);
+		}
+	}
+	return obj_list;
+}
+

@@ -6,5 +6,5 @@ module.exports = async (client, disc, user, channel, rebirth=false) => {
     	client._user.resetUser(client, user.id, true);
     } 
 
-    client.eventEm.emit('achivementEarned', channel, user, client.achivementList.find(element => element.id == `R${rebirth}`));
+    client.eventEm.emit('achivementEarned', channel, user, client.achivementList.find(a => a.id == `R${rebirth}`));
 }

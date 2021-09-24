@@ -6,19 +6,19 @@ module.exports = {
 	options: {ShowInHelp: false, Category: 'Gang'},
 	run: async function(client, msg, args, discord){
 		try{
-			var gangs = await client.data.gang.getAllGangs(client), gang_template = client.s.GANG_INFO_TEMPLATE;
+			var gangs = await client.gang.getAllGangs(client), gang_template = client.s.GANG_INFO_TEMPLATE;
 
 			if(gangs == null) return client.eventEm.emit('NoExistingGangs', msg);
 
-			const gang_template_keys = Object.keys(client.s.GANG_INFO_TEMPLATE), 
-				gang_template_values = Object.values(client.s.GANG_INFO_TEMPLATE),
-				gang_template_settings_keys = Object.keys(client.s.GANG_INFO_TEMPLATE.SETTINGS),
-				gang_template_settings_values = Object.values(client.s.GANG_INFO_TEMPLATE.SETTINGS);
+			const gang_template_keys = Object.keys(gang_template), 
+				gang_template_values = Object.values(gang_template),
+				gang_template_settings_keys = Object.keys(gang_template.SETTINGS),
+				gang_template_settings_values = Object.values(gang_template.SETTINGS);
 
 			var info, gangKeys, settingKeys;
 
-			for(var guild_index = 0; guild_index<gangs.length; guild_index++){
-				info = JSON.parse(gangs[guild_index].info), gangKeys = Object.keys(info);
+			for(var guild_index = 0; guild_index < gangs.length; guild_index++){
+				info = gangs[guild_index].info, gangKeys = Object.keys(info);
 				settingKeys = Object.keys(info.SETTINGS);
 
 				// ------------- Add to info -------------

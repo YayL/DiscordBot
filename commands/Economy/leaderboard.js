@@ -20,8 +20,10 @@ function printLeaderboard(client, discord, msg, fields, footer){
 module.exports = {
 	name: "Leaderboard",    
 	alias: ["lb"],
-	use: `-Leaderboard money
-          -Leaderboard levels`,
+	use: `-Leaderboard Money
+          -Leaderboard Levels
+          -Leaderboard Rebirths
+          -Leaderboard Gangs`,
 	description: "See the server leaderboard",
 	options: {ShowInHelp: true, Category: "Economy"},   
 	run: async function(client, msg, args, discord){
@@ -45,16 +47,45 @@ module.exports = {
             // ------------------------ Levels Leaderboard ------------------------
 
             }else if(new RegExp(args[0].toLowerCase()).test("levels")){
-                console.log('yes')
                 for(val of client.cachedLevelLB){
                     fields.push(
                         {
                             name: `**${index}. ${await name(client, val.id, msg)}**`,
-                            value: `**Level: ${client.data.jobs.xpToLevel(val.job_xp)} (${client.utils.fixNumber(val.job_xp)}xp)**`
+                            value: `**Level: ${client.data.jobs.xpToLevel(val.job_xp)} (${client.utils.fixNumber(val.job_xp, true)} xp)**`
                         });
                     index += 1;
                 }
                 footer = `These guys have a lot of experience! You require level ${client.utils.fixNumber(client.s.LB_LEVEL_MIN)} to be on the leaderboard\n`
+                    +`\nNext update in: `;
+            
+
+            // ------------------------ Rebirth Leaderboard ------------------------
+
+            }else if(new RegExp(args[0].toLowerCase()).test("rebirths")){
+                for(val of client.cachedRebirthLB){
+                    fields.push(
+                        {
+                            name: `**${index}. ${await name(client, val.id, msg)}**`,
+                            value: `**Rebirth: ${client.utils.fixNumber(val.rebirths)}**`
+                        });
+                    index += 1;
+                }
+                footer = `These guys have a lot of rebirths! You require rebirth ${client.utils.fixNumber(client.s.LB_REBIRTH_MIN)} to be on the leaderboard\n`
+                    +`\nNext update in: `;
+
+            // ------------------------ Gang Leaderboard ------------------------
+
+            }else if(new RegExp(args[0].toLowerCase()).test("gangs")){
+                for(val of client.cachedGangLB){
+                    fields.push(
+                        {
+                            name: `**${index}. ${val.info.NAME}**`,
+                            value: `**Level: ${client.utils.fixNumber(client.data.jobs.xpToLevel(val.xp))} (${client.utils.fixNumber(val.xp, true)} xp)**
+                            **Bank Balance: $${client.utils.fixNumber(val.bank, true)}**`
+                        });
+                    index += 1;
+                }
+                footer = `These gangs have a lot of experience! You need a level ${client.utils.fixNumber(client.s.LB_GANGLEVEL_MIN)} or higher gang to be on the leaderboard\n`
                     +`\nNext update in: `;
             }
 

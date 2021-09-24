@@ -91,7 +91,7 @@ module.exports = [
 
 		{
 			name: 'Journalist', base_pay: 1150,
-			job_options: ['']
+			job_options: []
 		},
 
 		{
@@ -163,7 +163,7 @@ module.exports = [
 
 		{
 			name: 'Publisher', base_pay: 17500,
-			job_options: ['']
+			job_options: []
 		},
 
 		{
@@ -240,7 +240,7 @@ module.exports = [
 
 		{
 			name: 'Detective', base_pay: 1.4e5,
-			job_options: ['']
+			job_options: []
 		},
 
 		{
@@ -332,7 +332,7 @@ module.exports = [
 
 		{
 			name: 'Archaeologist', base_pay: 5.75e5,
-			job_options: ['']
+			job_options: []
 		},
 	],
 
@@ -403,6 +403,10 @@ module.exports = [
 			name: 'E-Sport Coach', base_pay: 2.2e7,
 			job_options: ['Earth Board of Directors']
 		},
+		{
+			name: 'Big Investor', base_pay: 3e7,
+			job_options: []
+		}
 	],
 
 	[ // ---------------------------- Level: 9 ----------------------------
@@ -560,17 +564,17 @@ module.exports = [
 	[ // ---------------------------- Level: 15 ----------------------------
 		{
 			name: 'Alien Simulation Overlord', base_pay: 8.2e10,
-			job_options: ['']
+			job_options: []
 		},
 
 		{
 			name: 'Alien Emperor', base_pay: 8.1e10,
-			job_options: ['']
+			job_options: []
 		},
 
 		{
 			name: 'Alien Chief Admiral', base_pay: 8.05e10,
-			job_options: ['']
+			job_options: []
 		},
 
 		{
@@ -583,7 +587,7 @@ module.exports = [
 	[// ---------------------------- Level: 16 ----------------------------
 	    {
 			name: 'Tesseractal', base_pay: 1.3e11,
-			job_options: ['']
+			job_options: []
 		}
 
 	]

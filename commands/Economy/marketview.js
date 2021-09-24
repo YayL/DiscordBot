@@ -61,7 +61,7 @@ function listingsReactions(msg, commandExecutor_id, client, marketTable, startIn
 
 		if(user.id == commandExecutor_id && index - startIndex != -1){
 
-			if(!await client._user.bal.enoughMoney(client, user.id, marketTable[index].price))
+			if(!await client._user.bal.enoughMoney(client, msg, marketTable[index].price))
 				return false;
 			
 

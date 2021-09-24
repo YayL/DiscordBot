@@ -6,9 +6,12 @@ module.exports = {
 	alias : ["j"],
 	use: "-Jobs",
 	description : "Choose between the available jobs for you to do",
-	options: {ShowInHelp: true, Category: "User"},
+	options: {ShowInHelp: true, Category: "Economy"},
 	run : async function(client, msg, args, discord){
 		try{
+
+			msg.delete();
+
 			const user = await client._user.get(client, msg.member.id);
 
 			const currentJob = await client.jobList.get(user.job_name);
@@ -20,10 +23,11 @@ module.exports = {
 		    const filter = async (reaction, user) => {
 		        if(user.id != msg.member.id) return false
 		        	
-		        if(availableJobs[0] == ''){
+		        if(availableJobs.length == 0){
 		        	reaction.message.delete();
-					if(client.data.listings.getUserListingsCount(client, user.id) > 0) return client.eventEm.emit('hasOpenListings', msg);
-		            client.eventEm.emit("rebirth", user, reaction.channel); // Rebirth event
+					if(await client.data.market.getUserCount(client, user.id) > 0) 
+						return client.eventEm.emit('HasOpenListings', msg);
+		            client.eventEm.emit("rebirth", user, msg.channel); // Rebirth event
 
 		        }else {
 		        	for(i = 0; i<availableJobs.length;i++){
@@ -43,7 +47,7 @@ module.exports = {
 	            .setColor("#2fa87a")
 	            .setFooter("Make sure to pick the right one for you!");
 
-	        if(availableJobs.length==1 && availableJobs[0] == ''){
+	        if(availableJobs.length == 0){
 	        	embed.addField(`:regional_indicator_${abc[0]}:`, `**Rebirth - Get a Money multiplier**`,true);
 		    }else{ 
 		    	for(i = 0; i<availableJobs.length;i++){
@@ -58,6 +62,8 @@ module.exports = {
 	            for(i = 0; i<availableJobs.length;i++){
 	            	message.react(client.s.EMOJIS[i]).catch(e => {return});
 	            }
+				if(availableJobs.length == 0)
+					message.react(client.s.EMOJIS[0]);
 	        });
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e)

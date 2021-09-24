@@ -4,6 +4,7 @@ module.exports = {
 
 	getItem(client, id){
 		try{
+
 			const tierIndex = (id < 10000)
 				? ~~(id/1000)
 				: client.items.lookup_table.length-1;
@@ -12,7 +13,7 @@ module.exports = {
 				return null;
 
 			const item = id - 1000*(tierIndex == 8 ? 10 : tierIndex);
-			
+
 			if(item >= client.items[client.items.lookup_table[tierIndex]].length) 
 				return null;
 

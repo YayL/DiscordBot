@@ -8,6 +8,8 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Items"},
 	run: async function(client, msg, args, discord){
 		try{
+
+			msg.delete();
 			
 			const inventory = await client._user.items.getInventory(client, msg.author.id),
 				inventoryLength = Object.values(inventory).length;
@@ -40,13 +42,13 @@ async function sendMessage(client, msg, discord, inventory, inventoryLength, max
 
 		value_of_inv += (isNaN(Number(item.value)) ? 0 : item.value*inventory[item.id].count); // Checks if a value is limited or not
 
-		text += `*${slot})* *(ID:${item.id})* ***${item.name}*** x${inventory[item.id].count} | **__${item.tier.charAt(0).toUpperCase() + item.tier.slice(1)}__**\n`;
+		text += `*(ID:${item.id})* ***${item.name}*** x${inventory[item.id].count} | **__${item.tier.charAt(0).toUpperCase() + item.tier.slice(1)}__**\n`;
 
 	}
 	
 	let embed = new discord.MessageEmbed()
 		.setTitle(`Inventory`)
-		.setDescription(`${text}\n--------------------\n $${client.utils.fixNumber(value_of_inv, true)}\n--------------------`)
+		.setDescription(`${text}\n\u200b\n$${client.utils.fixNumber(value_of_inv, true)}`)
 		.setColor('#4287f5')
 		.setFooter(`Page ${page}/${maxPages}`);
 
@@ -65,15 +67,15 @@ async function sendMessage(client, msg, discord, inventory, inventoryLength, max
 				}
 			}
 			
-			m.awaitReactions(filter, {time: 20000})
+			m.awaitReactions(filter, {time: 45000})
 				.then(_ => {
 					if(!m.deleted) 
 						m.delete();
 				});
 			
-			if(page < maxPages)
-				m.react(client.s.LR_EMOJIS[1]);
 			if(page > 1)
 				m.react(client.s.LR_EMOJIS[0]);
+			if(page < maxPages)
+				m.react(client.s.LR_EMOJIS[1]);
 		})
 }

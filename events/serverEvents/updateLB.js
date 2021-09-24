@@ -14,6 +14,20 @@ module.exports = (client, disc) => {
 			console.error(e);
 
 		client['cachedMoneyLB'] = rows;
+	});
+
+	client.con.query(`SELECT * FROM users WHERE rebirths > ${client.s.LB_REBIRTH_MIN-1} ORDER BY rebirths DESC LIMIT ${client.s.LB_SIZE}`, (e, {rows}) => {
+		if(e) 
+			console.error(e);
+
+		client['cachedRebirthLB'] = rows;
+	});
+
+	client.con.query(`SELECT * FROM gangs WHERE xp > ${client.data.jobs.totalLvlXp(client.s.LB_GANGLEVEL_MIN)-1} ORDER BY xp DESC LIMIT ${client.s.LB_SIZE}`, (e, {rows}) => {
+		if(e) 
+			console.error(e);
+
+		client['cachedGangLB'] = rows;
 		client.leaderboardTimer = Date.now();
 	});
 }

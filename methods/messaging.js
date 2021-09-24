@@ -96,6 +96,9 @@ module.exports = {
   
 	  // Log to console and file
 	  console.log(format);
+	  if(level.toLowerCase() == 'err')
+	  	console.log(msg);
+		  
 	  if(s.LOG_TO_FILE)
 		// Logging to file with ANSI color, read with pager
 		if(!this._logStream.write((s.LOG_TO_FILE_ANSI ? format : utils.removeAnsi(format)) + '\n'))

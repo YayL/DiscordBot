@@ -16,14 +16,19 @@ module.exports = {
                 return client.msg.reply(msg, 'XP Conversion',
                  `You can convert $${client.utils.fixNumber(totalBal, true)} into ${client.utils.fixNumber(Math.floor((totalBal*xpRate)/moneyRate))}xp`, discord);
 
-            if(amount == "all")
+            if(amount === "all"){
                 amount = totalBal;
+            }
+                
 
-            if(currentXP + amount/moneyRate > client.s.MAX_XP) 
+            if(currentXP + amount/moneyRate > client.s.MAX_XP){
                 amount = (client.s.MAX_XP - currentXP)*moneyRate;
+                if(amount == 0)
+                    return client.eventEm.emit('MaxXP', msg);
+            }
 
-            if(!await client._user.bal.enoughMoney(client, msg.member.id, amount)) 
-                return client.eventEm.emit('notEnoughMoney', msg);
+            if(! await client._user.bal.enoughMoney(client, msg, amount)) 
+                return;
 
             amount -= amount%moneyRate;
 

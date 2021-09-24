@@ -1,9 +1,9 @@
-const xpTop = 40,
+const xpTop = 50,
 	xpBottom = 5;
 
 module.exports = {
 	name : "Work",
-	alias : ["w"],
+	alias : ['w'],
 	use: "-Work",
 	description : "Earn some cash from the job you have",
 	options: {ShowInHelp: true, Category: "Economy"},
@@ -16,11 +16,19 @@ module.exports = {
 				return client.eventEm.emit('notEmployed', msg)
 
 			if(client.data.cooldown.isOnCooldown(client, msg.author.id, 'work')) 
-				return client.eventEm.emit('WorkTimeout', msg, client.data.cooldown.getTimeLeft(client, msg.author.id, 'work'));
+				return client.eventEm.emit('Timeout', msg, client.data.cooldown.getTimeLeft(client, msg.author.id, 'work'));
+			
+			let multiplier = client._user.calculateMultiplier(client, msg.member.roles.cache);
 
-			var xp_grant = Math.floor(Math.random() * (xpTop - xpBottom + 1) + xpBottom),
+			let xp_grant = Math.floor(Math.random() * (xpTop - xpBottom + 1) + xpBottom) * (multiplier != 0 ? multiplier : 1),
 				base_pay = client.jobList.get(user.job_name).base_pay,
 				money_grant = Math.floor(base_pay * ((0.6*Math.random())/3 + 1))*(user.rebirths+1);
+
+			const gang = await client.gang.user.getGang(client, msg.author.id);
+
+			if(await client.gang.user.inGang(client, msg.author.id, gang)){
+				client.gang.xp.addXP(client, msg, gang, xp_grant*(Math.random() * 0.4));
+			}
 
 			client.msg.reply(msg, 
 					"Great work!", 

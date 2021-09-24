@@ -6,6 +6,7 @@ module.exports = {
     options: {ShowInHelp: true, Category: "Items"},
     run: async function(client, msg, args, discord){
         try{
+            
             const inventory = await client._user.items.getInventory(client, msg.author.id), 
                 item_id = Number(args[0]);
 

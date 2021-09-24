@@ -14,7 +14,7 @@ module.exports = {
 			if(!bet || bet < 1) 
                 return client.eventEm.emit('InvalidInputAmount', msg);
 
-            if(!await client._user.bal.enoughMoney(client, msg.member.id, Number(bet))) 
+            if(!await client._user.bal.enoughMoney(client, msg, Number(bet))) 
                 return;
 
             client._user.bal.addBalance(client, msg.member.id, -1*Number(bet));
@@ -62,7 +62,8 @@ async function highlow(client, msg, discord, bet){
     embed.setDescription(`A number has been chosen at random. The hint is ${hint}\n`
             + `:regional_indicator_h: Higher\n`
             + `:regional_indicator_l: Lower\n`
-            + `:regional_indicator_j: Jackpot`)
+            + `:regional_indicator_j: Jackpot`);
+
     embed.setFooter('Choose if you think it is higher, lower or that number');
 
     msg.channel.send(embed)

@@ -8,8 +8,10 @@ const categoryEmojiDict = {
 	'Voting': '🗳️',
 };
 
-function sendDefaultHelpCommand(msg, client, disc, cmds){
-	var embed = new disc.MessageEmbed()
+const max_commands_per_page = 8;
+
+function sendDefaultHelpCommand(client, msg, discord){
+	var embed = new discord.MessageEmbed()
 		.setAuthor(`List of categories to choose from`)
 		.setColor('#41BDB8')
 		.setFooter(`-help [category]`);
@@ -30,7 +32,7 @@ function sendDefaultHelpCommand(msg, client, disc, cmds){
 					.then(message => {
 						message.delete();
 					});
-				sendSpecificHelpCommand(msg, client, disc, Object.keys(categoryEmojiDict)[index], cmds);
+				sendSpecificHelpCommand(client, msg, discord, Object.keys(categoryEmojiDict)[index], 1);
 				return true;
 			}
 		}
@@ -50,7 +52,7 @@ function sendDefaultHelpCommand(msg, client, disc, cmds){
 		})
 }
 
-function sendSpecificHelpCommand(msg, client, disc, category, cmds){
+function sendSpecificHelpCommand(client, msg, discord, category, page){
 	if (category == undefined) 
 		return;
 
@@ -59,13 +61,24 @@ function sendSpecificHelpCommand(msg, client, disc, category, cmds){
 	if(categoryIndex == -1) 
 		return;
 
-	const embed = new disc.MessageEmbed()
+	const embed = new discord.MessageEmbed()
 		.setAuthor(`${client.categoryList[categoryIndex]}'s Command List`)
 		.setColor(`#41BDB8`);
+	
+	let cmd;
 
-	for(let cmd of cmds){
-		if(cmd.options.Category.toLowerCase() != client.categoryList[categoryIndex].toLowerCase() || !cmd.options.ShowInHelp) 
-			continue
+	const cmds = client.commandsCategories[category.toLowerCase()],
+		maxPages = Math.ceil(cmds.length/max_commands_per_page);
+
+	for(let index = max_commands_per_page*(page-1); index < max_commands_per_page*page; index++){
+
+		if(index >= cmds.length)
+			break;
+		
+		cmd = client.commands.get(cmds[index]);
+
+		if(!cmd.options.ShowInHelp)
+			continue;
 
 		embed.addFields({
 			name: `${cmd.name}`,
@@ -82,9 +95,38 @@ function sendSpecificHelpCommand(msg, client, disc, category, cmds){
 			value: (cmd.alias.length != 0 ? cmd.alias : '\u200b'),
 			inline: true
 		});
+		
 	}
 	
-	msg.channel.send(embed);
+	embed.setFooter(`${page}/${maxPages}`)
+
+	msg.channel.send(embed)
+		.then(newMessage => {
+
+			const filter = (reaction, user) => {
+				if(user.id != msg.author.id)
+					return false;
+				
+				const index = client.s.LR_EMOJIS.indexOf(reaction.emoji.name);
+
+				if(index != -1){
+					newMessage.delete();
+					sendSpecificHelpCommand(client, msg, discord, category, page + (2*index)-1);
+				}
+			}
+
+			newMessage.awaitReactions(filter, {time: 30000})
+				.then(_ => {
+					if(!newMessage.deleted)
+						newMessage.delete();
+				})
+				
+				if(page > 1)
+					newMessage.react(client.s.LR_EMOJIS[0]);
+				if(page < maxPages)
+					newMessage.react(client.s.LR_EMOJIS[1]);
+
+		})
 	
 	return true;
 }
@@ -92,17 +134,19 @@ function sendSpecificHelpCommand(msg, client, disc, category, cmds){
 module.exports = {
 	name : "Help",
 	alias : ["h", "cmds", "commands"],
-	use: "-help [category]",
+	use: "-help"
+		+ "-help [category]",
 	description : "Displays all available commands",
 	options: {ShowInHelp: true, Category: "Utils"},
 	run : function(client, msg, args, discord){
 		try{
-			const cmds = client.commands.array();
+
+			msg.delete();
 			
-			if(sendSpecificHelpCommand(msg, client, discord, args[0], cmds)) 
+			if(sendSpecificHelpCommand(client, msg, discord, args[0], 1))
 				return;
 			
-			sendDefaultHelpCommand(msg, client, discord, cmds);
+			sendDefaultHelpCommand(client, msg, discord);
 
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);

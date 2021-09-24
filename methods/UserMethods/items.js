@@ -30,7 +30,7 @@ module.exports = {
         }
 
         if(hasChanged){
-            client.con.query(`UPDATE users SET inventory = '${JSON.stringify(inventory)}' WHERE id ='${user_id}'`);
+            client.con.query(`UPDATE users SET inventory = '${JSON.stringify(inventory)}' WHERE id = '${user_id}'`);
         }
         
     },
@@ -57,7 +57,7 @@ module.exports = {
         }
 
         if(hasChanged){
-            client.con.query(`UPDATE users SET inventory = '${JSON.stringify(inventory)}' WHERE id ='${user_id}'`);
+            client.con.query(`UPDATE users SET inventory = '${JSON.stringify(inventory)}' WHERE id = '${user_id}'`);
         }
         
     },
