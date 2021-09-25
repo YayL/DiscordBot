@@ -19,13 +19,13 @@ module.exports = {
                         client.con.query(`UPDATE users SET rebirths = '${rows[0].rebirths + Number(!suicide)}' WHERE id = '${user_id}'`);
                     });
                     client.con.query(`DELETE FROM market WHERE userid = '${user_id}'`);
-
+                    return;
                 })
             } else {
-                client.con.query(`SELECT * FROM users WHERE id = '${user_id}'`, async(e, { rows }) => {
+                client.con.query(`SELECT * FROM users WHERE id = '${user_id}'`, (e, { rows }) => {
                     if (rows[0].gang != null)
                         client.data.gang.disbandGang(client, rows[0].gang)
-                    await client.con.query(`DELETE FROM users WHERE id = '${user_id}'`);
+                    client.con.query(`DELETE FROM users WHERE id = '${user_id}'`);
                 })
 
             }

