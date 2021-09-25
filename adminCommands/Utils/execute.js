@@ -13,14 +13,14 @@ module.exports = {
 				return client.eventEm.emit('InvalidArgs', msg, this.use);
 
 			msg.member = client.utils.getMember(args[1], msg);
-            msg.author = msg.mentions.users.array()[0];
-            msg.content = args.slice(1).join(" ");
+            		msg.author = msg.mentions.users.array()[0];
+            		msg.content = args.slice(1).join(" ");
 			msg.mentions.users.delete(msg.mentions.users.array()[0].id);
 
-            commandHandler.handleCommand(msg, client, discord);
-            
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
-    }
+            		commandHandler.handleCommand(msg, client, discord);
+
+        	}catch(e){
+            		client.eventEm.emit('CommandError', msg, this.name, args, e);
+        	}
+    	}
 }

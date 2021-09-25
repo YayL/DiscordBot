@@ -1,5 +1,3 @@
-const bal = require("../dataMethods/bal");
-
 async function setBalance(user_id, amount, client) {
     try {
         if (amount > client.s.MAX_MONEY)
