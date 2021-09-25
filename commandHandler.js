@@ -13,7 +13,8 @@ function notCommandChannel(client, msg){
 		return false;
 	}
 
-	msg.delete();
+	if(!msg.deleted)
+		msg.delete();
 
 	return !(client.adminList.includes(msg.author.id) && client.s.ADMIN_COMMANDS);
 }
@@ -44,8 +45,10 @@ module.exports = {
 
         if(msg.content.startsWith(prefix)){
 
-			if(notCommandChannel(client, msg))
+			if(notCommandChannel(client, msg)){
 				return;
+			}
+
 
 			var tempMessage = msg.content.slice(prefix.length); // Remove prefix from string
 			var args = tempMessage.split(" ").filter(arg => arg !== '');

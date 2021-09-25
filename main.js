@@ -2,10 +2,7 @@
 // Next Version: Gang Expension and Item Update 0.9
 
 /* Changes for next Commit:
-    Fixed an issue with propositions being stored to the database
-    Changed it so that the required amount of positives votes rise depending on the negative votes and is removed if there are too many negative votes
-    Changed it so you can go below a balance of 0
-    Added gang tokens which are given upon 
+    
 
 
 
