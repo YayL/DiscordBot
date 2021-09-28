@@ -17,10 +17,10 @@ module.exports = {
             msg.content = args.slice(1).join(" ");
 			msg.mentions.users.delete(msg.mentions.users.array()[0].id);
 
-            commandHandler.handleCommand(msg, client, discord);
-            
-        }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
-        }
-    }
+            		commandHandler.handleCommand(msg, client, discord);
+
+        	}catch(e){
+            		client.eventEm.emit('CommandError', msg, this.name, args, e);
+        	}
+    	}
 }
