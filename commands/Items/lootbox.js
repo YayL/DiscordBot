@@ -42,10 +42,6 @@ module.exports = {
 			if(! await client._user.bal.enoughMoney(client, msg, cost)) 
 				return;
 
-			console.log(rebirths);
-			console.log(amount);
-			console.log(cost);
-
 			if(client.data.cooldown.isOnCooldown(client, msg.author.id, 'lootbox'))
 				return client.eventEm.emit('Timeout', msg, client.data.cooldown.getTimeLeft(client, msg.author.id, 'lootbox'));
 
