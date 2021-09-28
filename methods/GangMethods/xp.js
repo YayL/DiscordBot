@@ -1,11 +1,11 @@
 module.exports = {
 
-    addXP(client, msg, gang, experience){
+    addExp(client, msg, gang, experience){
         if(experience + Number(gang.xp) > client.s.MAX_XP)
-        experience = client.s.MAX_XP - Number(gang.xp)
+            experience = client.s.MAX_XP - Number(gang.xp)
 
         if(experience + Number(gang.xp) < 0)
-        experience = -Number(gang.xp)
+            experience = -Number(gang.xp)
 
         client.con.query(`UPDATE gangs SET xp = xp + ${experience} WHERE name = '${gang.name}'`);
 

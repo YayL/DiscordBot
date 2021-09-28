@@ -10,17 +10,18 @@ module.exports = {
 
             if(args[0] == "me")
             {
-                level = await client.data.jobs.xpToLevel(await client._user.get(client, msg.member.id, 'job_xp'), true);
-                return client.msg.reply(msg, `${msg.member.displayName}'s Level:`, `Level: **${level}**`, disc);
+                level = await client.data.jobs.expToLevel((await client._user.get(client, msg.author.id)).experience, true);
+                return client.msg.reply(msg, `${msg.member.displayName}'s Level:`, `Level: **${level}**`, discord);
             }
             else
             {
                 client.utils.getMember(args[0], msg)
                     .then(async (member) => {
-                        if(member == null) return;
+                        if(member == null) 
+                            return;
 
-                        level = await client.data.jobs.xpToLevel(await client._user.get(client, member.id, 'job_xp'), true);
-                        return client.msg.reply(msg, `${member.displayName}'s Level:`, `Level: **${level}**`, disc);
+                        level = await client.data.jobs.expToLevel((await client._user.get(client, member.id)).experience, true);
+                        return client.msg.reply(msg, `${member.displayName}'s Level:`, `Level: **${level}**`, discord);
                     });
             }
         }catch(e){

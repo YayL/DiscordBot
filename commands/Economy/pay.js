@@ -18,6 +18,9 @@ module.exports = {
       		if(amount == "all") 
 				amount = await client._user.bal.getBalance(client, msg.member.id);
 
+			if(amount < 1)
+                return client.eventEm.emit('tooSmallAmount', msg, 1)
+
 	        if(!await client._user.bal.enoughMoney(client, msg, amount)) 
 				return;
 

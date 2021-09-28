@@ -1,26 +1,27 @@
 module.exports = {
-    async setXP(client, msg, user_id, xp, set_work_timer=false, add=false){
+    async setExp(client, msg, user_id, experience, set_work_timer=false, add=false){
         try{
-            const job_xp = await client._user.get(client, user_id, 'job_xp');
+            const previous_experience = await client._user.get(client, user_id).experience;
 
             if(add) 
-                xp += Number(job_xp);
-            if(xp > client.s.MAX_XP) 
-                xp = client.s.MAX_XP;
-            if(xp < 0) 
-                xp = 0;
+                experience += Number(experience);
+            if(experience > client.s.MAX_XP) 
+                experience = client.s.MAX_XP;
+            if(experience < 0) 
+                experience = 0;
 
-            if(set_work_timer) client.data.cooldown.addUserToCooldown(client, msg.author.id, 'work');
+            if(set_work_timer) 
+                client.data.cooldown.addUserToCooldown(client, msg.author.id, 'work');
 
-            client.con.query(`UPDATE users SET job_xp = ${xp} WHERE id = '${user_id}'`);
+            client._user.set(client, user_id, 'experience', experience);
 
-            client.eventEm.emit('userLevelUP', msg.channel, user_id, xp, job_xp);
+            client.eventEm.emit('userLevelUP', msg.channel, user_id, experience, previous_experience);
         }catch(e){
             client.msg.log("ERR", e, client.guild);
         }
     },
 
-    addXP(client, msg, user_id, xp, set_work_timer=false){
-        this.setXP(client, msg, user_id, xp, set_work_timer, true);
+    addExp(client, msg, user_id, experience, set_work_timer=false){
+        this.setExp(client, msg, user_id, experience, set_work_timer, true);
     },
 }

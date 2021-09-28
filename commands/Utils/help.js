@@ -28,10 +28,11 @@ function sendDefaultHelpCommand(client, msg, discord){
 		if(user.id == msg.member.id){
 			let index = Object.values(categoryEmojiDict).indexOf(reaction.emoji.name);
 			if (index != -1){
-				reaction.message.reactions.removeAll()
-					.then(message => {
-						message.delete();
-					});
+				if(!reaction.message.deleted)
+					reaction.message.reactions.removeAll()
+						.then(message => {
+							message.delete();
+						});
 				sendSpecificHelpCommand(client, msg, discord, Object.keys(categoryEmojiDict)[index], 1);
 				return true;
 			}
@@ -110,7 +111,8 @@ function sendSpecificHelpCommand(client, msg, discord, category, page){
 				const index = client.s.LR_EMOJIS.indexOf(reaction.emoji.name);
 
 				if(index != -1){
-					newMessage.delete();
+					if(!newMessage.deleted)
+						newMessage.delete();
 					sendSpecificHelpCommand(client, msg, discord, category, page + (2*index)-1);
 				}
 			}
@@ -140,8 +142,6 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Utils"},
 	run : function(client, msg, args, discord){
 		try{
-
-			msg.delete();
 			
 			if(sendSpecificHelpCommand(client, msg, discord, args[0], 1))
 				return;

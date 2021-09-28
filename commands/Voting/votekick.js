@@ -15,7 +15,7 @@ module.exports = {
             const player = await client.utils.getMember(args[0], msg);
 
             if(player == null) 
-                return client.utils.clearChat(msg, 1, client.channelId.voting);
+                return !msg.deleted ? msg.delete : false
 
             var reason = args.slice(1).join(" ");
 

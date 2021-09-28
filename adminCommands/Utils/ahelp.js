@@ -139,8 +139,6 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "Utils"},
 	run : function(client, msg, args, discord){
 		try{
-
-			msg.delete();
 			
 			if(sendSpecificHelpCommand(client, msg, discord, args[0], 1))
 				return;

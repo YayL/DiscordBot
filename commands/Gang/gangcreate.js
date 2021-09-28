@@ -7,7 +7,7 @@ module.exports = {
     run: async function(client, msg, args, discord){
         try{
 
-            if(await client._user.get(client, msg.author.id, 'job_xp') < client.data.jobs.totalLvlXp(8, true)) 
+            if((await client._user.get(client, msg.author.id)).experience < client.data.jobs.totalLevelExp(client.s.MIN_CREATE_LEVEL, true)) 
                 return client.eventEm.emit('TooLowLevel', msg, null, 8);
 
             if(args.length == 0 || ! ( 3 <= args[0].length && args[0].length <= 30 )) 
@@ -18,7 +18,7 @@ module.exports = {
 
             const name = args[0];
 
-			if(!client.gang.permissions.isGang(client, name.toLowerCase())) 
+			if(!client.gang.permissions.isGang(client, name.toLowerCase()))
 				return client.eventEm.emit('UnavailableName', msg, name);
 
 			client.gang.management.createNewGang(client, name, msg.author.id)

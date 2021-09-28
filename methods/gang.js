@@ -57,3 +57,11 @@ exports.getAllGangs = function(client) {
         client.msg.log("ERR", e, client.guild);
     })
 }
+
+exports.set = async function(client, gang, column, value){
+    try{   
+        await client.con.query(`UPDATE gangs SET ${column} = ${typeof value === 'number' ? value : `'${typeof value === 'object' ? JSON.stringify(value) : value}'`} WHERE name = ${gang.name}`)
+    }catch(e){
+        client.msg.log('ERR', e)
+    }
+}

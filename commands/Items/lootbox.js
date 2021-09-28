@@ -17,7 +17,7 @@ module.exports = {
 		try{
 			
 			if(!client.channelId.lootboxChannels.includes(msg.channel.id))
-				return msg.delete();
+				return msg.deleted ? msg.delete() : false;
 
 			const tier = args.length >= 1 ? args[0].toLowerCase() : '';
 
@@ -27,8 +27,8 @@ module.exports = {
 			if(args.length < 2) 
 				return sendLootInfo(client, discord, msg, tier, costCalculate(tier), color_table[lookup_table.indexOf(tier)]);
 			
-			const rebirths = await client._user.get(client, msg.author.id, 'rebirths') + 1;
-			const amount = args.length >= 1 
+			const rebirths = (await client._user.get(client, msg.author.id)).rebirths + 1,
+			 	amount = args.length >= 1 
 				? ((args[1].toLowerCase() == 'max') 
 					? max_lootboxes(rebirths) 
 					: 0 < Number(args[1]) 
@@ -36,11 +36,15 @@ module.exports = {
 							? Number(args[1]) 
 							: max_lootboxes(rebirths)) 
 						: 1)
-				: 1;
-				
-			const cost = costCalculate(tier)*amount;
+				: 1,
+				cost = costCalculate(tier)*amount;
 
-			if(! await client._user.bal.enoughMoney(client, msg, cost)) return;
+			if(! await client._user.bal.enoughMoney(client, msg, cost)) 
+				return;
+
+			console.log(rebirths);
+			console.log(amount);
+			console.log(cost);
 
 			if(client.data.cooldown.isOnCooldown(client, msg.author.id, 'lootbox'))
 				return client.eventEm.emit('Timeout', msg, client.data.cooldown.getTimeLeft(client, msg.author.id, 'lootbox'));

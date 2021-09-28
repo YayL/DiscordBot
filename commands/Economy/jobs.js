@@ -10,13 +10,12 @@ module.exports = {
 	run : async function(client, msg, args, discord){
 		try{
 
-			msg.delete();
-
 			const user = await client._user.get(client, msg.member.id);
 
-            const currentJob = await client.jobList.get(user.job_name);
+            const currentJob = await client.jobList.get(user.job);
 
-            if(currentJob.requirement > client.data.jobs.xpToLevel(user.job_xp)) return client.eventEm.emit('TooLowLevel', msg, user)
+            if(currentJob.requirement > client.data.jobs.expToLevel(user.experience)) 
+				return client.eventEm.emit('TooLowLevel', msg, user)
 
             const availableJobs = currentJob.job_options
 
@@ -24,15 +23,18 @@ module.exports = {
 		        if(user.id != msg.member.id) return false
 		        	
 		        if(availableJobs.length == 0){
-		        	reaction.message.delete();
+					if(!reaction.message.deleted)
+		        		reaction.message.delete();
+
 					if(await client.data.market.getUserCount(client, user.id) > 0) 
 						return client.eventEm.emit('HasOpenListings', msg);
 		            client.eventEm.emit("rebirth", user, msg.channel); // Rebirth event
 
                 }else {
-                    for(i = 0; i<availableJobs.length;i++){
+                    for(i = 0; i < availableJobs.length; i++){
                         if(reaction.emoji.name == client.s.EMOJIS[i]){
-                            reaction.message.delete();
+							if(!reaction.message.deleted)
+                            	reaction.message.delete();
                             client.eventEm.emit('promotion', user, availableJobs[i]); // Promotion event
                         }
                     }

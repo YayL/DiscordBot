@@ -11,18 +11,21 @@ module.exports = {
 
             const gang = await client.gang.user.getGang(client, msg.author.id);
 
+            if (gang == null)
+                return client.eventEm.emit('notInAGang', msg);
+
+            console.log(gang);
+
             if (args.length == 0)
                 return showItems(client, msg, gang, args, discord);
 
             const item = await client.data.items.getItem(client, Number(args[1])),
                 amount = args.length <= 2 ? 1 : (Number(args[2]) > 0 ? Number(args[2]) : 1);
 
-            if (!await client.gang.user.inGang(client, msg.author.id, gang))
-                return client.eventEm.emit('notInAGang', msg);
-
             if (new RegExp(args[0].toLowerCase()).test('withdraw')) {
                 if (await withdrawItems(client, msg, args, gang, item, amount))
                     client.eventEm.emit('GangVaultWithdraw', msg, gang, item, amount);
+                    
             } else if (new RegExp(args[0].toLowerCase()).test('store')) {
 
                 let vaultCount = client.gang.vault.countVault(gang),
@@ -78,6 +81,7 @@ async function storeItems(client, msg, args, gang, item, amount) {
 
 async function showItems(client, msg, gang, args, discord) {
     try {
+
         const embed = new discord.MessageEmbed()
             .setTitle(`${gang.info.NAME}'s Vault`)
             .setColor('#4287f5');

@@ -1,3 +1,5 @@
+const { Message } = require("discord.js");
+
 module.exports = {
     name: "Blackjack",
     alias: ["bj"],
@@ -104,10 +106,13 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
             val = "s";// Stand
         //else if(reaction.emoji.name == client.s.EMOJIS[9]) val = "d" // Double
         else return
-        reaction.message.reactions.removeAll()
-            .then(message => {
-                message.delete();
-            });
+
+        if(!message.deleted)
+            reaction.message.reactions.removeAll()
+                .then(message => {
+                    message.delete();
+                });
+                
         blackjack(ref, client, discord, bet, player, cards, dealerHand, playerHand, val);
     }
 

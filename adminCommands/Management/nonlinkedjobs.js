@@ -36,7 +36,7 @@ module.exports = {
             var text = `***__Here is the list:__*** \n` + nonLinkedJobs.join('\n');
 
             client.msg.reply(msg, `Non Linked Up Jobs: ${found_jobs}`, text, disc);
-
+            
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }

@@ -30,7 +30,7 @@ async function handleListingMessage(msg, client, embed, marketTable, args){
                 });
             }
 
-            let seller = await client.utils.getMember(marketTable[index].userid, msg)
+            let seller = await client.utils.getMember(marketTable[index].user_id, msg)
 
             embed.addFields({
                 name: `${client.s.EMOJIS[loopLength]} : (${item.tier}) ${client.utils.fixNumber(marketTable[index].amount)} ${item.name}`,
@@ -70,7 +70,7 @@ function listingsReactions(msg, commandExecutor_id, client, marketTable, startIn
                 return false;
             }
 
-            if(user.id == marketTable[index].userid){
+            if(user.id == marketTable[index].user_id){
                 client.eventEm.emit('ownerBuyer', msg);
                 return false;
             }
@@ -110,8 +110,8 @@ module.exports = {
             if(msg.mentions.users.array().length == 1)
             {
                 const user_id = msg.mentions.users.array()[0].id;
-                sql = `SELECT * FROM market WHERE userid = '${user_id}' ORDER BY price DESC`;
-                title = `${(await client.utils.getMember(user_id, msg)).displayName}'s Market Listings`
+                sql = `SELECT * FROM market WHERE user_id = '${user_id}' ORDER BY price DESC`;
+                title = `${(await client.utils.getMember(msg.mentions.users.array()[0].id, msg)).displayName}'s Market Listings`
             }
             else if(!Number.isNaN(Number(args[0])))
             {

@@ -7,7 +7,7 @@ module.exports = {
     run: async function(client, msg, args, discord){
         try{
             
-            client.con.query(`SELECT * FROM market WHERE userid = '${msg.author.id}'`, (e, {rows}) => {
+            client.con.query(`SELECT * FROM market WHERE user_id = '${msg.author.id}'`, (e, {rows}) => {
                 sendMessage(client, msg, discord, rows);
             })
 

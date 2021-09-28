@@ -7,8 +7,6 @@ module.exports = {
 	run: async function(client, msg, args, discord){
 		try{
 
-            msg.delete();
-
             const gang = await client.gang.user.getGang(client, msg.author.id);
 
 			if(! await client.gang.user.inGang(client, msg.author.id, gang)) 

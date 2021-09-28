@@ -52,10 +52,11 @@ async function highlow(client, msg, discord, bet){
             correct = true;
         }
 
-        if(correct) reaction.message.reactions.removeAll()
-            .then(message => {
-                message.delete();
-            });
+        if(correct && !reaction.message.deleted) 
+            reaction.message.reactions.removeAll()
+                .then(message => {
+                    message.delete();
+                });
     }
     
     embed.setTitle(`${msg.member.displayName}'s high-low game`)

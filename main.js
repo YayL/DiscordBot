@@ -4,8 +4,6 @@
 /* Changes for next Commit:
     
 
-
-
 	KNOWN BUGS:
 	
 	
@@ -85,13 +83,14 @@ client.botCount = botConfig.botCount; // Amount of bots in the server, TODO: Get
 
 client.allowCommands = true;
 
-client.cachedMoneyLB = {}; // Cached Money ranked Leaderboard
-client.cachedLevelLB = {}; // Cached Level ranked Leaderboard
-client.cachedRebirthLB = {}; // Cached rebirth ranked Leaderboard
-client.cachedGangLB = {}; // Cached gang ranked Leaderboard
+client.cachedMoneyLB = []; // Cached Money ranked Leaderboard
+client.cachedLevelLB = []; // Cached Level ranked Leaderboard
+client.cachedRebirthLB = []; // Cached rebirth ranked Leaderboard
+client.cachedGangLB = []; // Cached gang ranked Leaderboard
 client.totalMoney = 0; // Total capital of the whole server
 
 client.userCache = {}; // A cache of all user data
+client.gangCache = {};
 
 client.startUpTime = 0; // Time off the bot start
 

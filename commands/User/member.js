@@ -6,8 +6,6 @@ module.exports = {
 	options: {ShowInHelp: true, Category: "User"},
 	run : function(client, msg, args, discord){
 		try{
-			msg.delete();
-			
 			msg.guild.roles.fetch(client.roleId.member) // Get member rank using its role id
 				.then(role => {
 					msg.member.roles.add(role);

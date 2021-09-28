@@ -9,16 +9,10 @@ module.exports = {
 	run: async function(client, msg, args, discord){
 		try{
 
-			msg.delete();
-			
 			const inventory = await client._user.items.getInventory(client, msg.author.id),
-				inventoryLength = Object.values(inventory).length;
-			
-			let maxPages = Math.ceil(inventoryLength/max_items_per_page);
-			let page = (Number.isNaN(Number(args[0])) ? 1 : (Number(args[0]) > maxPages ? maxPages : (Number(args[0]) < 1 ? 1 : Number(args[0]))));
-
-            if(maxPages == 0) 
-                maxPages = 1;
+				inventoryLength = Object.values(inventory).length,
+				maxPages = Math.ceil(inventoryLength/max_items_per_page) < 1 ? 1 : Math.ceil(inventoryLength/max_items_per_page),
+				page = (Number.isNaN(Number(args[0])) ? 1 : (Number(args[0]) > maxPages ? maxPages : (Number(args[0]) < 1 ? 1 : Number(args[0]))));
 
             sendMessage(client, msg, discord, inventory, inventoryLength, maxPages, page);
 
@@ -40,7 +34,7 @@ async function sendMessage(client, msg, discord, inventory, inventoryLength, max
 
         item = await client.data.items.getItem(client, Object.keys(inventory)[slot-1]);
 
-        value_of_inv += (isNaN(Number(item.value)) ? 0 : item.value*inventory[item.id].count); // Checks if a value is limited or not
+        value_of_inv += (isNaN(Number(item.	value)) ? 0 : item.value*inventory[item.id].count); // Checks if a value is limited or not
 
 		text += `*(ID:${item.id})* ***${item.name}*** x${inventory[item.id].count} | **__${item.tier.charAt(0).toUpperCase() + item.tier.slice(1)}__**\n`;
 
@@ -63,7 +57,8 @@ async function sendMessage(client, msg, discord, inventory, inventoryLength, max
 
 				if(index != -1){
 					sendMessage(client, msg, discord, inventory, inventoryLength, maxPages, page + (index*2)-1);
-					m.delete();
+					if(!m.deleted)
+						m.delete();
 				}
 			}
 			

@@ -33,7 +33,7 @@ function checkIfAlias(cmdName, cmds){
 
 module.exports = {
 	handleCommand: (msg, client, Discord) => {
-
+		
 		let commands = client.commands
 
 		if(client.adminList.includes(msg.author.id) && client.s.ADMIN_COMMANDS){
@@ -50,8 +50,8 @@ module.exports = {
 			}
 
 
-			var tempMessage = msg.content.slice(prefix.length); // Remove prefix from string
-			var args = tempMessage.split(" ").filter(arg => arg !== '');
+			let tempMessage = msg.content.slice(prefix.length); // Remove prefix from string
+			let args = tempMessage.split(" ").filter(arg => arg !== '');
 
 			if(args[0] == undefined) return client.eventEm.emit('CommandNotSpecified', msg);
 

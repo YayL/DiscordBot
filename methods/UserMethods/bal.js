@@ -1,4 +1,4 @@
-async function setBalance(user_id, amount, client) {
+async function setBalance(client, user_id, amount) {
     try {
         if (amount > client.s.MAX_MONEY)
             amount = client.s.MAX_MONEY;
@@ -6,14 +6,15 @@ async function setBalance(user_id, amount, client) {
         if (amount < -client.s.MAX_MONEY)
             amount = -client.s.MAX_MONEY;
 
-        client.con.query(`UPDATE users SET bal = ${amount} WHERE id = '${user_id}'`);
+        client._user.set(client, user_id, 'bank', amount);
+
     } catch (e) {
         client.msg.log("ERR", e, client.guild);
     }
 }
 
 module.exports = {
-    addBalance(client, user_id, amount, set = false) {
+    async addBalance(client, user_id, amount, set = false) {
         try {
             if (user_id == undefined)
                 return;
@@ -23,25 +24,15 @@ module.exports = {
             if (!amount) // An issue might arries. Add && amount != 0 if so
                 return;
 
-            if (!set) {
-                if (amount == 0)
-                    return;
-                this.getBalance(client, user_id)
-                    .then(a => {
-                        setBalance(user_id, Number(a) + amount, client);
-                    });
-            } else {
-                setBalance(user_id, amount, client);
-            }
+            setBalance(client, user_id, Number(!set) * Number(await client._user.bal.getBalance(client, user_id)) + Number(amount))
+
         } catch (e) {
             client.msg.log("ERR", e, client.guild);
         }
     },
 
     async getBalance(client, user_id) {
-        return new Promise(async(resolve) => {
-            resolve((await client._user.get(client, user_id)).bal);
-        });
+            return (await client._user.get(client, user_id)).bank
     },
 
     async enoughMoney(client, msg, amount) {

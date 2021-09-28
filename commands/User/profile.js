@@ -6,7 +6,6 @@
     options: {ShowInHelp: true, Category: "User"},
     run: async function(client, msg, args, discord){
         try{
-            await client.data.bal.updateTotalMoney(client);
 
             const plr = args[0] == "me" || args.length == 0 ? msg.member : await client.utils.getMember(args[0], msg).then(plr => {return plr})
 
@@ -14,21 +13,20 @@
 
             let user = await client._user.get(client, plr.id);
 
-            const bal = Number(user.bal),
-                job_name = user.job_name,
+            const bank_balance = Number(user.bank),
+                job = user.job,
                 gang_name = user.gang != null ? user.gang.charAt(0).toUpperCase() + user.gang.slice(1) : 'Not in a gang',
-                job_xp = Number(user.job_xp),
-                job_lvl = client.data.jobs.xpToLevel(job_xp, true),
-                requiredXp_ToNextLvl = client.data.jobs.nextLvlXp(job_lvl);
+                experience = Number(user.experience),
+                level = client.data.jobs.expToLevel(experience, true),
+                requiredXp_ToNextLvl = client.data.jobs.nextLevelExp(level);
 
             profileInfo = `----------
-                 Bank Balance: **$${client.utils.fixNumber(bal, true)}**
-                 Percentage of Market Capital: **${Math.floor((bal/client.totalMoney)*1000000)/10000}% **
-                 Job Title: **${job_name}**
+                 Bank Balance: **$${client.utils.fixNumber(bank_balance, true)}**
+                 Job Title: **${job}**
                  Gang: **__${gang_name}__**
-                 Level: **${job_lvl >= client.s.MAX_LEVEL ? 'Max' : job_lvl}**
-                 Current XP: **${client.utils.fixNumber(job_xp-client.data.jobs.totalLvlXp(job_lvl))}/`
-                 + `${job_lvl >= client.s.MAX_LEVEL ? "Max" : client.utils.fixNumber(requiredXp_ToNextLvl)}**
+                 Level: **${level >= client.s.MAX_LEVEL ? 'Max' : level}**
+                 Current XP: **${client.utils.fixNumber(experience-client.data.jobs.totalLevelExp(level))}/`
+                 + `${level >= client.s.MAX_LEVEL ? "Max" : client.utils.fixNumber(requiredXp_ToNextLvl)}**
                  Rebirths: **${user.rebirths}**`;
 
             client.msg.reply(msg, `${plr.displayName}'s Profile:`, profileInfo, discord);

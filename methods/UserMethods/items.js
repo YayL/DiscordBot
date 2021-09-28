@@ -1,6 +1,6 @@
 module.exports = {
     async getInventory(client, user_id){
-        var inventory = await client._user.get(client, user_id, 'inventory');
+        var inventory = (await client._user.get(client, user_id)).inventory;
 
         // Check if inventory is able to be parsed
         if(`${inventory}`.toLowerCase() == 'null') inventory = {};
@@ -29,9 +29,9 @@ module.exports = {
             }
         }
 
-        if(hasChanged){
-            client.con.query(`UPDATE users SET inventory = '${JSON.stringify(inventory)}' WHERE id = '${user_id}'`);
-        }
+        if(hasChanged)
+            client._user.set(client, user_id, 'inventory', inventory);
+        
         
     },
 
@@ -56,9 +56,8 @@ module.exports = {
             
         }
 
-        if(hasChanged){
-            client.con.query(`UPDATE users SET inventory = '${JSON.stringify(inventory)}' WHERE id = '${user_id}'`);
-        }
+        if(hasChanged)
+            client._user.set(client, user_id, 'inventory', inventory);
         
     },
 

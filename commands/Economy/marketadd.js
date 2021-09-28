@@ -6,7 +6,7 @@ module.exports = {
     options: {ShowInHelp: true, Category: "Economy"},
     run: async function(client, msg, args, discord){
         try{
-
+            
             const item_id = args[0], 
                 amount = args[1] == "all" ? -1 : client.utils.suffixCheck(args[1]), 
                 inventory = await client._user.items.getInventory(client, msg.author.id),
@@ -30,6 +30,9 @@ module.exports = {
             
             const item = client.data.items.getItem(client,item_id),
                 price = client.utils.suffixCheck(args[2]);
+            
+            if(price < 1)
+                client.eventEm.emit('tooSmallAmount', msg, 1)
 
             client.data.market.add(client, msg.author.id, item_id, amount, item.tier.toLowerCase(), Math.ceil(Date.now()/1000)+deadline, price, userListingCount);
             client._user.items.delItems(client, msg.author.id, [{id: item_id, count: amount}]);

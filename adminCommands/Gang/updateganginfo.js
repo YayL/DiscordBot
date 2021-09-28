@@ -52,7 +52,7 @@ module.exports = {
                 client.con.query(`UPDATE gangs SET info = '${JSON.stringify(info)}'`);
             }
 
-
+            client.eventEm.emit('processFinished', msg);
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }

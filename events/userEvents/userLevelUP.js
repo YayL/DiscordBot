@@ -1,6 +1,6 @@
 module.exports = async (client, discord, channel, user_id, xp_amount, previous_xp) => {
 
-    const lvl = await client.data.jobs.xpToLevel(xp_amount),
+    const lvl = await client.data.jobs.expToLevel(xp_amount),
         user = await client.utils.getMember(user_id, channel),
         embed = new discord.MessageEmbed()
         .setTitle('Level UP!')
@@ -8,7 +8,7 @@ module.exports = async (client, discord, channel, user_id, xp_amount, previous_x
         .setColor('#dde026')
         .setFooter('Keep going! You are doing great!');
 
-    if(lvl <= await client.data.jobs.xpToLevel(previous_xp))
+    if(lvl <= await client.data.jobs.expToLevel(previous_xp))
         return;
 
     channel.send(embed);

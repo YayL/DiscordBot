@@ -18,14 +18,14 @@ function printLeaderboard(client, discord, msg, fields, footer){
 
 
 module.exports = {
-	name: "Leaderboard",    
+	name: "Leaderboard",
 	alias: ["lb"],
 	use: `-Leaderboard Money
           -Leaderboard Levels
           -Leaderboard Rebirths
           -Leaderboard Gangs`,
 	description: "See the server leaderboard",
-	options: {ShowInHelp: true, Category: "Economy"},   
+	options: {ShowInHelp: true, Category: "Economy"},
 	run: async function(client, msg, args, discord){
         try{
             let fields = [], footer, index = 1;
@@ -33,11 +33,16 @@ module.exports = {
             // ------------------------ Money Leaderboard ------------------------
 
             if(args.length < 1 || new RegExp(args[0].toLowerCase()).test("money")){
-                for(val of client.cachedMoneyLB){ 
+                await client.data.bal.updateTotalMoney(client);
+                
+                if(client.cachedMoneyLB.length === 0)
+                    return;
+
+                for(let val of client.cachedMoneyLB){ 
                     fields.push(
                         {
                             name: `**${index}. ${await name(client, val.id, msg)}**`,
-                            value: `**$${client.utils.fixNumber(val.bal, true)} (${Math.round(val.bal*1e6/client.totalMoney)/1e4}%)**`
+                            value: `**$${client.utils.fixNumber(val.bank, true)} (${Math.round(val.bank*1e6/client.totalMoney)/1e4}%)**`
                         });
                     index += 1;
                 }
@@ -47,11 +52,15 @@ module.exports = {
             // ------------------------ Levels Leaderboard ------------------------
 
             }else if(new RegExp(args[0].toLowerCase()).test("levels")){
-                for(val of client.cachedLevelLB){
+
+                if(client.cachedLevelLB.length === 0)
+                    return;
+
+                for(let val of client.cachedLevelLB){
                     fields.push(
                         {
                             name: `**${index}. ${await name(client, val.id, msg)}**`,
-                            value: `**Level: ${client.data.jobs.xpToLevel(val.job_xp)} (${client.utils.fixNumber(val.job_xp, true)} xp)**`
+                            value: `**Level: ${client.data.jobs.expToLevel(val.experience)} (${client.utils.fixNumber(val.experience, true)} xp)**`
                         });
                     index += 1;
                 }
@@ -62,7 +71,11 @@ module.exports = {
             // ------------------------ Rebirth Leaderboard ------------------------
 
             }else if(new RegExp(args[0].toLowerCase()).test("rebirths")){
-                for(val of client.cachedRebirthLB){
+
+                if(client.cachedRebirthLB.length === 0)
+                    return;
+
+                for(let val of client.cachedRebirthLB){
                     fields.push(
                         {
                             name: `**${index}. ${await name(client, val.id, msg)}**`,
@@ -76,11 +89,15 @@ module.exports = {
             // ------------------------ Gang Leaderboard ------------------------
 
             }else if(new RegExp(args[0].toLowerCase()).test("gangs")){
-                for(val of client.cachedGangLB){
+
+                if(client.cachedGangLB.length === 0)
+                    return;
+                
+                for(let val of client.cachedGangLB){
                     fields.push(
                         {
                             name: `**${index}. ${val.info.NAME}**`,
-                            value: `**Level: ${client.utils.fixNumber(client.data.jobs.xpToLevel(val.xp))} (${client.utils.fixNumber(val.xp, true)} xp)**
+                            value: `**Level: ${client.utils.fixNumber(client.data.jobs.expToLevel(val.experience))} (${client.utils.fixNumber(val.experience, true)} xp)**
                             **Bank Balance: $${client.utils.fixNumber(val.bank, true)}**`
                         });
                     index += 1;

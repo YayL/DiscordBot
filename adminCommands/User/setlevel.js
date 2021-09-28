@@ -7,19 +7,18 @@ module.exports = {
     run: function(client, msg, args, discord){
         try{
             let level = client.utils.suffixCheck(args[1], true);
-            if(!level || 0 > level > 56) return;
+            if(!level || 0 > level > 56) 
+                return;
             
-            const xp = client.data.jobs.totalLvlXp(level, true);
+            const xp = client.data.jobs.totalLevelExp(level, true);
 
             if(args[0] == "me"){
-                return client._user.xp.setXP(client, msg, msg.member.id, xp);
+                return client._user.xp.setExp(client, msg, msg.author.id, xp);
             }
 
-            client.utils.getMember(args[0], msg)
-                .then(member => {
-                    if(member != null) 
-                        client._user.xp.setXP(client, msg, member.id, xp);
-                });
+           let user = msg.mentions.users.array()[0]
+            if(user != null) 
+                client._user.xp.setExp(client, msg, user.id, xp);
             
             
         }catch(e){

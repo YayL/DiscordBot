@@ -11,11 +11,11 @@ module.exports = {
             if(args[0] == "me")
                 return client._user.bal.addBalance(client, msg.author.id, args[1]);
 
-            client.utils.getMember(args[0], msg)
-                .then(member => {
-                    if(member != null) 
-                        return client._user.bal.addBalance(client, member.id, args[1]);
-                });
+            const user = msg.mentions.users.array()[0];
+            if(user != undefined) 
+                return client._user.bal.addBalance(client, user.id, args[1]);
+            
+            client.eventEm.emit('processFinished', msg);
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }

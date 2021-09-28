@@ -1,6 +1,7 @@
 module.exports = async (client, disc, channel, user, achivement, achivements = false) => {
 	try{
-		if(achivement == undefined) return;
+		if(achivement == undefined) 
+			return;
 
 		achivements = !achivements ? (await client._user.get(client, user.id)).achivements : achivements
 

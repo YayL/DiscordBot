@@ -5,58 +5,67 @@ module.exports = {
 
     async resetUser(client, user_id, rebirth = false, suicide = false) {
         try {
+
+            let user = await client._user.get(client, user_id);
+
             if (rebirth || suicide) {
-                client.con.query(`SELECT * FROM users WHERE id = '${user_id}'`, (e, { rows }) => {
-                    client.con.query(`DELETE FROM users WHERE id = '${user_id}'`, async(e, _) => {
-                        await addUserToDatabase(client, user_id, rows[0].key);
+                client.con.query(`DELETE FROM users WHERE id = '${user_id}'`, async(e, _) => {
+                    await addUserToDatabase(client, user_id, user.key);
 
-                        if (rows[0].gang != null)
-                            client.con.query(`UPDATE users SET gang = '${rows[0].gang}' WHERE id = '${user_id}'`);
+                    if (user.gang != null){
+                        this.set(client, user_id, 'gang', user.gang);
+                    }
 
-                        if (rows[0].achivements != null)
-                            client.con.query(`UPDATE users SET achivements = '${JSON.stringify(rows[0].achivements)}' WHERE id = '${user_id}'`);
+                    if (user.achivements != null){
+                        this.set(client, user_id, 'achivements', user.achivements);
+                    }
+                        
+                    this.set(client, user_id, 'rebirths', user.rebirths + Number(rebirth));
+                });
+                client.con.query(`DELETE FROM market WHERE userid = '${user_id}'`);
+                return;
 
-                        client.con.query(`UPDATE users SET rebirths = '${rows[0].rebirths + Number(!suicide)}' WHERE id = '${user_id}'`);
-                    });
-                    client.con.query(`DELETE FROM market WHERE userid = '${user_id}'`);
-                    return;
-                })
             } else {
-                client.con.query(`SELECT * FROM users WHERE id = '${user_id}'`, (e, { rows }) => {
-                    if (rows[0].gang != null)
-                        client.data.gang.disbandGang(client, rows[0].gang)
-                    client.con.query(`DELETE FROM users WHERE id = '${user_id}'`);
-                })
+                if (user.gang != null)
+                    client.gang.management.disbandGang(client, user.gang)
 
+                client.con.query(`DELETE FROM users WHERE id = '${user_id}'`);
+                delete client.userCache[user_id];
             }
         } catch (e) {
             client.msg.log("ERR", e, client.guild);
         }
-
     },
 
 
-    get(client, user_id, info = '*') {
+    get(client, user_id) {
+
+        if(Number.isNaN(Number(user_id)))
+            return null;
+
+        if(Object.keys(client.userCache).includes(user_id)){
+            return client.userCache[user_id]; 
+        }
+        
         return new Promise(resolve => {
-            client.con.query(`SELECT ${info} FROM users WHERE id = '${user_id}'`, async(e, { rows }) => {
+            client.con.query(`SELECT * FROM users WHERE id = '${user_id}'`, async(e, result) => {
                 try {
-                    if ((info == '*' || info == 'achivements' || info == 'inventory') && rows.length == 0) {
+                    if (result.rowCount === 0) {
                         await addUserToDatabase(client, user_id);
-                        return resolve(await client._user.get(client, user_id, info));
+                        return resolve(await client._user.get(client, user_id));
                     }
+                    else{
+                        client.userCache[user_id] = result.rows[0];
+                    }
+
                     if (e) {
                         client.msg.log("ERR", e, client.guild);
                         return resolve(null);
                     }
+                    
+                    client.userCache[user_id] = result.rows[0];
 
-                    if (info === "*")
-                        resolve(rows[0]);
-                    else {
-                        if (rows[0] == undefined) {
-                            return resolve(null);
-                        }
-                        return resolve(rows[0][info]);
-                    }
+                    resolve(result.rows[0]);
                 } catch (e) {
                     client.msg.log("ERR", e, client.guild);
                 }
@@ -65,6 +74,24 @@ module.exports = {
         }).catch(e => {
             client.msg.log("ERR", e, client.guild);
         })
+    },
+
+    async set(client, user_id, column, value){
+        try{
+
+            if(Number.isNaN(Number(user_id)))
+                return null;
+
+            if(Object.keys(client.userCache).includes(user_id)){
+                await client.con.query(`UPDATE users SET ${column.toLowerCase()} = ${typeof value === 'number' ? value : `'${typeof value === 'object' ? JSON.stringify(value) : value}'`} WHERE id = '${user_id}'`);
+                client.userCache[user_id][column] = value;
+            }else{
+                await addUserToDatabase(client, user_id);
+                client._user.set(client, user_id, column, value);
+            }
+        }catch(e){
+            client.msg.log('ERR', e);
+        }
     },
 
     calculateMultiplier(client, user_roles, multiplier = 0) {
@@ -79,12 +106,9 @@ module.exports = {
 
 function addUserToDatabase(client, user_id, key = false) {
     return new Promise(resolve => {
-                client.con.query(`SELECT * FROM users WHERE id = '${user_id}'`, (e, { rows }) => {
-                            if (rows.length == 0) {
-                                client.con.query(`INSERT INTO users (${!key ? '' : 'key,'}id) VALUES (${!key ? '' : `${key},`}'${user_id}')`, (e, {rows}) => {
-                    resolve();
-                })
-            }
+        client.con.query(`INSERT INTO users (${!key ? '' : 'key,'}id) VALUES (${!key ? '' : `${Number(key)},`}'${user_id}')`, async (e, _) => {
+            client.userCache[user_id] = await client._user.get(client, user_id);
+            resolve();
         });
-    });
+    }); 
 }

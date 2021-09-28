@@ -6,7 +6,6 @@ module.exports = {
     options: {ShowInHelp: false, Category: 'Management'},
     run : function(client, msg, args, discord){
         try{
-            msg.delete();
             client.s.LOG_ERRORS_TO_DISCORD = (client.s.LOG_ERRORS_TO_DISCORD ? false : true);
             client.eventEm.emit('ErrorToggle', msg);
         }catch(e){

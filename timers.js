@@ -17,13 +17,5 @@ module.exports = {
         }catch(e){
             client.msg.log('ERR', e, client.guild);
         }
-    }, client.s.MARKET_CLEANING_TIMER),
-
-    database: (client) => setInterval(() => {
-        try{
-            client.data.cleanDatabase(client);
-        }catch(e){
-            client.msg.log('ERR', e, client.guild);
-        }
-    }, client.s.DATABASE_CLEANING_TIMER)
+    }, client.s.MARKET_CLEANING_TIMER)
 }

@@ -17,9 +17,17 @@ module.exports = (client, disc) => {
     client.itemAmount = client.data.items.countItems(client);
     client.msg.log("INFO", `Items: ${client.itemAmount}`);
 
-    client.totalMoney = client.data.bal.updateTotalMoney(client);
-    client.eventEm.emit('updateLB');
-    client.eventEm.emit('updateLB', 'lvl');
+    client.con.query(`SELECT * FROM users`, (e, result) => {
+        for(let val of result.rows){
+            client.userCache[val.id] = val;
+        }
+        client.msg.log('INFO', 'userCache has been loaded')
+
+        client.totalMoney = client.data.bal.updateTotalMoney(client);
+        client.eventEm.emit('updateLB');
+
+        client.msg.log("INFO", 'Yeah, yeah! I am up...');
+    })
     
-    client.msg.log("INFO", 'Yeah, yeah! I am up...');
+    
 }

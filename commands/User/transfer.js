@@ -33,13 +33,13 @@ module.exports = {
             amount -= amount%moneyRate;
 
             if(amount == 0) 
-                return client.msg.reply(msg, `Too small amount!`, `The amount specified requires to be above $${client.utils.fixNumber(moneyRate)}`, discord);
+                return client.eventEm.emit('tooSmallAmount', msg, moneyRate);
 
             client.msg.reply(msg, `You converted $${client.utils.fixNumber(amount, true)} to xp`, `$${client.utils.fixNumber(amount, true)}`
              + ` is equal to ${client.utils.fixNumber(amount/moneyRate, true)}xp`, discord);
 
             client._user.bal.addBalance(client, msg.member.id, -1*amount);
-            client._user.xp.addXP(client, msg, msg.member.id, amount/moneyRate);
+            client._user.xp.addExp(client, msg, msg.member.id, amount/moneyRate);
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }

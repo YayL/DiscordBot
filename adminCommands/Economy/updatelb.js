@@ -7,6 +7,7 @@ module.exports = {
     run: function(client, msg, args, discord){
         try{
             client.eventEm.emit('updateLB');
+            client.eventEm.emit('processFinished', msg);
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }

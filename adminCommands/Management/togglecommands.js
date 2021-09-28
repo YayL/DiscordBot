@@ -6,7 +6,6 @@ module.exports = {
     options: {ShowInHelp: false, Category: 'Management'},
     run : function(client, msg, args, discord){
         try{
-            msg.delete();
             client.allowCommands = (client.allowCommands ? false : true);
             client.eventEm.emit('CommandsToggle', msg);
         }catch(e){

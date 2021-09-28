@@ -17,7 +17,6 @@ module.exports = {
 	run : function(client, msg, args, discord){
 		try{
 			client.allowCommands = false;
-			msg.delete();
 			beforeExit(msg, client);
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
