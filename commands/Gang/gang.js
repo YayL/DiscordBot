@@ -12,7 +12,7 @@ module.exports = {
 			const gang = await client.gang.user.getGang(client, msg.author.id),
 				info = gang.info,
 				embed = new discord.MessageEmbed(),
-				level = client.data.jobs.xpToLevel(gang.xp);
+				level = client.data.jobs.expToLevel(gang.experience);
 
 			embed.addFields({
 				name: '👥 Members', 
@@ -22,7 +22,7 @@ module.exports = {
 			{
 				name: '⚙️ Level',
 				value: `**Level:** ${level}`
-						+ `\n**Current XP:** ${Number(gang.xp) - client.data.jobs.totalLvlXp(level, true)}/${client.data.jobs.nextLvlXp(level)}`,
+						+ `\n**Current Experience:** ${Number(gang.experience) - client.data.jobs.totalLevelExp(level, true)}/${client.data.jobs.nextLevelExp(level)}`,
 				inline: true
 			},
 			{
