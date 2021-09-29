@@ -10,6 +10,9 @@ module.exports = {
 
             if (rebirth || suicide) {
                 client.con.query(`DELETE FROM users WHERE id = '${user_id}'`, async(e, _) => {
+                    if(Object.keys(client.userCache).includes(user_id))
+                        delete client.userCache[user_id];
+
                     await addUserToDatabase(client, user_id, user.key);
 
                     if (user.gang != null){
@@ -30,7 +33,8 @@ module.exports = {
                     client.gang.management.disbandGang(client, user.gang)
 
                 client.con.query(`DELETE FROM users WHERE id = '${user_id}'`);
-                delete client.userCache[user_id];
+                if(Object.keys(client.userCache).includes(user_id))
+                    delete client.userCache[user_id];
             }
         } catch (e) {
             client.msg.log("ERR", e, client.guild);
