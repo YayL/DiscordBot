@@ -42,7 +42,7 @@ module.exports = {
 					return client.eventEm.emit('MaxBankAccount', msg, gang);
 
 				if(amount == 'all')
-					amount = Number(await client._user.get(client, msg.author.id, 'bal'))
+					amount = Number((await client._user.get(client, msg.author.id)).bank)
 
                 if(deposit(client, msg, args, gang, (bankSize < (amount + bankAmount) ? bankSize - bankAmount : amount)))
 				    client.eventEm.emit('GangBankDeposit', msg, gang, amount);
