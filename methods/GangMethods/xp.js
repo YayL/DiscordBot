@@ -9,7 +9,7 @@ module.exports = {
 
         client.con.query(`UPDATE gangs SET experience = experience + ${experience} WHERE name = '${gang.name}'`);
 
-        if(client.data.jobs.xpToLevel(Number(gang.experience)) != client.data.jobs.xpToLevel(Number(gang.experience) + experience)){
+        if(client.data.jobs.expToLevel(Number(gang.experience)) != client.data.jobs.expToLevel(Number(gang.experience) + experience)){
             client.eventEm.emit('gangLevelUp', msg, gang, experience)
         }
 
