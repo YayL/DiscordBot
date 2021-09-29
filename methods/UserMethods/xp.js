@@ -1,12 +1,11 @@
 module.exports = {
-    async setExp(client, msg, user_id, extra_experience, set_work_timer=false, add=false){
+    async setExp(client, msg, user_id, experience, set_work_timer=false, add=false){
         try{
-            let experience = Number(await client._user.get(client, user_id).experience);
-
-            console.log(experience);
+            let current_experience = Number(await client._user.get(client, user_id).experience);
 
             if(add) 
-                experience += Number(extra_experience);
+                experience += Number(current_experience);
+
             if(experience > client.s.MAX_XP) 
                 experience = client.s.MAX_XP;
             if(experience < 0) 
@@ -15,11 +14,9 @@ module.exports = {
             if(set_work_timer) 
                 client.data.cooldown.addUserToCooldown(client, msg.author.id, 'work');
 
-            console.log(experience);
-
             client._user.set(client, user_id, 'experience', experience);
 
-            client.eventEm.emit('userLevelUP', msg.channel, user_id, experience, extra_experience);
+            client.eventEm.emit('userLevelUP', msg.channel, user_id, experience, experience);
         }catch(e){
             client.msg.log("ERR", e, client.guild);
         }
