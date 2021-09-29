@@ -59,6 +59,7 @@ const test_cases = [
     '-votekick %',
     '-votemute %',
     '-reset me',
+    '-suicide',
     '-sbal me -100m',
     '-loot common 1',
     '-loot legendary 1',

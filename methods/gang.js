@@ -11,9 +11,9 @@ exports.bank = require('./GangMethods/bank.js');
 
 exports.getGang = function(client, name) {
     return new Promise(resolve => {
-        client.con.query(`SELECT * FROM gangs WHERE name = '${name}'`, (e, { rows }) => {
+        client.con.query(`SELECT * FROM gangs WHERE name = '${name}'`, (e, result) => {
             try {
-                if (rows.length == 0) {
+                if (result.rowCount == 0) {
                     return resolve(null);
                 }
 
@@ -21,7 +21,8 @@ exports.getGang = function(client, name) {
                     client.msg.log("ERR", e, client.guild);
                     resolve(null);
                 }
-                resolve(rows[0]);
+
+                resolve(result.rows[0]);
 
             } catch (e) {
                 client.msg.log("ERR", e, client.guild);
@@ -36,9 +37,9 @@ exports.getGang = function(client, name) {
 
 exports.getAllGangs = function(client) {
     return new Promise(resolve => {
-        client.con.query(`SELECT * FROM gangs`, (e, { rows }) => {
+        client.con.query(`SELECT * FROM gangs`, (e, result) => {
             try {
-                if (rows.length == 0) {
+                if (resukt.rowCount == 0) {
                     return resolve(null);
                 }
 
@@ -47,7 +48,7 @@ exports.getAllGangs = function(client) {
                     return resolve(null);
                 }
 
-                return resolve(rows);
+                return resolve(result.rows);
             } catch (e) {
                 client.msg.log("ERR", e, client.guild);
                 resolve(null);

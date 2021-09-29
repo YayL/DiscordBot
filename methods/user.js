@@ -22,7 +22,7 @@ module.exports = {
                         
                     this.set(client, user_id, 'rebirths', user.rebirths + Number(rebirth));
                 });
-                client.con.query(`DELETE FROM market WHERE userid = '${user_id}'`);
+                client.con.query(`DELETE FROM market WHERE user_id = '${user_id}'`);
                 return;
 
             } else {

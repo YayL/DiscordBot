@@ -21,7 +21,7 @@ module.exports = async (client, disc, channel, user, achivement, achivements = f
 
             achivements.push(achivement.index);
 
-            client.con.query(`UPDATE users SET achivements = '${JSON.stringify(achivements)}' WHERE id = '${user.id}'`);
+            client._user.set(client, user.id, 'achivements', achivement);
 
 			achivement.run(client, user);
 

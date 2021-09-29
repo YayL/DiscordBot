@@ -1,6 +1,6 @@
 module.exports = {
 	async joinGang(client, gang, user_id, is_created=false){
-        client.con.query(`UPDATE users SET gang = '${gang.name.toLowerCase()}' WHERE id = '${user_id}'`);
+        client._user.set(client, user_id, 'gang', gang.name);
         
         if(!is_created){
             const members = gang.members;
@@ -17,7 +17,7 @@ module.exports = {
 
             client.con.query(`UPDATE gangs SET members = '${JSON.stringify(members)}' WHERE name = '${gang.name}'`);
         }
-        client.con.query(`UPDATE users SET gang = null WHERE id = '${user_id}'`);
+        client._user.set(client, user_id, 'gang', null);
     },
  
     async getGang(client, user_id){
