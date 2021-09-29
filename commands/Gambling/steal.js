@@ -30,11 +30,11 @@ module.exports = {
             
             // Success
             if(typeValue >= probability){
-                amount = Number(await client._user.get(client, target.id, 'bal')) * Math.random() * (0.05-0.001) + 0.001;
+                amount = Number((await client._user.get(client, target.id)).bank) * Math.random() * (0.05-0.001) + 0.001;
             }
             // Fail
             else if(typeValue >= probability-0.3){
-                amount = -Number(await client._user.get(client, msg.author.id, 'bal')) * Math.random() * (0.1-0.005) + 0.005;
+                amount = -Number((await client._user.get(client, msg.author.id)).bank) * Math.random() * (0.1-0.005) + 0.005;
             }
 
             amount = Math.floor(amount);
