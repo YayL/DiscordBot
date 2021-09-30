@@ -21,9 +21,6 @@ module.exports = {
 			if(await client.gang.user.inGang(client, user.id))
 				return client.eventEm.emit('userAlreadyInGang', msg, user.displayName);
 
-            if(! gang.info.SETTINGS['INVITE_ONLY']) 
-                return client.eventEm.emit('NotInviteOnly', msg);
-
 			if(client.gang.invite.isInvited(client, gang.info, user.id)) 
 				return client.eventEm.emit('alreadyInvited', msg);
 
