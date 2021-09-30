@@ -80,6 +80,7 @@ client.s = require('./info/settings.js');
 // TODO: client.botConfig?
 client.adminList = botConfig.adminList; // List of super-admin IDs
 client.allowedBotList = botConfig.allowedBotList;
+
 client.botCount = botConfig.botCount; // Amount of bots in the server, TODO: Get dynamically?
 
 client.allowCommands = true;

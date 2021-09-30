@@ -40,7 +40,7 @@ module.exports = {
             const balance = Number(await client._user.bal.getBalance(client, msg.author.id));
 
             if (balance < amount) {
-                client.eventEm.emit('NotEnoughMoney', msg, (amount - balance));
+                client.eventEm.emit('notEnoughMoney', msg, (amount - balance));
                 return false;
             }
             return true;

@@ -30,9 +30,6 @@ module.exports = {
 				client.gang.xp.addExp(client, msg, gang, xp_grant*(Math.random() * 0.4));
 			}
 
-			console.log(xp_grant);
-			
-
 			client.msg.reply(msg, 
 					"Great work!", 
 					`You earned **${xp_grant}xp**\n and **$${client.utils.fixNumber(money_grant, true)}**`,
