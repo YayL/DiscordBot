@@ -18,11 +18,20 @@ module.exports = {
             if(gang == null) 
                 return client.eventEm.emit('gangNonExistent', msg, name);
 
-			if(client.gang.invite.isInviteOnly(client, gang.info.SETTINGS)){
-				if(! client.gang.invite.isInvited(client, gang.info, msg.author.id)) 
-					return client.eventEm.emit('notInvited', msg);
-				client.gang.invite.remFromInviteList(client, gang, msg.author.id);
-			}
+            let shouldRemove = false;
+
+            if(! client.gang.invite.isInvited(client, gang.info, msg.author.id)){
+                if(client.gang.invite.isInviteOnly(client, gang.info.SETTINGS))
+                    return client.eventEm.emit('notInvited', msg);
+            }
+            else
+                client.gang.invite.remFromInviteList(client, gang, msg.author.id)
+
+            console.log(client.gang.info.getLimit(client, gang, 'Member'))
+            console.log(gang.members.length);
+
+            if(client.gang.info.getLimit(client, gang, 'Member') >= gang.members.length)
+                return client.eventEm.emit('tooManyMembers', msg);
 
 			client.gang.user.joinGang(client, gang, msg.author.id);
 

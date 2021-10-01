@@ -19,7 +19,7 @@ module.exports = {
     },
 
     getLimit(client, gang, upgrade){
-        return client.s.GANG_UPGRADES[upgrade][1][gang.info.UPGRADES[upgrade]]
+        return client.s.GANG_UPGRADES[upgrade][1][gang.info.UPGRADES[upgrade] != undefined ? gang.info.UPGRADES[upgrade] : 0];
     },
 
     getGangUpgrade(client, gang, upgrade, addition=0){
