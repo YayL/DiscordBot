@@ -23,7 +23,7 @@
             profileInfo = `
                 **Bank Balance:**\n💵 $${client.utils.fixNumber(bank_balance, true)}\n\u200b
                  **Job Title:**\n🏢 ${job}\n\u200b
-                 **Gang:**\n👪__${gang_name}__\n\u200b
+                 **Gang:**\n👪 __${gang_name}__\n\u200b
                  **Level:\n⏳ **${level >= client.s.MAX_LEVEL ? 'Max' : level}\n\u200b
                  **Experience:**\n⚙️ ${client.utils.fixNumber(experience-client.data.jobs.totalLevelExp(level))}/`
                  + `${level >= client.s.MAX_LEVEL ? "Max" : client.utils.fixNumber(requiredXp_ToNextLvl)}\n\u200b

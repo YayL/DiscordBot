@@ -91,7 +91,7 @@ async function showItems(client, msg, gang, args, discord) {
             amount_of_items = 0;
 
         if (gang.vault == null || Object.keys(gang.vault).length == 0) {
-            embed.setDescription(`**EMPTY VAULT**\n\u200b\n0/${client.data.gang.getGangUpgrade(client, gang, 'Vault')}`)
+            embed.setDescription(`**EMPTY VAULT**\n\u200b\n0/${client.gang.info.getGangUpgrade(client, gang, 'Vault')}`)
             return msg.channel.send(embed);
         }
 

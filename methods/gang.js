@@ -39,7 +39,7 @@ exports.getAllGangs = function(client) {
     return new Promise(resolve => {
         client.con.query(`SELECT * FROM gangs`, (e, result) => {
             try {
-                if (resukt.rowCount == 0) {
+                if (result.rowCount == 0) {
                     return resolve(null);
                 }
 
