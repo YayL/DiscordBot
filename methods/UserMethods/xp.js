@@ -16,7 +16,7 @@ module.exports = {
 
             client._user.set(client, user_id, 'experience', experience);
 
-            client.eventEm.emit('userLevelUP', msg.channel, user_id, experience, experience);
+            client.eventEm.emit('userLevelUP', msg.channel, user_id, experience, current_experience);
         }catch(e){
             client.msg.log("ERR", e, client.guild);
         }

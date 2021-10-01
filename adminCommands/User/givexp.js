@@ -10,13 +10,11 @@ module.exports = {
             if(!amount) return;
             
             if(args[0] == "me"){
-                return client._user.xp.addExp(client, msg, msg.member.id, amount, false);
+                return client._user.xp.addExp(client, msg, msg.author.id, amount, false);
             }
-            client.utils.getMember(args[0], msg)
-                .then(member => {
-                    if(member != null) 
-                        return client._user.xp.addExp(client, msg, member.id, amount, false);
-                })
+            const user = msg.mentions.users.array()[0]
+            if(member != null) 
+                return client._user.xp.addExp(client, msg, user.id, amount, false);
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }
