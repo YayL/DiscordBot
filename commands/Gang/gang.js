@@ -16,17 +16,17 @@ module.exports = {
 
 			embed.addFields({
 				name: '👥 Members', 
-				value: `${gang.members.length}/${client.gang.info.getGangUpgrade(client, gang, 'Member')}\nInvite people using -ginvite`,
+				value: `${gang.members.length}/${client.gang.info.getGangUpgrade(client, gang, 'Member')}`,
 				inline: true
 			},
 			{
 				name: '⚙️ Level',
 				value: `**Level:** ${level}`
-						+ `\n**Current Experience:** ${Number(gang.experience) - client.data.jobs.totalLevelExp(level, true)}/${client.data.jobs.nextLevelExp(level)}`,
+						+ `\n**Experience:** ${Number(gang.experience) - client.data.jobs.totalLevelExp(level, true)}/${client.data.jobs.nextLevelExp(level)}`,
 				inline: true
 			},
 			{
-				name: `💰 Bank Balance`,
+				name: `💵 Bank Balance`,
 				value: `**Bank Balance:** $${client.utils.fixNumber(Number(gang.bank), true)}`,
 				inline: true
 			});

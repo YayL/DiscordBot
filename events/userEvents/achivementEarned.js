@@ -15,7 +15,7 @@ module.exports = async (client, disc, channel, user, achivement, achivements = f
 			const embed = new disc.MessageEmbed()
 		        .setTitle(`**__New Achivement:__** *${achivement.name}*`)
 		        .addField('\u200b',`*${achivement.message}*`)
-		        .setColor('#a87f32');
+		        .setColor(client.s.COLOR_SCHEME['USER']);
 
             channel.send(embed);
 

@@ -20,16 +20,21 @@
                 level = client.data.jobs.expToLevel(experience, true),
                 requiredXp_ToNextLvl = client.data.jobs.nextLevelExp(level);
 
-            profileInfo = `----------
-                 Bank Balance: **$${client.utils.fixNumber(bank_balance, true)}**
-                 Job Title: **${job}**
-                 Gang: **__${gang_name}__**
-                 Level: **${level >= client.s.MAX_LEVEL ? 'Max' : level}**
-                 Current XP: **${client.utils.fixNumber(experience-client.data.jobs.totalLevelExp(level))}/`
-                 + `${level >= client.s.MAX_LEVEL ? "Max" : client.utils.fixNumber(requiredXp_ToNextLvl)}**
-                 Rebirths: **${user.rebirths}**`;
+            profileInfo = `
+                **Bank Balance:**\n💵 $${client.utils.fixNumber(bank_balance, true)}\n\u200b
+                 **Job Title:**\n🏢 ${job}\n\u200b
+                 **Gang:**\n👪__${gang_name}__\n\u200b
+                 **Level:\n⏳ **${level >= client.s.MAX_LEVEL ? 'Max' : level}\n\u200b
+                 **Experience:**\n⚙️ ${client.utils.fixNumber(experience-client.data.jobs.totalLevelExp(level))}/`
+                 + `${level >= client.s.MAX_LEVEL ? "Max" : client.utils.fixNumber(requiredXp_ToNextLvl)}\n\u200b
+                 **Rebirths:**\n🖤 ${user.rebirths}`;
 
-            client.msg.reply(msg, `${plr.displayName}'s Profile:`, profileInfo, discord);
+            const embed = new discord.MessageEmbed()
+                .setTitle(`${msg.member.displayName}'s Profile`)
+                .setDescription(`\n\u200b${profileInfo}\n\u200b\n`)
+                .setThumbnail(msg.author.avatarURL())
+            
+            msg.channel.send(embed);
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }

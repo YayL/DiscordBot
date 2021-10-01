@@ -14,6 +14,17 @@ module.exports = {
     LR_EMOJIS: ['⬅️', '➡️'],
     YES_NO_EMOJIS: ['❌', '✅'],
 
+    COLOR_SCHEME: {
+        ERROR: '#f55d42',
+        WARNING: '#f5a142',
+        INFO: '#477fc9',
+        WIN: '#47c95a',
+        LOST: '#c94947',
+        USER: '#e3da34',
+        GANG: '#34e357',
+        GANGWARNINGS: '#e34646'
+    },
+
     // User
     MAX_RANKS: 2,
 

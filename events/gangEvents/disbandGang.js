@@ -3,7 +3,7 @@ module.exports = async (client, disc, msg, name) => {
         var embed = new disc.MessageEmbed()
             .setTitle(`You have disbanded the gang: __${name.charAt(0).toUpperCase() + name.slice(1)}__`)
             .setDescription(`All members of this gang have been removed and the gang no longer exists`)
-            .setColor(`#8d99b8`);
+            .setColor(client.s.COLOR_SCHEME['GANG']);
 
         msg.channel.send(embed);
     }catch(e){

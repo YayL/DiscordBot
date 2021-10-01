@@ -19,7 +19,7 @@ module.exports = async (client, disc, msg, listing_id, buyer_id) => {
             .setTitle(`You bought ${(await client.utils.getMember(rows[0].userid, msg)).displayName}'s Listing`)
             .setDescription(`Acquiry: **${client.utils.fixNumber(rows[0].amount)} ${client.data.items.getItem(client, rows[0].item_id).name}s**
                 Price: **${client.utils.fixNumber(rows[0].price, true)}**`)
-            .setColor('#3fd161');
+            .setColor(client.s.COLOR_SCHEME['USER']);
             
         msg.channel.send(embed);
     });

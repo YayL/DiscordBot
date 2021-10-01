@@ -8,7 +8,7 @@ module.exports = (client, discord, msg, amount, name) => {
         embed.setTitle(`Your inventory is empty. Get some items and try again!`);
     else 
         embed.setDescription(`Check your inventory and see if you at least have **x${amount} ${name}**`);
-    embed.setColor('a86b2f');
+    embed.setColor(client.s.COLOR_SCHEME['WARNING']);
 
     msg.channel.send(embed);
 }

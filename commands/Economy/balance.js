@@ -16,7 +16,7 @@ module.exports = {
                     var extra = '';
                     if(bal > 1e5) 
                         extra = `\n*More precisely:* **${formatter.format(bal)}**`;
-                    client.msg.reply(msg, "Balance",`*Your balance is:* **$${client.utils.fixNumber(bal, true)}**`+extra, discord);
+                    client.msg.reply(msg, "💵 Balance 💵",`*Your balance is:* **$${client.utils.fixNumber(bal, true)}**`+extra, discord);
                 });
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);

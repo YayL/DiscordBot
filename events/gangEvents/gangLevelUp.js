@@ -7,6 +7,6 @@ module.exports = (client, discord, msg, gang, experience_grant) => {
     const embed = new discord.MessageEmbed()
         .setTitle(`${gang.info.NAME} has leveled up to level ${client.data.jobs.expToLevel(Number(gang.experience) + experience_grant)}`)
         .setDescription(`**${tokens}** tokens has been added`)
-        .setColor(`#8d99b8`);
+        .setColor(client.s.COLOR_SCHEME['GANG']);
     msg.channel.send(embed);
 }

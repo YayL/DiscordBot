@@ -2,7 +2,7 @@ module.exports = (client, discord, msg) => {
 
     const embed = new discord.MessageEmbed()
         .setTitle('You can not do this to yourself')
-        .setColor('a86b2f');
+        .setColor(client.s.COLOR_SCHEME['WARNING']);
         
     msg.channel.send(embed);
 }

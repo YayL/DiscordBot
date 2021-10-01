@@ -32,7 +32,7 @@ module.exports = {
 
 			client.msg.reply(msg, 
 					"Great work!", 
-					`You earned **${xp_grant}xp**\n and **$${client.utils.fixNumber(money_grant, true)}**`,
+					`You earned **${xp_grant}xp**\n and 💵 **$${client.utils.fixNumber(money_grant, true)}**`,
 					discord);
 			
 			client._user.xp.addExp(client, msg, msg.member.id, xp_grant, true);

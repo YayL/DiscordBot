@@ -3,7 +3,7 @@ module.exports = (client, discord, msg, user, requiredLevel=0) => {
         embed = new discord.MessageEmbed()
             .setTitle('You are too low of a level!')
             .setDescription(`To do this you require a level of **${LEVEL_REQUIRED}** or higher`)
-            .setColor('a86b2f')
+            .setColor(client.s.COLOR_SCHEME['USER'])
             .setFooter("Keep going, you're a champ!");
             
     msg.channel.send(embed);

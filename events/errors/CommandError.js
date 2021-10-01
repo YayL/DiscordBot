@@ -6,7 +6,7 @@ module.exports = (client, discord, msg, CommandName, args, e, cmdh=false) => {
     else{
         const embed = new discord.MessageEmbed()
             .setTitle(`There was an issue with the command: __${CommandName} ${args.join(' ')}__`)
-            .setColor('b80909');
+            .setColor(client.s.COLOR_SCHEME['ERROR']);
 
         msg.channel.send(embed);
         

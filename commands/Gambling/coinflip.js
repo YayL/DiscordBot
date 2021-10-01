@@ -12,7 +12,11 @@ module.exports = {
             const bet = client.utils.suffixCheck(args[0])
             const isTails = (~~((Math.random() * 100) + 1)) % 2 == 0
 
+            if(bet == false || bet < 1)
+                return client.eventEm.emit('InvalidInputAmount', msg)
 
+            if(! await client._user.bal.enoughMoney(client, msg, bet))
+                return;
 
             const embed = new discord.MessageEmbed()
                 .setTitle('Heads or Tails?')
@@ -25,15 +29,15 @@ module.exports = {
                         if (msg.author.id !== user.id)
                             return;
 
-                        const index = client.s.EMOJIS.indexOf(reaction.emojis.name);
+                        const index = client.s.EMOJIS.indexOf(reaction.emoji.name);
 
                         if (index == -1)
                             return;
 
                         if (index == 7) {
-                            sendWinningMessage(client, msg, discord, bet, !isTails, 'head')
+                            handleWinnings(client, msg, discord, bet, !isTails, 'Head')
                         } else if (index == 19) {
-                            sendWinningMessage(client, msg, discord, bet, isTails, 'tails')
+                            handleWinnings(client, msg, discord, bet, isTails, 'Tails')
                         }
 
                     }
@@ -43,6 +47,9 @@ module.exports = {
                             if (newMessage.deleted)
                                 newMessage.delete();
                         })
+                    
+                    newMessage.react(client.s.EMOJIS[7]);
+                    newMessage.react(client.s.EMOJIS[19]);
 
                 })
 
@@ -53,16 +60,20 @@ module.exports = {
     }
 }
 
-function sendWinningMessage(client, msg, discord, bet, won, type) {
+function handleWinnings(client, msg, discord, bet, won, type) {
 
     const embed = new discord.MessageEmbed()
 
     if (won) {
         const winnings = Math.ceil((Math.random() * bet * 0.25))
-        embed.setTitle('You choose correct!')
-        embed.setDescription(`The money has been added to your account: $${client.utils.fixNumber(winnings, true)} for winning`)
+        embed.setTitle(`${type} is correct!`)
+        embed.setDescription(`You recieve 💵 $${client.utils.fixNumber(winnings, true)} for winning`)
+        client._user.set(client, msg.author.id, 'bank', winnings)
     } else {
-        embed.setTitle('')
+        embed.setTitle(`${type} is unfortunately not correct!`)
+        embed.setDescription(`You lost 💵 $${client.utils.fixNumber(bet, true)}`)
     }
+
+    msg.channel.send(embed);
 
 }

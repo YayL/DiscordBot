@@ -2,7 +2,7 @@ module.exports = (client, discord, msg, usage) => {
 
     const embed = new discord.MessageEmbed()
         .setTitle('You have the Maximum amount of XP already')
-        .setColor('a86b2f');
+        .setColor(client.s.COLOR_SCHEME['INFO']);
         
     msg.channel.send(embed);
 }
