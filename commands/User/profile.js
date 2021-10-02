@@ -15,7 +15,7 @@
 
             const bank_balance = Number(user.bank),
                 job = user.job,
-                gang_name = user.gang != null ? user.gang.charAt(0).toUpperCase() + user.gang.slice(1) : 'Not in a gang',
+                gang_name = user.gang != null ? (await client.gang.user.getGang(client, msg.author.id)).info.NAME : 'Not in a gang',
                 experience = Number(user.experience),
                 level = client.data.jobs.expToLevel(experience, true),
                 requiredXp_ToNextLvl = client.data.jobs.nextLevelExp(level);

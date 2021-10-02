@@ -18,6 +18,9 @@ module.exports = {
             if(! await client._user.bal.enoughMoney(client, msg, bet))
                 return;
 
+            if(bet == 'all')
+                bal = Number((await client._user.get()).bank);
+
             const embed = new discord.MessageEmbed()
                 .setTitle('Heads or Tails?')
 
