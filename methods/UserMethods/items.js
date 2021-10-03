@@ -1,19 +1,20 @@
 module.exports = {
     async getInventory(client, user_id){
-        var inventory = (await client._user.get(client, user_id)).inventory;
+        let inventory = (await client._user.get(client, user_id)).inventory;
 
         // Check if inventory is able to be parsed
-        if(`${inventory}`.toLowerCase() == 'null') inventory = {};
+        if(`${inventory}`.toLowerCase() == 'null') 
+            inventory = {};
 
         return inventory;
     },
 
     async addItems(client, user_id, items){
         // Get user inventory
-        var inventory = await client._user.items.getInventory(client, user_id);
+        let inventory = await client._user.items.getInventory(client, user_id);
 
         // Add items to the inventory or increase the count of that item
-        var hasChanged = false, amount_to_add = 0;
+        let hasChanged = false, amount_to_add = 0;
         
         for(item of items){
             amount_to_add = Number(item.count) // If statement somehow changes the value of item to actual item so must put this here
