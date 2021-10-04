@@ -12,10 +12,10 @@
             if(plr == null) return client.eventEm.emit('InvalidArgs', msg, this.use)
 
             let user = await client._user.get(client, plr.id);
-
+            
             const bank_balance = Number(user.bank),
                 job = user.job,
-                gang_name = user.gang.toString() != 'null' ? (await client.gang.user.getGang(client, msg.author.id)).info.NAME : 'Not in a gang',
+                gang_name = `${user.gang}` != 'null' ? (await client.gang.user.getGang(client, msg.author.id)).info.NAME : 'Not in a gang',
                 experience = Number(user.experience),
                 level = client.data.jobs.expToLevel(experience, true),
                 requiredXp_ToNextLvl = client.data.jobs.nextLevelExp(level);
