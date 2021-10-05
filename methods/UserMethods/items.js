@@ -2,6 +2,8 @@ module.exports = {
     async getInventory(client, user_id){
         let inventory = (await client._user.get(client, user_id)).inventory;
 
+        console.log(await client._user.get(client, user_id));
+
         // Check if inventory is able to be parsed
         if(`${inventory}`.toLowerCase() == 'null') 
             inventory = {};
@@ -16,7 +18,7 @@ module.exports = {
         // Add items to the inventory or increase the count of that item
         let hasChanged = false, amount_to_add = 0;
         
-        for(item of items){
+        for(let item of items){
             amount_to_add = Number(item.count) // If statement somehow changes the value of item to actual item so must put this here
             if(Object.keys(inventory).includes(`${item.id}`)){
                 inventory[item.id].count += amount_to_add;
@@ -42,7 +44,7 @@ module.exports = {
 
         // Add items to the inventory or increase the count of that item
         var hasChanged = false, index = 0;
-        for(item of items){
+        for(let item of items){
             index = items.indexOf(item);
             if(index == -1) 
                 continue;

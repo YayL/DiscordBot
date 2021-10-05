@@ -87,14 +87,15 @@ module.exports = {
                 return null;
 
             if(Object.keys(client.userCache).includes(user_id)){
-                await client.con.query(`UPDATE users SET ${column.toLowerCase()} = ${typeof value === 'number' 
-                    ? value 
-                    : `${typeof value === 'object' 
-                        ? `'${JSON.stringify(value)}'` 
-                        : `${typeof value == 'string'
-                            ? `'${value}'`
-                            : value}`}`} WHERE id = '${user_id}'`);
-                client.userCache[user_id][column] = value;
+                if(typeof value === 'number')
+                    client.con.query(`UPDATE users SET ${column.toLowerCase()} = ${value} WHERE id = '${user_id}'`)
+                else if(typeof value === 'object')
+                    client.con.query(`UPDATE users SET ${column.toLowerCase()} = '${JSON.stringify(value)}' WHERE id = '${user_id}'`)
+                else if(typeof value === 'string')
+                    client.con.query(`UPDATE users SET ${column.toLowerCase()} = '${value}' WHERE id = '${user_id}'`)
+                else
+                    client.con.query(`UPDATE users SET ${column.toLowerCase()} = ${value} WHERE id = '${user_id}'`)
+                client.userCache[user_id][column.toLowerCase()] = value;
             }else{
                 await addUserToDatabase(client, user_id);
                 client._user.set(client, user_id, column, value);

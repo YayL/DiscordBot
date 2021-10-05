@@ -53,7 +53,8 @@ module.exports = {
 			let tempMessage = msg.content.slice(prefix.length); // Remove prefix from string
 			let args = tempMessage.split(" ").filter(arg => arg !== '');
 
-			if(args[0] == undefined) return client.eventEm.emit('CommandNotSpecified', msg);
+			if(args[0] == undefined) 
+				return client.eventEm.emit('CommandNotSpecified', msg);
 
 			CommandName = args[0].toLowerCase();
 			args.shift(); // Remove first argument, CommandName, from array
