@@ -30,7 +30,7 @@ module.exports = {
             console.log(client.gang.info.getLimit(client, gang, 'Member'))
             console.log(gang.members.length);
 
-            if(client.gang.info.getLimit(client, gang, 'Member') >= gang.members.length)
+            if(gang.members.length > client.gang.info.getLimit(client, gang, 'Member'))
                 return client.eventEm.emit('tooManyMembers', msg);
 
 			client.gang.user.joinGang(client, gang, msg.author.id);
