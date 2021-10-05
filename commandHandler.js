@@ -62,8 +62,13 @@ module.exports = {
 			const alias = checkIfAlias(CommandName, commands.array());
 			CommandName = alias != undefined ? alias.toLowerCase() : CommandName;
 
+			const commandToRun = commands.get(CommandName);
+
+			if(commandToRun == undefined)
+				return client.eventEm.emit('InvalidCommand', msg, CommandName, args);
+
 			try{
-				commands.get(CommandName).run(client, msg, args, Discord, commands.array());
+				commandToRun.run(client, msg, args, Discord, commands.array());
 			}catch(e){
 				client.eventEm.emit('CommandError', msg, CommandName, args, e, true);
 			}
