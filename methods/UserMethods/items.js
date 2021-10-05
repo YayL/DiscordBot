@@ -1,18 +1,21 @@
 module.exports = {
     async getInventory(client, user_id){
-        let inventory = (await client._user.get(client, user_id)).inventory;
 
-        console.log(await client._user.get(client, user_id));
+        const user = (await client._user.get(client, user_id));
 
         // Check if inventory is able to be parsed
-        if(`${inventory}`.toLowerCase() == 'null') 
-            inventory = {};
+        if(`${user.inventory}`.toLowerCase() == 'null')
+            user.inventory = {};
 
-        return inventory;
+        return user.inventory;
     },
 
     async addItems(client, user_id, items){
         // Get user inventory
+
+        if(Number.isNaN(Number(user_id)))
+            return;
+
         let inventory = await client._user.items.getInventory(client, user_id);
 
         // Add items to the inventory or increase the count of that item
@@ -39,6 +42,10 @@ module.exports = {
     },
 
     async delItems(client, user_id, items){
+
+        if(Number.isNaN(Number(user_id)))
+            return;
+
         // Get user inventory
         var inventory = await client._user.items.getInventory(client, user_id);
 

@@ -59,7 +59,7 @@ module.exports = {
             console.log(7);
 
             client.data.cooldown.addUserToCooldown(client, msg.author.id, 'steal');
-            client.eventEm.emit('steal', msg, target, amount);
+            console.log(await client.eventEm.emit('steal', msg, target, amount));
 
 		}catch(e){
 			client.eventEm.emit('CommandError', msg, this.name, args, e)
