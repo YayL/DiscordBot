@@ -33,7 +33,6 @@ module.exports = {
             // ------------------------ Money Leaderboard ------------------------
 
             if(args.length < 1 || new RegExp(args[0].toLowerCase()).test("money")){
-                await client.data.bal.updateTotalMoney(client);
                 
                 if(client.cachedMoneyLB.length === 0)
                     return;

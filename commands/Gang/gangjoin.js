@@ -27,9 +27,6 @@ module.exports = {
             else
                 client.gang.invite.remFromInviteList(client, gang, msg.author.id)
 
-            console.log(client.gang.info.getLimit(client, gang, 'Member'))
-            console.log(gang.members.length);
-
             if(gang.members.length > client.gang.info.getLimit(client, gang, 'Member'))
                 return client.eventEm.emit('tooManyMembers', msg);
 
