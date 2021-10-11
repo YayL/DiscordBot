@@ -27,10 +27,10 @@ module.exports = {
 
     // User
     MAX_RANKS: 2,
-
+ 
     // Leaderboard
     LB_MONEY_MIN: 50, // Leaderboard minimum money required to be displayed
-    LB_LEVEL_MIN: 1, // Leaderboard minimum level required to be displayed
+    LB_LEVEL_MIN: 2, // Leaderboard minimum level required to be displayed
     LB_REBIRTH_MIN: 5,
     LB_GANGLEVEL_MIN: 2,
     LB_SIZE: 10, // Amount of users displayed on lb

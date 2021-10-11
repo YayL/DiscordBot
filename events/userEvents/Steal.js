@@ -2,8 +2,6 @@ module.exports = async (client, disc, msg, target, amount) => {
 
     const embed = new disc.MessageEmbed();
 
-    console.log(`Amount: ${amount}`);
-
     if(amount <= 0){
         embed.setTitle(`Your attempt to steal money did not succeed`);
         embed.setDescription(`You can try again in ${client.userCooldowns.steal[1]/(60*1000)} minutes`)
@@ -19,8 +17,6 @@ module.exports = async (client, disc, msg, target, amount) => {
     }
 
     embed.setColor(client.s.COLOR_SCHEME['USER']);
-    
-    console.log(`Is about to send message in: ${msg.channel}`);
 
     msg.channel.send(embed);
 

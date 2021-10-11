@@ -6,11 +6,11 @@ module.exports = {
 
     getListingCreator: async (client, id) =>{
         return new Promise(resolve => {
-            client.con.query(`SELECT * FROM market WHERE ID = ${id}`, (e, {rows}) => {
+            client.con.query(`SELECT * FROM market WHERE id = ${id}`, (e, result) => {
                 if(e) 
                     resolve(command.log(e));
-                resolve(rows[0].user_id);
-            })
+                resolve(result.rows[0].user_id);
+            });
         })
     },
 

@@ -7,8 +7,16 @@ module.exports = {
     description: "Test event",
     options: {ShowInHelp: false, Category: 'Utils'},
     run: async function(client, msg, args, discord){
-        try{
-            client.msg.log("INFO", client.utils.fixNumber(client.totalMoney, true));
+        try{   
+
+            client.con.query(`SELECT * FROM market WHERE deadline < ${Math.floor(Date.now()/1000)}`, (e, result) => {
+                if(result.rowCount == 0)
+                    return;
+                    
+                for(let row of result.rows){
+                    client.data.market.remove(client, row);
+                }
+            });
         }catch(e){
             client.eventEm.emit('CommandError', msg, this.name, args, e);
         }

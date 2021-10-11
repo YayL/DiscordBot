@@ -14,8 +14,6 @@ module.exports = {
             if (gang == null)
                 return client.eventEm.emit('notInAGang', msg);
 
-            console.log(gang);
-
             if (args.length == 0)
                 return showItems(client, msg, gang, args, discord);
 

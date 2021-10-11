@@ -9,8 +9,11 @@ module.exports = {
 
     market: (client) => setInterval(() => {
         try{
-            client.con.query(`SELECT * FROM market WHERE deadline < ${Math.floor(Date.now()/1000)}`, (e, {rows}) => {
-                for(let row in rows){
+            client.con.query(`SELECT * FROM market WHERE deadline < ${Math.floor(Date.now()/1000)}`, (e, result) => {
+                if(result.rowCount == 0)
+                    return;
+                    
+                for(let row of result.rows){
                     client.data.market.remove(client, row);
                 }
             });
