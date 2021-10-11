@@ -6,30 +6,30 @@ module.exports = {
     use: "-Blackjack [bet]",
     description: "Bet that you will win the blackjack",
     options: {ShowInHelp: true, Category: "Gambling"},
-    run: async function(client, msg, args, discord){
+    run: async function(client, message, args, discord){
         try{
             let bet = client.utils.suffixCheck(args[0]);
 
             if(bet == "all") 
-                bet = await client._user.bal.getBalance(client, msg.member.id);
+                bet = await client._user.bal.getBalance(client, message.member.id);
 
             if(!bet || bet < 1) 
-                return client.eventEm.emit('InvalidInputAmount', msg);
+                return client.eventEm.emit('InvalidInputAmount', message);
 
-            if(!await client._user.bal.enoughMoney(client, msg, Number(bet))) 
+            if(!await client._user.bal.enoughMoney(client, message, Number(bet))) 
                 return;
 
-            client._user.bal.addBalance(client, msg.member.id, -1*Number(bet));
+            client._user.bal.addBalance(client, message.member.id, -1*Number(bet));
 
-            blackjack(msg, client, discord, Number(bet), msg.member);
+            blackjack(message, client, discord, Number(bet), message.member);
         }catch(e){
-            client.eventEm.emit('CommandError', msg, this.name, args, e);
+            client.eventEm.emit('CommandError', message, this.name, args, e);
         }
 
     }
 }
 
-function blackjack(ref, client, discord, bet, player, cards=[], dealerHand=[], playerHand=[], retVal="h"){
+function blackjack(message, client, discord, bet, player, cards=[], dealerHand=[], playerHand=[], retVal="h"){
     if(!cards.length){
         cards = generateDeck();
         dealerHand.push(cards.pop());
@@ -38,7 +38,7 @@ function blackjack(ref, client, discord, bet, player, cards=[], dealerHand=[], p
 
     if(retVal == "h") {
         playerHand.push(cards.pop());
-        sendMessage(ref, client, discord, bet, player, cards, dealerHand, playerHand, false, (handToPoints(playerHand)>21));
+        sendMessage(message, client, discord, bet, player, cards, dealerHand, playerHand, false, (handToPoints(playerHand)>21));
     }
     else if(retVal == "s"){
         let dealerPoints = handToPoints(dealerHand);
@@ -48,11 +48,11 @@ function blackjack(ref, client, discord, bet, player, cards=[], dealerHand=[], p
             dealerHand.push(newCard);
             dealerPoints += handToPoints([newCard]);
         }
-        sendMessage(ref, client, discord, bet, player, cards, dealerHand, playerHand, (dealerPoints>21),(handToPoints(playerHand)>21), true);
+        sendMessage(message, client, discord, bet, player, cards, dealerHand, playerHand, (dealerPoints>21),(handToPoints(playerHand)>21), true);
     }
 }
 
-function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playerHand, dealerBust = false, plrBust=false, finished = false){
+function sendMessage(message, client, discord, bet, player, cards, dealerHand, playerHand, dealerBust = false, plrBust=false, finished = false){
     let embed = new discord.MessageEmbed();
 
     plrPoints = handToPoints(playerHand);
@@ -113,10 +113,10 @@ function sendMessage(ref, client, discord, bet, player, cards, dealerHand, playe
                     message.delete();
                 });
                 
-        blackjack(ref, client, discord, bet, player, cards, dealerHand, playerHand, val);
+        blackjack(message, client, discord, bet, player, cards, dealerHand, playerHand, val);
     }
 
-    ref.channel.send(embed)
+    message.channel.send(embed)
         .then(msg => {
             if(dealerBust || plrBust || finished) 
                 return;
