@@ -6,7 +6,7 @@
         "setupdb": "node setupDB.js"
     },
     "dependencies": {
-        "discord.js": "^12.5.3",
+        "discord.js": "^14.0.0",
         "pg": "^8.7.1"
     }
 }
